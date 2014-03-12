@@ -1,0 +1,21 @@
+爬虫要求：
+1.能在Linux下带计划任务运行，实现语言不限
+2.抓取速度基本约200条/分钟
+3.数据格式至少包含的基本的字段：标题，发表人，时间，内容，星级评论（如有），多的不限。
+4.有额外的主动拉取和推送API（包含的字段同前），即抓取完成的数据结果在存储的同时也能提交给其他程序。
+5、数据储存格式不限，JSON或者CSV都可以
+
+1、多玩： http://www.duowan.com/
+2、178： http://www.178.com/
+3、nga： http://bbs.ngacn.cc/
+4、百度贴吧： http://tieba.baidu.com/
+5、豆瓣： http://www.douban.com/
+6、安卓市场： http://apk.hiapk.com/
+7、百度手机助手
+8、91助手
+9、安智市场： http://www.anzhi.com/
+10、应用宝： http://android.myapp.com/
+11、google play store： https://play.google.com
+12、应用汇： http://www.appchina.com/
+13、智慧云： http://app.vmall.com/
+14、小米市场
