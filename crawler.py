@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# TencentScrawler test version 0.1 Alpha for 应用宝 http://android.myapp.com
+# TencentCrawler test version 0.1 Alpha for 应用宝 http://android.myapp.com
 # by Jiaheng Zhang, all rights reserved.
 
 import urllib
@@ -106,7 +106,7 @@ def get_comments_data():
 
 if __name__ == '__main__':
 
-	print '\n' + "TencentScrawler test version 0.1 Alpha for 应用宝 http://android.myapp.com"
+	print '\n' + "TencentCrawler test version 0.1 Alpha for 应用宝 http://android.myapp.com"
 	print "by Jiaheng Zhang, all rights reserved." + '\n'
 
 	# read the list of page to get info from
@@ -118,7 +118,7 @@ if __name__ == '__main__':
 		app_url = app_url.strip('\n')
 
 		print "********************************************************************************"
-		print "Scrawling page: " + app_url
+		print "Crawling page: " + app_url
 
 		# get app id from app url
 		is_success, app_id = get_app_id(app_url)
