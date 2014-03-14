@@ -35,7 +35,13 @@ def get_app_info(app_id):
 
 	soup = BeautifulSoup(app_page_html)
 	soup_app_info = soup.find('div', attrs = {"class": "app-msg"})
-	app_info['app_name'] = soup_app_info.find('h1').contents[0]
+	app_info['app_name'] = soup_app_info.h1.contents[0].string
+	
+	soup_dts = soup_app_info.dl.find_all('dt')
+	for item in soup_dts:
+		if item.string.replace(u'\xa0', '').find(u'版本') >= 0:
+			app_info['app_version'] = item.next_sibling.contents[0].string
+			break
 
 	return app_info
 
