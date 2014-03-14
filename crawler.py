@@ -83,7 +83,11 @@ def get_comments_data():
 			item = {}
 			comment_time = time.strptime(comment_item['createtime'], "%Y-%m-%d %H:%M")
 
-			if comment_time >= start_time and comment_time <= end_time:
+			if comment_time >= start_time:
+
+				# the comment is too new
+				if comment_time > end_time:
+					continue
 
 				item['user_name'] = comment_item['username']
 				item['user_id'] = comment_item['userid']
@@ -100,7 +104,7 @@ def get_comments_data():
 			else:
 				break
 
-		if comment_time >= start_time and comment_time <= end_time:
+		if comment_time >= start_time:
 			comment_url_args['pageNo'] += 1
 		else:
 			break
