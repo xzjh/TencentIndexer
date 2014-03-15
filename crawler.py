@@ -20,8 +20,8 @@ comment_url_base = "http://android.myapp.com/android/commentlist_web"
 app_url_base = "http://android.app.qq.com/android/appdetail.jsp"
 data_dir_name = 'data_myapp'
 data_file_prefix = 'data_myapp_'
-start_time = time.strptime("2014-03-11 0:0", "%Y-%m-%d %H:%M")
-end_time = time.strptime("2014-03-13 23:59", "%Y-%m-%d %H:%M")
+start_time = time.strptime("2014-03-12 0:0", "%Y-%m-%d %H:%M")
+end_time = time.strptime("2014-03-14 23:59", "%Y-%m-%d %H:%M")
 
 
 def get_app_info(app_id):
@@ -71,7 +71,7 @@ def get_comments_data():
 	while True:
 		# the url of comment page
 		comment_url = comment_url_base + '?' + urllib.urlencode(comment_url_args)
-		print 'Comment page URL: ' + comment_url
+		print 'Crawling comment page: ' + comment_url
 		# get the source code of comment page
 		response = urllib2.urlopen(comment_url)
 		data_raw = response.read().decode('utf-8')
@@ -109,6 +109,14 @@ def get_comments_data():
 		else:
 			break
 
+
+	data['app_score'] = float(data_json['info']['allscore'])
+	data['app_score_count_all'] = int(data_json['info']['allcount'])
+	data['app_score_count_1'] = int(data_json['info']['all1vcount'])
+	data['app_score_count_2'] = int(data_json['info']['all2vcount'])
+	data['app_score_count_3'] = int(data_json['info']['all3vcount'])
+	data['app_score_count_4'] = int(data_json['info']['all4vcount'])
+	data['app_score_count_5'] = int(data_json['info']['all5vcount'])
 	data['app_comments_count'] = len(data['app_comments'])
 
 	return data
