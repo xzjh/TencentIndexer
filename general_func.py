@@ -8,6 +8,7 @@ import json
 
 #configurations
 data_dir_name = "data"
+page_list_dir_name = "page_list"
 
 # read the list of page to get info from
 def get_list_from_file(file_name):

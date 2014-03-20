@@ -13,12 +13,12 @@ import json
 import general_func
 
 # configurations
-page_list_file = "page_list/myapp.txt"
+website_id = 'myapp'
+page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 comment_url_args = {}
 comment_url_args['pageSize'] = 10
 comment_url_base = "http://android.myapp.com/android/commentlist_web"
 app_url_base = "http://android.app.qq.com/android/appdetail.jsp"
-website_id = 'myapp'
 #start_time = time.strptime("2014-03-12 0:0", "%Y-%m-%d %H:%M")
 #end_time = time.strptime("2014-03-14 23:59", "%Y-%m-%d %H:%M")
 
