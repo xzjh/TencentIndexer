@@ -6,6 +6,21 @@ http://play.91.com/android/App/index-287.html
 
 应用宝
 http://android.myapp.com
+detail:
 http://android.app.qq.com/android/appdetail.jsp?appid=48462&icfa=15144102048462001000&lmid=2017
 http://android.myapp.com/android/appdetail.jsp?appid=48157&icfa=15144102048157006000&lmid=2017
+comments:
+GET http://android.myapp.com/android/commentlist_web?pageNo=1&pageSize=10&appid=48462
 
+Google Play
+https://play.google.com
+detail:
+https://play.google.com/store/apps/details?id=com.tencent.mm&hl=zh-cn
+comments:
+POST https://play.google.com/store/getreviews
+args:
+'reviewType': '0',			# 类型：
+'pageNum': 0,				# 页数
+'id': "com.tencent.mm",		# 应用ID
+'reviewSortOrder': '0'		# 按照时间排序
+'hl': 'zh-cn'				# 中文

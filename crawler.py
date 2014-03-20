@@ -4,7 +4,7 @@
 # by Jiaheng Zhang, all rights reserved.
 
 import sys
-import time
+from datetime import datetime
 
 import general_func
 import crawler_myapp
@@ -18,8 +18,8 @@ if __name__ == '__main__':
 
 	crawler_args = {}
 	crawler_args['website_id'] = sys.argv[1]
-	crawler_args['start_time'] = time.strptime(sys.argv[2], "%Y%m%d%H%M")
-	crawler_args['end_time'] = time.strptime(sys.argv[3], "%Y%m%d%H%M")
+	crawler_args['start_time'] = datetime.strptime(sys.argv[2], "%Y%m%d%H%M")
+	crawler_args['end_time'] = datetime.strptime(sys.argv[3], "%Y%m%d%H%M")
 	if len(crawler_args) >= 4:
 		crawler_args['keyword'] = sys.argv[4]
 	else:

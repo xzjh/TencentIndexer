@@ -7,7 +7,7 @@ import urllib
 import urllib2
 import urlparse
 from bs4 import BeautifulSoup
-import time
+from datetime import datetime
 import json
 
 import general_func
@@ -72,7 +72,7 @@ def get_comments_data(app_info, start_time, end_time):
 		for comment_item in data_json['info']['value']:
 
 			item = {}
-			comment_time = time.strptime(comment_item['createtime'], "%Y-%m-%d %H:%M")
+			comment_time = datetime.strptime(comment_item['createtime'], "%Y-%m-%d %H:%M")
 
 			if comment_time >= start_time:
 
@@ -104,7 +104,7 @@ def get_comments_data(app_info, start_time, end_time):
 			break
 
 
-	data['app_score'] = float(data_json['info']['allscore'])
+	data['app_score'] = data_json['info']['allscore']
 	data['app_score_count_all'] = int(data_json['info']['allcount'])
 	data['app_score_count_1'] = int(data_json['info']['all1vcount'])
 	data['app_score_count_2'] = int(data_json['info']['all2vcount'])
