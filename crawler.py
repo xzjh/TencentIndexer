@@ -14,7 +14,7 @@ app_version = "0.1 Alpha"
 
 if __name__ == '__main__':
 
-	print '\n' + "TencentCrawler " + app_version + " by Jiaheng Zhang, all rights reserved." + '\n'
+	print '\n' + "TencentCrawler " + app_version + " by Jiaheng Zhang, all rights reserved."
 
 	crawler_args = {}
 	crawler_args['website_id'] = sys.argv[1]
