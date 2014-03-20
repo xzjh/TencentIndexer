@@ -13,7 +13,7 @@ import json
 import general_func
 
 # configurations
-page_list_file = "page_list/myapp_page_list.txt"
+page_list_file = "page_list/myapp.txt"
 comment_url_args = {}
 comment_url_args['pageSize'] = 10
 comment_url_base = "http://android.myapp.com/android/commentlist_web"

@@ -1,4 +1,4 @@
-##!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # TencentCrawler module of general functions
 # by Jiaheng Zhang, all rights reserved.

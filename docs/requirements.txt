@@ -5,17 +5,23 @@
 4.有额外的主动拉取和推送API（包含的字段同前），即抓取完成的数据结果在存储的同时也能提交给其他程序。
 5、数据储存格式不限，JSON或者CSV都可以
 
-1、多玩： http://www.duowan.com/
-2、178： http://www.178.com/
-3、nga： http://bbs.ngacn.cc/
-4、百度贴吧： http://tieba.baidu.com/
-5、豆瓣： http://www.douban.com/
+1、新浪微博
+
+2、百度贴吧： http://tieba.baidu.com/
+3、豆瓣： http://www.douban.com/
+4、腾讯游戏各游戏官网论坛：http://game.qq.com/index.shtml
+（包括里面的手机游戏论坛：http://bbs.agame.qq.com/forum.php）
+
+5、安智市场： http://www.anzhi.com/
 6、安卓市场： http://apk.hiapk.com/
-7、百度手机助手
-8、91助手
-9、安智市场： http://www.anzhi.com/
-10、应用宝： http://android.myapp.com/
+7、豌豆荚：http://www.wandoujia.com
+8、智汇云： http://app.vmall.com/
+9、应用宝： http://android.myapp.com/
+10、91助手：
 11、google play store： https://play.google.com
-12、应用汇： http://www.appchina.com/
-13、智慧云： http://app.vmall.com/
-14、小米市场
+
+12、多玩： http://www.duowan.com/
+13、178： http://www.178.com/
+
+从上到下是按优先级来排的哈
+
