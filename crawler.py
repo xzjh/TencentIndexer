@@ -10,6 +10,7 @@ from datetime import datetime
 import general_func
 import crawler_myapp
 import crawler_googleplay
+import crawler_anzhi
 
 # configurations
 app_version = "0.1 Alpha"
@@ -32,5 +33,7 @@ if __name__ == '__main__':
 		crawler_myapp.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'googleplay':
 		crawler_googleplay.crawl(crawler_args)
+	elif crawler_args['website_id'] == 'anzhi':
+		crawler_anzhi.crawl(crawler_args)
 	else:
 		print "Invalid website_id!"

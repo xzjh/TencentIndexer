@@ -24,3 +24,7 @@ args:
 'id': "com.tencent.mm",		# 应用ID
 'reviewSortOrder': '0'		# 按照时间排序
 'hl': 'zh-cn'				# 中文
+
+Anzhi:
+http://www.anzhi.com/soft_1443636.html
+http://www.anzhi.com/comment.php?softid=1443636&page=1
