@@ -4,6 +4,7 @@
 # by Jiaheng Zhang, all rights reserved.
 
 import sys
+import os
 from datetime import datetime
 
 import general_func
@@ -16,6 +17,7 @@ app_version = "0.1 Alpha"
 if __name__ == '__main__':
 
 	print '\n' + "TencentCrawler " + app_version + " by Jiaheng Zhang, all rights reserved."
+	os.chdir(sys.path[0])
 
 	crawler_args = {}
 	crawler_args['website_id'] = sys.argv[1]
