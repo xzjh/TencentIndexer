@@ -12,13 +12,13 @@
 4、腾讯游戏各游戏官网论坛：http://game.qq.com/index.shtml
 （包括里面的手机游戏论坛：http://bbs.agame.qq.com/forum.php）
 
-5、安智市场： http://www.anzhi.com/
-6、安卓市场： http://apk.hiapk.com/
+*5、安智市场： http://www.anzhi.com/
+*6、安卓市场： http://apk.hiapk.com/
 7、豌豆荚：http://www.wandoujia.com
 8、智汇云： http://app.vmall.com/
-9、应用宝： http://android.myapp.com/
+*9、应用宝： http://android.myapp.com/
 10、91助手：
-11、google play store： https://play.google.com
+*11、google play store： https://play.google.com
 
 12、多玩： http://www.duowan.com/
 13、178： http://www.178.com/
