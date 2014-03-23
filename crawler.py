@@ -26,9 +26,14 @@ if __name__ == '__main__':
 	crawler_args['end_time'] = datetime.strptime(sys.argv[3], "%Y%m%d%H%M")
 	if len(crawler_args) >= 4:
 		crawler_args['keyword'] = sys.argv[4]
+		print_keyword = 'keyword \"' + crawler_args['keyword'] + '"'
 	else:
 		crawler_args['keyword'] = None
+		print_keyword = "no keyword"
 
+	print 'Now crawling messages from website "' + crawler_args['website_id'] + '" in the period from ' + \
+		str(crawler_args['start_time']) + ' to ' + str(crawler_args['end_time']) + \
+		' with ' + print_keyword + '.'
 	if crawler_args['website_id'] == 'myapp':
 		crawler_myapp.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'googleplay':
