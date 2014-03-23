@@ -13,6 +13,7 @@ import general_func
 
 # configurations
 website_id = 'googleplay'
+website_name = "Google Play https://play.google.com"
 page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 comment_url_args = {}
 comment_url_args['reviewType'] = '0'
@@ -123,7 +124,7 @@ def get_comments_data(app_info, start_time, end_time):
 
 def crawl(args):
 
-	print "Now running TencentCrawler for Google Play https://play.google.com"
+	print "Now running TencentCrawler for " + website_name
 
 	start_time = args['start_time']
 	end_time = args['end_time']
