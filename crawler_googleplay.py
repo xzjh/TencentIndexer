@@ -21,6 +21,7 @@ comment_url_args['reviewSortOrder'] = '0'
 comment_url_args['hl'] = 'zh-cn'
 comment_url_base = "https://play.google.com/store/getreviews"
 app_url_base = "https://play.google.com/store/apps/details"
+time_format = '%Y%m%d'
 
 def get_app_info(app_id):
 
@@ -105,7 +106,7 @@ def get_comments_data(app_info, start_time, end_time):
 				else:
 					item['comment_title'] = ''
 				item['comment_content'] = soup_comment_item.find('div', attrs = {'class': 'review-body'}).contents[2].strip()
-				item['comment_time'] = comment_time_raw
+				item['comment_time'] = comment_time.strftime(time_format)
 				item['comment_star_rating'] = int(soup_comment_item.find('div', attrs = {'class': 'current-rating'}).attrs['style'].split(':')[1][:-2]) / 20
 				data['app_comments'].append(item)
 
@@ -119,6 +120,10 @@ def get_comments_data(app_info, start_time, end_time):
 			comment_url_args['pageNum'] += 1
 		else:
 			break
+
+	data['app_comments_count'] = len(data['app_comments'])
+	data['app_comments_start_time'] = start_time.strftime(time_format)
+	data['app_comments_end_time'] = end_time.strftime(time_format)
 
 	return data
 
@@ -163,8 +168,8 @@ def crawl(args):
 
 		data_file_prefix = 'data_' + website_id + '_'
 		dir_name = 'data_' + website_id
-		file_name = data_file_prefix + app_id + '_' + start_time.strftime('%Y%m%d') + \
-			'_' + end_time.strftime('%Y%m%d') + '.json'
+		file_name = data_file_prefix + app_id + '_' + start_time.strftime(time_format) + \
+			'_' + end_time.strftime(time_format) + '.json'
 
 		general_func.save_to_file_by_json(dir_name, file_name, data)
 

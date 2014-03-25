@@ -22,6 +22,7 @@ comment_url_base = "http://android.myapp.com/android/commentlist_web"
 app_url_base = "http://android.app.qq.com/android/appdetail.jsp"
 #start_time = time.strptime("2014-03-12 0:0", "%Y-%m-%d %H:%M")
 #end_time = time.strptime("2014-03-14 23:59", "%Y-%m-%d %H:%M")
+time_format = '%Y%m%d%H%M'
 
 def get_app_info(app_id):
 
@@ -85,7 +86,7 @@ def get_comments_data(app_info, start_time, end_time):
 				item['user_id'] = comment_item['userid']
 				item['user_photo'] = comment_item['userphoto']
 				item['comment_content'] = comment_item['content']
-				item['comment_time'] = comment_item['createtime']
+				item['comment_time'] = comment_time.strftime(time_format)
 				item['comment_star_rating'] = int(comment_item['userpoststarno']) / 20
 				item['comment_channel'] = comment_item['channel']
 				item['comment_agree_count'] = int(comment_item['agree'])
@@ -112,7 +113,10 @@ def get_comments_data(app_info, start_time, end_time):
 	data['app_score_count_3'] = int(data_json['info']['all3vcount'])
 	data['app_score_count_4'] = int(data_json['info']['all4vcount'])
 	data['app_score_count_5'] = int(data_json['info']['all5vcount'])
+	
 	data['app_comments_count'] = len(data['app_comments'])
+	data['app_comments_start_time'] = start_time.strftime(time_format)
+	data['app_comments_end_time'] = end_time.strftime(time_format)
 
 	return data
 
@@ -154,8 +158,8 @@ def crawl(args):
 
 		data_file_prefix = 'data_' + website_id + '_'
 		dir_name = 'data_' + website_id
-		file_name = data_file_prefix + app_id + '_' + start_time.strftime('%Y%m%d%H%M') + \
-			'_' + end_time.strftime('%Y%m%d%H%M') + '.json'
+		file_name = data_file_prefix + app_id + '_' + start_time.strftime(time_format) + \
+			'_' + end_time.strftime(time_format) + '.json'
 
 		general_func.save_to_file_by_json(dir_name, file_name, data)
 

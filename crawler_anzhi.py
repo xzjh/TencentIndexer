@@ -19,6 +19,7 @@ page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 comment_url_args = {}
 comment_url_base = "http://www.anzhi.com/comment.php"
 app_url_base = "http://www.anzhi.com/soft_"
+time_format = '%Y%m%d%H%M'
 
 def get_app_info(app_id):
 
@@ -87,7 +88,7 @@ def get_comments_data(app_info, start_time, end_time):
 				item['user_name'] = soup_comment_item.find('div', attrs = {'class': 'comment_list_top'}).span.contents[0]
 				item['user_photo'] = soup_comment_item.img.attrs['src']
 				item['comment_content'] = soup_comment_item.p.contents[0]
-				item['comment_time'] = comment_time_raw
+				item['comment_time'] = comment_time.strftime(time_format)
 				data['app_comments'].append(item)
 
 			else:
@@ -100,6 +101,10 @@ def get_comments_data(app_info, start_time, end_time):
 			comment_url_args['page'] += 1
 		else:
 			break
+
+	data['app_comments_count'] = len(data['app_comments'])
+	data['app_comments_start_time'] = start_time.strftime(time_format)
+	data['app_comments_end_time'] = end_time.strftime(time_format)
 
 	return data
 
@@ -141,8 +146,8 @@ def crawl(args):
 
 		data_file_prefix = 'data_' + website_id + '_'
 		dir_name = 'data_' + website_id
-		file_name = data_file_prefix + app_id + '_' + start_time.strftime('%Y%m%d%H%M') + \
-			'_' + end_time.strftime('%Y%m%d%H%M') + '.json'
+		file_name = data_file_prefix + app_id + '_' + start_time.strftime(time_format) + \
+			'_' + end_time.strftime(time_format) + '.json'
 
 		general_func.save_to_file_by_json(dir_name, file_name, data)
 

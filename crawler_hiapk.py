@@ -22,6 +22,7 @@ comment_url_args['action'] = "FindApkSoftCommentListJson"
 comment_url_args['callback'] = ''
 comment_url_base = "http://apk.hiapk.com/Detail.aspx"
 app_url_base = "http://apk.hiapk.com/html/2014/03/"
+time_format = '%Y%m%d%H%M'
 
 def get_app_info(app_id):
 
@@ -98,7 +99,7 @@ def get_comments_data(app_info, start_time, end_time):
 				item['user_name'] = soup_comment_item.find('div', attrs = {'class', 'author_tip'}).contents[0].strip().split(' ')[0]
 				item['user_photo'] = soup_comment_item.find('div', attrs = {'class', 'headimg'}).img.attrs['src']
 				item['comment_content'] = soup_comment_item.find('div', attrs = {'class', 'comcontent'}).contents[0].strip()
-				item['comment_time'] = comment_time_raw[0] + ' ' + comment_time_raw[1]
+				item['comment_time'] = comment_time.strftime(time_format)
 				item['comment_channel'] = soup_comment_item.find('div', attrs = {'class', 'detail_version'}) \
 					.span.next_sibling.next_sibling.contents[0].strip().split(u'：')[1]
 				data['app_comments'].append(item)
@@ -113,6 +114,10 @@ def get_comments_data(app_info, start_time, end_time):
 			comment_url_args['curPageIndex'] += 1
 		else:
 			break
+
+	data['app_comments_count'] = len(data['app_comments'])
+	data['app_comments_start_time'] = start_time.strftime(time_format)
+	data['app_comments_end_time'] = end_time.strftime(time_format)
 
 	return data
 
@@ -154,8 +159,8 @@ def crawl(args):
 
 		data_file_prefix = 'data_' + website_id + '_'
 		dir_name = 'data_' + website_id
-		file_name = data_file_prefix + app_id + '_' + start_time.strftime('%Y%m%d%H%M') + \
-			'_' + end_time.strftime('%Y%m%d%H%M') + '.json'
+		file_name = data_file_prefix + app_id + '_' + start_time.strftime(time_format) + \
+			'_' + end_time.strftime(time_format) + '.json'
 
 		general_func.save_to_file_by_json(dir_name, file_name, data)
 
