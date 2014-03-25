@@ -163,7 +163,8 @@ def crawl(args):
 
 		data_file_prefix = 'data_' + website_id + '_'
 		dir_name = 'data_' + website_id
-		file_name = data_file_prefix + app_id + '.json'
+		file_name = data_file_prefix + app_id + '_' + start_time.strftime('%Y%m%d') + \
+			'_' + end_time.strftime('%Y%m%d') + '.json'
 
 		general_func.save_to_file_by_json(dir_name, file_name, data)
 
