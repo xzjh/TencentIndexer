@@ -23,12 +23,10 @@ time_format = '%Y%m%d%H%M'
 
 def get_app_info(app_id):
 
-	app_url = app_url_base + app_id + '.html'
-
 	app_info = {}
 
-	response = urllib.urlopen(app_url)
-	app_page_html = response.read()
+	app_url = app_url_base + app_id + '.html'
+	app_page_html = general_func.url_open(app_url)
 
 	soup = BeautifulSoup(app_page_html)
 	app_info['app_name'] = soup.find('div', attrs = {'class': 'detail_line'}).h3.contents[0]
@@ -60,8 +58,7 @@ def get_comments_data(app_info, start_time, end_time):
 		print 'Processing comment page: ' + comment_url
 		# get the source code of comment page
 		# POST method
-		response = urllib.urlopen(comment_url)
-		data_html = response.read()
+		data_html = general_func.url_open(comment_url)
 
 		# get useful information
 		soup = BeautifulSoup(data_html)

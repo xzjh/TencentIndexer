@@ -3,7 +3,6 @@
 # TencentCrawler for Google Play https://play.google.com
 # by Jiaheng Zhang, all rights reserved.
 
-import urllib
 import urlparse
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -25,12 +24,10 @@ time_format = '%Y%m%d'
 
 def get_app_info(app_id):
 
-	app_url = app_url_base + '?hl=zh-cn&id=' + app_id
-
 	app_info = {}
 
-	response = urllib.urlopen(app_url)
-	app_page_html = response.read()
+	app_url = app_url_base + '?hl=zh-cn&id=' + app_id
+	app_page_html = general_func.url_open(app_url)
 
 	soup = BeautifulSoup(app_page_html)
 	app_info['app_name'] = soup.find('div', attrs = {"class": "document-title"}).div.contents[0]
@@ -69,9 +66,7 @@ def get_comments_data(app_info, start_time, end_time):
 		print 'Processing comment page: ' + str(comment_url_args['pageNum'])
 		# get the source code of comment page
 		# POST method
-	 	comment_url_args_encoded = urllib.urlencode(comment_url_args)
-		response = urllib.urlopen(comment_url_base, comment_url_args_encoded)
-		data_raw = response.read()
+		data_raw = general_func.url_open(comment_url_base, comment_url_args)
 		data_raw = data_raw[5:]
 		data_json = json.loads(data_raw)
 		data_html = data_json[0][2]

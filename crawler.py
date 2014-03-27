@@ -6,6 +6,7 @@
 import sys
 import os
 from datetime import datetime
+import json
 
 import general_func
 import crawler_myapp
@@ -35,6 +36,20 @@ if __name__ == '__main__':
 	print 'Now crawling messages from website "' + crawler_args['website_id'] + '" in the period from ' + \
 		str(crawler_args['start_time']) + ' to ' + str(crawler_args['end_time']) + \
 		' with ' + print_keyword + '.'
+
+	# set up proxy
+	file_proxy = open('proxies.json')
+	proxy_address_raw = file_proxy.read()
+	proxy_address = json.loads(proxy_address_raw)
+	if proxy_address.has_key(crawler_args['website_id']):
+		#crawler_args['proxy_address'] = proxy_address[crawler_args['website_id']]
+		general_func.proxy_address = proxy_address[crawler_args['website_id']]
+		print "-- Using proxy: " + general_func.proxy_address
+	else:
+		#crawler_args['proxy_address'] = None
+		general_func.proxy_address = ''
+
+	# call the crawler
 	if crawler_args['website_id'] == 'myapp':
 		crawler_myapp.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'googleplay':

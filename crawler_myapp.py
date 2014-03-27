@@ -4,7 +4,6 @@
 # by Jiaheng Zhang, all rights reserved.
 
 import urllib
-import urllib2
 import urlparse
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -26,12 +25,10 @@ time_format = '%Y%m%d%H%M'
 
 def get_app_info(app_id):
 
-	app_url = app_url_base + '?appid=' + app_id
-
 	app_info = {}
 
-	response = urllib2.urlopen(app_url)
-	app_page_html = response.read()
+	app_url = app_url_base + '?appid=' + app_id
+	app_page_html = general_func.url_open(app_url)
 
 	soup = BeautifulSoup(app_page_html)
 	soup_app_info = soup.find('div', attrs = {"class": "app-msg"})
@@ -66,8 +63,7 @@ def get_comments_data(app_info, start_time, end_time):
 		comment_url = comment_url_base + '?' + urllib.urlencode(comment_url_args)
 		print 'Processing comment page: ' + comment_url
 		# get the source code of comment page
-		response = urllib2.urlopen(comment_url)
-		data_raw = response.read().decode('utf-8')
+		data_raw = general_func.url_open(comment_url)
 		data_json = json.loads(data_raw)
 
 		# get useful information
