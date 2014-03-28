@@ -1,5 +1,5 @@
 {
-    "push_address": "PUSH_ADD",
+    "push_address": "http://localhost",
     "proxies": {
         "googleplay": "66.230.191.159:3128"
     }

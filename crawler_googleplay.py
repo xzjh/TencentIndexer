@@ -166,7 +166,7 @@ def crawl(args):
 		file_name = data_file_prefix + app_id + '_' + start_time.strftime(time_format) + \
 			'_' + end_time.strftime(time_format) + '.json'
 
-		general_func.save_to_file_by_json(dir_name, file_name, data)
+		general_func.process_results(dir_name, file_name, data)
 
 if __name__ == '__main__':
 

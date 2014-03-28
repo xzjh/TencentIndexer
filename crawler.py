@@ -7,6 +7,7 @@ import sys
 import os
 from datetime import datetime
 import json
+import re
 
 import general_func
 import crawler_myapp
@@ -23,6 +24,7 @@ if __name__ == '__main__':
 	print '\n' + "TencentCrawler " + app_version + " by Jiaheng Zhang, all rights reserved."
 	os.chdir(sys.path[0])
 
+	# read args
 	crawler_args = {}
 	crawler_args['website_id'] = sys.argv[1]
 	crawler_args['start_time'] = datetime.strptime(sys.argv[2], "%Y%m%d%H%M")
@@ -38,17 +40,25 @@ if __name__ == '__main__':
 		str(crawler_args['start_time']) + ' to ' + str(crawler_args['end_time']) + \
 		' with ' + print_keyword + '.'
 
-	# set up proxy
+	# read configs
 	file_configs = open(configurations_file)
 	configs_raw = file_configs.read()
 	configs = json.loads(configs_raw)
+	# proxies
 	if configs.has_key('proxies') and configs['proxies'].has_key(crawler_args['website_id']):
-		#crawler_args['proxy_address'] = proxy_address[crawler_args['website_id']]
 		general_func.proxy_address = configs['proxies'][crawler_args['website_id']]
 		print "-- Using proxy: " + general_func.proxy_address
 	else:
-		#crawler_args['proxy_address'] = None
-		general_func.proxy_address = ''
+		general_func.proxy_address = None
+	# push address
+	if configs.has_key('push_address'):
+		if re.match(r'^https?:/{2}\w.+$', configs['push_address']):
+			general_func.push_address = configs['push_address']
+			print "-- Push address: " + general_func.push_address
+		else:
+			print "-- Invalid push address: " + configs['push_address']
+	else:
+		general_func.push_address = None
 
 	# call the crawler
 	if crawler_args['website_id'] == 'myapp':
