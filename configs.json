@@ -1,0 +1,6 @@
+{
+    "push_address": "PUSH_ADD",
+    "proxies": {
+        "googleplay": "66.230.191.159:3128"
+    }
+}

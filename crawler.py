@@ -16,6 +16,7 @@ import crawler_hiapk
 
 # configurations
 app_version = "0.1 Alpha"
+configurations_file = "configs.json"
 
 if __name__ == '__main__':
 
@@ -38,12 +39,12 @@ if __name__ == '__main__':
 		' with ' + print_keyword + '.'
 
 	# set up proxy
-	file_proxy = open('proxies.json')
-	proxy_address_raw = file_proxy.read()
-	proxy_address = json.loads(proxy_address_raw)
-	if proxy_address.has_key(crawler_args['website_id']):
+	file_configs = open(configurations_file)
+	configs_raw = file_configs.read()
+	configs = json.loads(configs_raw)
+	if configs.has_key('proxies') and configs['proxies'].has_key(crawler_args['website_id']):
 		#crawler_args['proxy_address'] = proxy_address[crawler_args['website_id']]
-		general_func.proxy_address = proxy_address[crawler_args['website_id']]
+		general_func.proxy_address = configs['proxies'][crawler_args['website_id']]
 		print "-- Using proxy: " + general_func.proxy_address
 	else:
 		#crawler_args['proxy_address'] = None
