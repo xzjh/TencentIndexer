@@ -27,4 +27,8 @@ args:
 
 Anzhi:
 http://www.anzhi.com/soft_1443636.html
-http://www.anzhi.com/comment.php?softid=1443636&page=1
+GET http://www.anzhi.com/comment.php?softid=1443636&page=1
+
+豆瓣条目
+http://www.douban.com/subject/10751360/
+GET http://www.douban.com/j/ilmen/thing/10751360/notes?sort=time&start=0&count=10

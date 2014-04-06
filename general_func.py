@@ -40,7 +40,7 @@ def process_results(dir_name, file_name, data):
 	file_json = open(full_file_name, 'w')
 	file_json.write(data_encoded.encode('utf-8'))
 	file_json.close()
-	print "** Saved to file: " + full_file_name
+	print "-- Saved to file: " + full_file_name
 
 	# push to server
 	if push_address != None:
@@ -49,9 +49,9 @@ def process_results(dir_name, file_name, data):
 			push_data['json'] = data_encoded
 			push_data['file_name'] = os.getcwd() + '/' + full_file_name
 			urllib2.urlopen(push_address, data = push_data)
-			print "** Pushed to address: " + push_address
+			print "-- Pushed to address: " + push_address
 		except:
-			print "** Failed to push to " + push_address
+			print "-- Failed to push to " + push_address
 
 def url_open(url, post_args = None):
 

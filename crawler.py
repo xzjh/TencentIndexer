@@ -15,6 +15,7 @@ import crawler_googleplay
 import crawler_anzhi
 import crawler_hiapk
 import crawler_91
+import crawler_douban_subject
 
 # configurations
 app_version = "0.1 Alpha"
@@ -72,5 +73,7 @@ if __name__ == '__main__':
 		crawler_hiapk.crawl(crawler_args)
 	elif crawler_args['website_id'] == '91':
 		crawler_91.crawl(crawler_args)
+	elif crawler_args['website_id'] == 'douban_subject':
+		crawler_douban_subject.crawl(crawler_args)
 	else:
 		print "Invalid website_id!"
