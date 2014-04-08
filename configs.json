@@ -1,6 +1,6 @@
 {
     "push_address": "http://localhost",
     "proxies": {
-        "googleplay": "66.230.191.159:3128"
+        "googleplay": "http://127.0.0.1:9743"
     }
 }

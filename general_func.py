@@ -6,7 +6,7 @@
 import os
 import json
 import urllib
-import urllib2
+import requests
 
 #configurations
 data_dir_name = "data"
@@ -63,17 +63,16 @@ def url_open(url, post_args = None):
 
 	# set up the proxy
 	if proxy_address != None:
-		proxy_handler = urllib2.ProxyHandler({"http": proxy_address})
+		proxy = {"http": proxy_address}
 	else:
-		proxy_handler = urllib2.ProxyHandler({})
-	opener = urllib2.build_opener(proxy_handler)
-	urllib2.install_opener(opener)
+		proxy = {}
+
+	headers = {'User-Agent': 'Mozilla/5.0'}
 
 	if post_args != None:
 		url_args_encoded = urllib.urlencode(post_args)
-		req = urllib2.Request(url, url_args_encoded, headers = {'User-Agent': 'Mozilla/5.0'})
-	else:		
-		req = urllib2.Request(url, headers = {'User-Agent': 'Mozilla/5.0'})
-	data = urllib2.urlopen(req).read()
-
-	return data
+		req = requests.post(url, data = url_args_encoded, headers = headers)
+	else:
+		req = requests.get(url, headers = headers)
+		
+	return req.text
