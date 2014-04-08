@@ -3,6 +3,7 @@
 运行环境：
 * Python 2.7.5
 * 安装BeautifulSoup库，如果有easy_install，直接运行：easy_install beautifulsoup4
+* 安装requests库，如果有easy_install，直接运行：easy_install requests
 
 参数：
 crawler.py website_id start_time end_time keyword
