@@ -70,9 +70,8 @@ def url_open(url, post_args = None):
 	headers = {'User-Agent': 'Mozilla/5.0'}
 
 	if post_args != None:
-		url_args_encoded = urllib.urlencode(post_args)
-		req = requests.post(url, data = url_args_encoded, headers = headers)
+		req = requests.post(url, data = post_args, headers = headers)
 	else:
 		req = requests.get(url, headers = headers)
-		
+
 	return req.text

@@ -19,7 +19,7 @@ https://play.google.com/store/apps/details?id=com.tencent.mm&hl=zh-cn
 comments:
 POST https://play.google.com/store/getreviews
 args:
-'reviewType': '0',			# 类型：
+'reviewType': '0',			# 类型
 'pageNum': 0,				# 页数
 'id': "com.tencent.mm",		# 应用ID
 'reviewSortOrder': '0'		# 按照时间排序
