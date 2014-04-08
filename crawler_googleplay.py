@@ -70,7 +70,9 @@ def get_comments_data(app_info, start_time, end_time):
 		data_raw = data_raw[5:]
 		data_json = json.loads(data_raw)
 		data_html = data_json[0][2]
-
+		f = open('test/google.html','w')
+		f.write(data_html.encode('utf8'))
+		f.close()
 		# get useful information
 		soup = BeautifulSoup(data_html)
 		soup_comments = soup.find_all('div', attrs = {'class': 'single-review'})
@@ -87,13 +89,13 @@ def get_comments_data(app_info, start_time, end_time):
 				if comment_time > end_time:
 					continue
 
-				soup_user_info = soup_comment_item.find_all('a', attrs = {'class': 'id-no-nav g-hovercard'})
-				if len(soup_user_info) <= 0:
+				soup_user_info = soup_comment_item.find('a', attrs = {'class': 'id-no-nav g-hovercard'})
+				if soup_user_info == None:
 					continue
-				item['user_name'] = soup_user_info[1].attrs['title']
-				item['user_id'] = soup_user_info[1].attrs['data-userid']
-				item['user_link'] = soup_user_info[1].attrs['href']
-				item['user_photo'] = soup_user_info[0].contents[1].attrs['src']
+				item['user_name'] = soup_user_info.attrs['title']
+				item['user_id'] = soup_user_info.attrs['data-userid']
+				item['user_link'] = soup_user_info.attrs['href']
+				item['user_photo'] = soup_comment_item.img.attrs['src']
 
 				comment_title = soup_comment_item.find('span', attrs = {'class': 'review-title'}).contents
 				if len(comment_title) > 0:
