@@ -19,6 +19,12 @@ def get_list_from_file(file_name):
 
 	the_file = open(file_name, 'r')
 	the_list = the_file.readlines()
+	
+	for i in range(len(the_list))[::-1]:
+		the_list[i] = the_list[i].strip()
+		if the_list[i][0] == '#':
+			del the_list[i]
+
 	return the_list
 
 # initialize the data dir, if exists, do nothing, else create a new
