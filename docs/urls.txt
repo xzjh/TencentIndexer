@@ -34,5 +34,7 @@ http://www.douban.com/subject/10751360/
 GET http://www.douban.com/j/ilmen/thing/10751360/notes?sort=time&start=0&count=10
 
 百度贴吧吧内
-http://tieba.baidu.com/mo	#tn验证码
-http://tieba.baidu.com/mo/m?word=微信&tn=bdKSW
+*http://tieba.baidu.com/mo	#tn验证码
+*http://tieba.baidu.com/mo/m?word=微信&tn=bdKSW
+http://tieba.baidu.com/mo/m?kw=腾讯手机管家&pn=0
+http://tieba.baidu.com/mo/m?kz=2319992979&global=1&expand=1

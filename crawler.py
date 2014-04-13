@@ -16,6 +16,7 @@ import crawler_anzhi
 import crawler_hiapk
 import crawler_91
 import crawler_douban_subject
+import crawler_tieba_forum
 
 # configurations
 app_version = "0.1 Alpha"
@@ -75,5 +76,7 @@ if __name__ == '__main__':
 		crawler_91.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'douban_subject':
 		crawler_douban_subject.crawl(crawler_args)
+	elif crawler_args['website_id'] == 'tieba_forum':
+		crawler_tieba_forum.crawl(crawler_args)
 	else:
 		print "Invalid website_id!"

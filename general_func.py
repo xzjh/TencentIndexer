@@ -7,6 +7,8 @@ import os
 import json
 import urllib
 import requests
+import datetime
+import codecs
 
 #configurations
 data_dir_name = "data"
@@ -17,7 +19,7 @@ push_address = None
 # read the list of page to get info from
 def get_list_from_file(file_name):
 
-	the_file = open(file_name, 'r')
+	the_file = codecs.open(file_name, encoding = 'utf-8')
 	the_list = the_file.readlines()
 	
 	for i in range(len(the_list))[::-1]:
@@ -59,7 +61,7 @@ def process_results(dir_name, file_name, data):
 		except:
 			print "-- Failed to push to " + push_address
 
-def url_open(url, post_args = None):
+def url_open(url, post_args = None, additional_headers = None):
 
 	# set up the proxy
 	if proxy_address != None:
@@ -68,6 +70,8 @@ def url_open(url, post_args = None):
 		proxy = {}
 
 	headers = {'User-Agent': 'Mozilla/5.0'}
+	if additional_headers != None:
+		headers.update(additional_headers)
 
 	if post_args != None:
 		req = requests.post(url, data = post_args, headers = headers)
@@ -75,3 +79,7 @@ def url_open(url, post_args = None):
 		req = requests.get(url, headers = headers)
 
 	return req.text
+
+def get_beijing_time():
+
+	return datetime.datetime.utcnow() + datetime.timedelta(hours = 8)
