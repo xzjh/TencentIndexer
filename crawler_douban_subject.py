@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# TencentCrawler for 安智 http://www.anzhi.com
+# TencentCrawler for 豆瓣条目 http://www.douban.com
 # by Jiaheng Zhang, all rights reserved.
 
 import urllib
