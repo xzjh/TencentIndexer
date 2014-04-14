@@ -135,9 +135,9 @@ def get_post_data(post_id):
 			post_content += unicode(soup_content_pos)
 			soup_content_pos = soup_content_pos.next_sibling
 
-		this_post['forum_post_content_author'] = post_content
-		this_post['forum_post_username_author'] = soup_content_pos.contents[0]
-		this_post['forum_post_time_author'] = get_time_from_str(unicode(soup_content_pos.next_sibling)) \
+		this_post['forum_post_author_content'] = post_content
+		this_post['forum_post_author_username'] = soup_content_pos.contents[0]
+		this_post['forum_post_author_time'] = get_time_from_str(unicode(soup_content_pos.next_sibling)) \
 			.strftime(time_format)
 
 		# get last reply content
@@ -167,9 +167,9 @@ def get_post_data(post_id):
 			post_content += unicode(soup_last_reply_pos)
 			soup_last_reply_pos = soup_last_reply_pos.next_sibling
 
-		this_post['forum_post_content_reply'] = post_content
-		this_post['forum_post_username_reply'] = soup_last_reply_pos.string
-		this_post['forum_post_time_reply'] = get_time_from_str(unicode(soup_last_reply_pos.next_sibling)) \
+		this_post['forum_post_reply_content'] = post_content
+		this_post['forum_post_reply_username'] = soup_last_reply_pos.string
+		this_post['forum_post_reply_time'] = get_time_from_str(unicode(soup_last_reply_pos.next_sibling)) \
 			.strftime(time_format)
 
 	except:
