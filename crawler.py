@@ -17,6 +17,7 @@ import crawler_hiapk
 import crawler_91
 import crawler_douban_subject
 import crawler_tieba_forum
+import crawler_tieba_search
 
 # configurations
 app_version = "0.1 Alpha"
@@ -32,16 +33,16 @@ if __name__ == '__main__':
 	crawler_args['website_id'] = sys.argv[1]
 	crawler_args['start_time'] = datetime.strptime(sys.argv[2], "%Y%m%d%H%M")
 	crawler_args['end_time'] = datetime.strptime(sys.argv[3], "%Y%m%d%H%M")
-	if len(crawler_args) >= 4:
-		crawler_args['keyword'] = sys.argv[4]
-		print_keyword = 'keyword \"' + crawler_args['keyword'] + '"'
-	else:
-		crawler_args['keyword'] = None
-		print_keyword = "no keyword"
+	# if len(crawler_args) >= 4:
+	# 	crawler_args['keyword'] = sys.argv[4]
+	# 	print_keyword = 'keyword \"' + crawler_args['keyword'] + '"'
+	# else:
+	# 	crawler_args['keyword'] = None
+	# 	print_keyword = "no keyword"
 
 	print 'Now crawling messages from website "' + crawler_args['website_id'] + '" in the period from ' + \
-		str(crawler_args['start_time']) + ' to ' + str(crawler_args['end_time']) + \
-		' with ' + print_keyword + '.'
+		str(crawler_args['start_time']) + ' to ' + str(crawler_args['end_time']) + '.'
+		# ' with ' + print_keyword + '.'
 
 	# read configs
 	file_configs = open(configurations_file)
@@ -78,5 +79,7 @@ if __name__ == '__main__':
 		crawler_douban_subject.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'tieba_forum':
 		crawler_tieba_forum.crawl(crawler_args)
+	elif crawler_args['website_id'] == 'tieba_search':
+		crawler_tieba_search.crawl(crawler_args)
 	else:
 		print "Invalid website_id!"

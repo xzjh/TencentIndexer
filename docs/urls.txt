@@ -38,3 +38,6 @@ GET http://www.douban.com/j/ilmen/thing/10751360/notes?sort=time&start=0&count=1
 *http://tieba.baidu.com/mo/m?word=微信&tn=bdKSW
 http://tieba.baidu.com/mo/m?kw=腾讯手机管家&pn=0
 http://tieba.baidu.com/mo/m?kz=2319992979&global=1&expand=1
+
+百度贴吧搜索
+http://tieba.baidu.com/f/search/res?ie=utf-8&qw=%E8%85%BE%E8%AE%AF%E6%89%8B%E6%9C%BA%E7%AE%A1%E5%AE%B6&pn=2
