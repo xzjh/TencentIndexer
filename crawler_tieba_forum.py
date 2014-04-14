@@ -121,59 +121,59 @@ def get_post_data(post_id):
 	rep_page = re.compile(ur'(?<=第1/)\d+(?=页)')
 	rep_reply = re.compile(ur'\d+楼\.')
 
-	#try:
-	post_html = general_func.url_open(post_url, additional_headers = additional_headers)
-	soup = BeautifulSoup(post_html)
-	this_post['forum_post_title'] = soup.card.attrs['title']
-	# post content match re:
-	#(?<=\d楼\.&#160;).+?(?=(<br/>)*<a href="/mo/.+</a>)
-
-	# get author content
-	soup_content_pos = soup.find('a', text = u'刷新').next_sibling
-	post_content = ''
-	while not (soup_content_pos.name == 'a' and soup_content_pos.attrs['href'].startswith('/mo/q')):
-		post_content += unicode(soup_content_pos)
-		soup_content_pos = soup_content_pos.next_sibling
-
-	this_post['forum_post_content_author'] = post_content
-	this_post['forum_post_username_author'] = soup_content_pos.contents[0]
-	this_post['forum_post_time_author'] = get_time_from_str(unicode(soup_content_pos.next_sibling)) \
-		.strftime(time_format)
-
-	# get last reply content
-	soup_next_page = soup.find('a', text = u'下一页')
-	if soup_next_page:
-		# more than 1 pages
-		while soup_next_page:
-			result = rep_page.search(unicode(soup_next_page))
-			if result:
-				page_num = result.group()
-				break
-			else:
-				soup_next_page = soup_next_page.next_sibling
-				continue
-		post_url_args['pn'] = (int(page_num) - 1) * 10
-		# get last page
-		post_url = post_url_base + '?' + urllib.urlencode(post_url_args)
+	try:
 		post_html = general_func.url_open(post_url, additional_headers = additional_headers)
 		soup = BeautifulSoup(post_html)
+		this_post['forum_post_title'] = soup.card.attrs['title']
+		# post content match re:
+		#(?<=\d楼\.&#160;).+?(?=(<br/>)*<a href="/mo/.+</a>)
 
-	# get last reply
-	for item in soup.p.contents:
-		if type(item) == bs4.element.NavigableString and rep_reply.match(item):
-			soup_last_reply_pos = item
-	post_content = ''
-	while not (soup_last_reply_pos.name == 'a' and soup_last_reply_pos.attrs['href'].startswith('/mo/q')):
-		post_content += unicode(soup_last_reply_pos)
-		soup_last_reply_pos = soup_last_reply_pos.next_sibling
+		# get author content
+		soup_content_pos = soup.find('a', text = u'刷新').next_sibling
+		post_content = ''
+		while not (soup_content_pos.name == 'a' and soup_content_pos.attrs['href'].startswith('/mo/q')):
+			post_content += unicode(soup_content_pos)
+			soup_content_pos = soup_content_pos.next_sibling
 
-	this_post['forum_post_content_reply'] = post_content
-	this_post['forum_post_username_reply'] = soup_last_reply_pos.string
-	this_post['forum_post_time_reply'] = get_time_from_str(unicode(soup_last_reply_pos.next_sibling)) \
-		.strftime(time_format)
+		this_post['forum_post_content_author'] = post_content
+		this_post['forum_post_username_author'] = soup_content_pos.contents[0]
+		this_post['forum_post_time_author'] = get_time_from_str(unicode(soup_content_pos.next_sibling)) \
+			.strftime(time_format)
 
-	#except:
-	#	return False, None
+		# get last reply content
+		soup_next_page = soup.find('a', text = u'下一页')
+		if soup_next_page:
+			# more than 1 pages
+			while soup_next_page:
+				result = rep_page.search(unicode(soup_next_page))
+				if result:
+					page_num = result.group()
+					break
+				else:
+					soup_next_page = soup_next_page.next_sibling
+					continue
+			post_url_args['pn'] = (int(page_num) - 1) * 10
+			# get last page
+			post_url = post_url_base + '?' + urllib.urlencode(post_url_args)
+			post_html = general_func.url_open(post_url, additional_headers = additional_headers)
+			soup = BeautifulSoup(post_html)
+
+		# get last reply
+		for item in soup.p.contents:
+			if type(item) == bs4.element.NavigableString and rep_reply.match(item):
+				soup_last_reply_pos = item
+		post_content = ''
+		while not (soup_last_reply_pos.name == 'a' and soup_last_reply_pos.attrs['href'].startswith('/mo/q')):
+			post_content += unicode(soup_last_reply_pos)
+			soup_last_reply_pos = soup_last_reply_pos.next_sibling
+
+		this_post['forum_post_content_reply'] = post_content
+		this_post['forum_post_username_reply'] = soup_last_reply_pos.string
+		this_post['forum_post_time_reply'] = get_time_from_str(unicode(soup_last_reply_pos.next_sibling)) \
+			.strftime(time_format)
+
+	except:
+		return False, None
 
 	return True, this_post
 
