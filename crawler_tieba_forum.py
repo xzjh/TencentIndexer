@@ -136,7 +136,7 @@ def get_post_data(post_id):
 			soup_content_pos = soup_content_pos.next_sibling
 
 		this_post['forum_post_author_content'] = post_content
-		this_post['forum_post_author_username'] = soup_content_pos.contents[0]
+		this_post['forum_post_author_user_name'] = soup_content_pos.contents[0]
 		this_post['forum_post_author_time'] = get_time_from_str(unicode(soup_content_pos.next_sibling)) \
 			.strftime(time_format)
 
@@ -168,7 +168,7 @@ def get_post_data(post_id):
 			soup_last_reply_pos = soup_last_reply_pos.next_sibling
 
 		this_post['forum_post_reply_content'] = post_content
-		this_post['forum_post_reply_username'] = soup_last_reply_pos.string
+		this_post['forum_post_reply_user_name'] = soup_last_reply_pos.string
 		this_post['forum_post_reply_time'] = get_time_from_str(unicode(soup_last_reply_pos.next_sibling)) \
 			.strftime(time_format)
 
