@@ -41,3 +41,6 @@ http://tieba.baidu.com/mo/m?kz=2319992979&global=1&expand=1
 
 百度贴吧搜索
 http://tieba.baidu.com/f/search/res?ie=utf-8&qw=%E8%85%BE%E8%AE%AF%E6%89%8B%E6%9C%BA%E7%AE%A1%E5%AE%B6&pn=2
+
+新浪微博
+http://weibo.cn/search/mblog?&keyword=%E8%85%BE%E8%AE%AF%E6%89%8B%E6%9C%BA%E5%8A%A9%E6%89%8B&&starttime=20140401&endtime=20140415&sort=time&page=1

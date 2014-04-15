@@ -61,22 +61,22 @@ def process_results(dir_name, file_name, data):
 		except:
 			print "-- Failed to push to " + push_address
 
-def url_open(url, post_args = None, additional_headers = None):
+def url_open(url, post_args = None, additional_headers = None, cookies = None):
 
 	# set up the proxy
 	if proxy_address != None:
 		proxy = {"http": proxy_address}
 	else:
-		proxy = {}
+		proxy = None
 
 	headers = {'User-Agent': 'Mozilla/5.0'}
 	if additional_headers != None:
 		headers.update(additional_headers)
 
 	if post_args != None:
-		req = requests.post(url, data = post_args, headers = headers)
+		req = requests.post(url, data = post_args, headers = headers, cookies = cookies, proxies = proxy)
 	else:
-		req = requests.get(url, headers = headers)
+		req = requests.get(url, headers = headers, cookies = cookies, proxies = proxy)
 
 	return req.text
 
