@@ -40,6 +40,13 @@ def get_posts_data(forum_id, start_time, end_time):
 		forum_html = general_func.url_open(forum_url)
 		soup = BeautifulSoup(forum_html)
 		soup_posts = soup.find_all('div', attrs = {'class': 's_post'})
+		soup_last_page_link = soup.find('a', text = u"尾页")
+		if soup_last_page_link:
+			last_page_url = soup_last_page_link.attrs['href']
+			url_parse = urlparse.urlparse(last_page_url)
+			last_page_num = urlparse.parse_qs(url_parse.query)['pn'][0]
+		else:
+			last_page_num = 1
 
 		# get the IDs and times of the posts
 		for soup_post in soup_posts:
@@ -71,7 +78,7 @@ def get_posts_data(forum_id, start_time, end_time):
 			else:
 				break
 
-		if post_time >= start_time:
+		if post_time >= start_time and forum_url_args['pn'] <= last_page_num:
 			# the comment is too new
 			if post_time > end_time:
 				print "-- The posts are too new! Pass this page! " + post_time.strftime(time_format)
@@ -90,47 +97,46 @@ def get_post_data(post_address):
 	this_post = {}
 	this_post['post_address'] = post_address
 
-	# try:
-	post_html = general_func.url_open(post_address)
-	soup = BeautifulSoup(post_html)
-	this_post['forum_post_title'] = soup.find('h1', attrs = {'class': 'core_title_txt'}).attrs['title']
+	try:
+		post_html = general_func.url_open(post_address)
+		soup = BeautifulSoup(post_html)
+		this_post['forum_post_title'] = soup.find('h1', attrs = {'class': 'core_title_txt'}).attrs['title']
 
-	post_url_parse = urlparse.urlparse(post_address)
-	post_url_args = urlparse.parse_qs(post_url_parse.query)
-	post_pid = post_url_args['pid'][0]
-	post_cid = post_url_args['cid'][0]
+		post_url_parse = urlparse.urlparse(post_address)
+		post_url_args = urlparse.parse_qs(post_url_parse.query)
+		post_pid = post_url_args['pid'][0]
+		post_cid = post_url_args['cid'][0]
 
-	if post_cid != '0':
-		# it is a reply's comment
-		# get comment data
-		soup_anchor = soup.find('a', attrs = {'class': 'l_post_anchor', 'name': post_cid})
+		if post_cid != '0':
+			# it is a reply's comment
+			# get comment data
+			soup_anchor = soup.find('a', attrs = {'class': 'l_post_anchor', 'name': post_cid})
 
-		this_post['forum_post_comment_content'] = unicode( \
-			soup_anchor.find_next('span', attrs = {'class': 'lzl_content_main'}).contents[1])
-		this_post['forum_post_comment_user_name'] = \
-			soup_anchor.find_next('a', attrs = {'class': 'j_user_card'}).attrs['username']
-		this_post['forum_post_comment_user_link'] = post_url_base + \
-			soup_anchor.find_next('a', attrs = {'class': 'j_user_card'}).attrs['href']
-		this_post['forum_post_comment_user_photo'] = post_url_base + \
-			soup_anchor.find_next('img').attrs['src']
-		this_post['forum_post_comment_time'] = datetime.strptime( \
-			soup_anchor.find_next('span', attrs = {'class': 'lzl_time'}).contents[0], 
+			this_post['forum_post_comment_content'] = unicode( \
+				soup_anchor.find_next('span', attrs = {'class': 'lzl_content_main'}).contents[1])
+			this_post['forum_post_comment_user_name'] = \
+				soup_anchor.find_next('a', attrs = {'class': 'j_user_card'}).attrs['username']
+			this_post['forum_post_comment_user_link'] = post_url_base + \
+				soup_anchor.find_next('a', attrs = {'class': 'j_user_card'}).attrs['href']
+			this_post['forum_post_comment_user_photo'] = post_url_base + \
+				soup_anchor.find_next('img').attrs['src']
+			this_post['forum_post_comment_time'] = datetime.strptime( \
+				soup_anchor.find_next('span', attrs = {'class': 'lzl_time'}).contents[0], 
+				'%Y-%m-%d %H:%M').strftime(time_format)
+
+		# get post data
+		soup_anchor = soup.find('a', attrs = {'class': 'l_post_anchor', 'name': post_pid})
+		soup_user_info = soup_anchor.find_next('a', attrs = {'class': 'p_author_face'})
+		this_post['forum_post_user_link'] = post_url_base + soup_user_info.attrs['href']
+		this_post['forum_post_user_name'] = soup_user_info.img.attrs['username']
+		this_post['forum_post_user_photo'] = post_url_base + soup_user_info.img.attrs['src']
+		this_post['forum_post_content'] = soup_anchor.find_next('div', attrs = {'class': 'd_post_content'}).text.strip()
+		this_post['forum_post_time'] = datetime.strptime( \
+			soup_anchor.find_next('ul', attrs = {'class': 'p_tail'}).contents[1].contents[0].contents[0], \
 			'%Y-%m-%d %H:%M').strftime(time_format)
 
-	# get post data
-	soup_anchor = soup.find('a', attrs = {'class': 'l_post_anchor', 'name': post_pid})
-	soup_user_info = soup_anchor.find_next('a', attrs = {'class': 'p_author_face'})
-	this_post['forum_post_user_link'] = post_url_base + soup_user_info.attrs['href']
-	this_post['forum_post_user_name'] = soup_user_info.img.attrs['username']
-	this_post['forum_post_user_photo'] = post_url_base + soup_user_info.img.attrs['src']
-	this_post['forum_post_content'] = "".join(map(lambda x: unicode(x).strip() + '\n', \
-		soup_anchor.find_next('div', attrs = {'class': 'd_post_content'}).contents))
-	this_post['forum_post_time'] = datetime.strptime( \
-		soup_anchor.find_next('ul', attrs = {'class': 'p_tail'}).contents[1].contents[0].contents[0], \
-		'%Y-%m-%d %H:%M').strftime(time_format)
-
-	# except:
-	# 	return False, None
+	except:
+		return False, None
 
 	return True, this_post
 
