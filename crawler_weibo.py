@@ -103,25 +103,25 @@ def get_posts_data(search_keyword, start_time, end_time):
 				
 				# now it's the post needed
 				# get post data
-				# try:
-				this_post = {}
-				this_post['weibo_post_user_name'] = soup_weibo.find('a', attrs = {'class': 'nk'}).text
-				this_post['weibo_post_user_link'] = soup_weibo.find('a', attrs = {'class': 'nk'}).attrs['href']
-				soup_content = soup_weibo.find('span', attrs = {'class': 'ctt'})
-				this_post['weibo_post_content'] = soup_content.text
-				if soup_content.previous_sibling.name == 'span' and \
-					u'转发了' in soup_content.previous_sibling.contents[0]:
-					# it is a forwarded weibo
-					this_post['weibo_post_original_user_name'] = soup_content.previous_sibling.a.text
-					this_post['weibo_post_original_user_link'] = soup_content.previous_sibling.a.attrs['href']
-					forward_content_raw = soup_content.find_next('span', text = u'转发理由:').parent.text
-					remove_pos = rep_remove_content_extra.search(forward_content_raw).start()
-					this_post['weibo_post_forward_content'] = forward_content_raw[:remove_pos].strip()
+				try:
+					this_post = {}
+					this_post['weibo_post_user_name'] = soup_weibo.find('a', attrs = {'class': 'nk'}).text
+					this_post['weibo_post_user_link'] = soup_weibo.find('a', attrs = {'class': 'nk'}).attrs['href']
+					soup_content = soup_weibo.find('span', attrs = {'class': 'ctt'})
+					this_post['weibo_post_content'] = soup_content.text
+					if soup_content.previous_sibling.name == 'span' and \
+						u'转发了' in soup_content.previous_sibling.contents[0]:
+						# it is a forwarded weibo
+						this_post['weibo_post_original_user_name'] = soup_content.previous_sibling.a.text
+						this_post['weibo_post_original_user_link'] = soup_content.previous_sibling.a.attrs['href']
+						forward_content_raw = soup_content.find_next('span', text = u'转发理由:').parent.text
+						remove_pos = rep_remove_content_extra.search(forward_content_raw).start()
+						this_post['weibo_post_forward_content'] = forward_content_raw[:remove_pos].strip()
 
-				posts_data['weibo_posts'].append(this_post)
-				# except:
-				# 	print '-- Failed to get current weibo!'
-				# 	continue
+					posts_data['weibo_posts'].append(this_post)
+				except:
+					print '-- Failed to get current weibo!'
+					continue
 			else:
 				break
 
