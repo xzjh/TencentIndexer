@@ -32,34 +32,35 @@ def parse_forum_url(forum_url):
 
 	global website_id, forum_url_base, post_url_base
 
-	page_url_parse = urlparse.urlparse(forum_url)
-	if page_url_parse.netloc == 'bbs.g.qq.com':
-		# bbs.g.qq.com domain
-		website_id = 'tencentbbs_bbsg'
-		forum_url_base = 'http://bbs.g.qq.com/forum.php'
-		post_url_base = forum_url_base
-	elif page_url_parse.netloc.endswith('gamebbs.qq.com'):
-		# gamebbs.qq.com domain
-		website_id = 'tencentbbs_gamebbs'
-		forum_url_base = 'http://' + page_url_parse.netloc + '/forum.php'
-		post_url_base = forum_url_base
-	else:
-		return False, None
+	try:
+		page_url_parse = urlparse.urlparse(forum_url)
+		if page_url_parse.netloc == 'bbs.g.qq.com':
+			# bbs.g.qq.com domain
+			website_id = 'tencentbbs_bbsg'
+			forum_url_base = 'http://bbs.g.qq.com/forum.php'
+			post_url_base = forum_url_base
+		elif page_url_parse.netloc.endswith('gamebbs.qq.com'):
+			# gamebbs.qq.com domain
+			website_id = 'tencentbbs_gamebbs'
+			forum_url_base = 'http://' + page_url_parse.netloc + '/forum.php'
+			post_url_base = forum_url_base
+		else:
+			return False, None
 
-	page_url_args = urlparse.parse_qs(page_url_parse.query)
-	if page_url_args.has_key('fid') and page_url_args['fid'] != '':
+		page_url_args = urlparse.parse_qs(page_url_parse.query)
 		return True, page_url_args['fid'][0]
-	else:
+
+	except:
 		return False, None
 
 # get the post ID from the page url
 def get_post_id(post_url):
 
-	page_url_parse = urlparse.urlparse(post_url)
-	page_url_args = urlparse.parse_qs(page_url_parse.query)
-	if page_url_args.has_key('tid') and page_url_args['tid'] != '':
+	try:
+		page_url_parse = urlparse.urlparse(post_url)
+		page_url_args = urlparse.parse_qs(page_url_parse.query)
 		return True, page_url_args['tid'][0]
-	else:
+	except:
 		return False, None
 
 def get_posts_data(forum_id, start_time, end_time):
@@ -100,7 +101,7 @@ def get_posts_data(forum_id, start_time, end_time):
 				post_url_raw = soup_post.a.attrs['href']
 				is_success, post_id = get_post_id(post_url_raw)
 				if not is_success:
-					print '-- Failed to get post: ' + post_id
+					print '-- Failed to get post!'
 					continue
 
 				# get post data
