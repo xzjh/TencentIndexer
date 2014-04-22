@@ -13,9 +13,9 @@ import re
 import general_func
 
 # configurations
-website_id = 'tencentbbs' # TBD
-website_name = "腾讯论坛 http://bbs.g.qq.com http://gamebbs.qq.com"
-page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
+website_id = '' # TBD
+website_name = '' # TBD
+page_list_file = '' # TBD
 forum_url_base = '' # TBD
 forum_url_args = {}
 forum_url_args['mod'] = 'forumdisplay'
@@ -27,6 +27,25 @@ post_url_reply_args['mod'] = 'redirect'
 post_url_reply_args['goto'] = 'lastpost'
 time_format = '%Y%m%d%H%M'
 
+def set_website_attrs(website_id_arg):
+
+	global website_id, forum_url_base, post_url_base, page_list_file
+
+	website_id = website_id_arg
+
+	if website_id == 'tencentbbs':
+		website_name = '腾讯论坛 http://bbs.g.qq.com http://gamebbs.qq.com'
+	elif website_id == 'duowan':
+		website_name = '多玩论坛 http://bbs.duowan.com'
+		forum_url_base = 'http://bbs.duowan.com/forum.php'
+		post_url_base = forum_url_base
+	elif website_id == '178':
+		website_name = '178论坛 http://bbs.178.com/'
+		forum_url_base = 'http://bbs.178.com/forum.php'
+		post_url_base = forum_url_base
+
+	page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
+
 # get the forum ID from the page url
 def parse_forum_url(forum_url):
 
@@ -34,21 +53,25 @@ def parse_forum_url(forum_url):
 
 	try:
 		page_url_parse = urlparse.urlparse(forum_url)
-		if page_url_parse.netloc == 'bbs.g.qq.com':
-			# bbs.g.qq.com domain
-			website_id = 'tencentbbs_bbsg'
-			forum_url_base = 'http://bbs.g.qq.com/forum.php'
-			post_url_base = forum_url_base
-		elif page_url_parse.netloc.endswith('gamebbs.qq.com'):
-			# gamebbs.qq.com domain
-			website_id = 'tencentbbs_gamebbs'
-			forum_url_base = 'http://' + page_url_parse.netloc + '/forum.php'
-			post_url_base = forum_url_base
+		if website_id == 'duowan' or website_id == '178':
+			return True, page_url_parse.path.split('-')[1]
 		else:
-			return False, None
-
-		page_url_args = urlparse.parse_qs(page_url_parse.query)
-		return True, page_url_args['fid'][0]
+			# tencentbbs, set args
+			if page_url_parse.netloc == 'bbs.g.qq.com':
+				# bbs.g.qq.com domain
+				website_id = 'tencentbbs_bbsg'
+				forum_url_base = 'http://bbs.g.qq.com/forum.php'
+				post_url_base = forum_url_base
+			elif page_url_parse.netloc.endswith('gamebbs.qq.com'):
+				# gamebbs.qq.com domain
+				website_id = 'tencentbbs_gamebbs'
+				forum_url_base = 'http://' + page_url_parse.netloc + '/forum.php'
+				post_url_base = forum_url_base
+			else:
+				return False, None
+			# parse fid
+			page_url_args = urlparse.parse_qs(page_url_parse.query)
+			return True, page_url_args['fid'][0]
 
 	except:
 		return False, None
@@ -58,8 +81,11 @@ def get_post_id(post_url):
 
 	try:
 		page_url_parse = urlparse.urlparse(post_url)
-		page_url_args = urlparse.parse_qs(page_url_parse.query)
-		return True, page_url_args['tid'][0]
+		if website_id == 'duowan' or website_id == '178':
+			return True, page_url_parse.path.split('-')[1]
+		else:
+			page_url_args = urlparse.parse_qs(page_url_parse.query)
+			return True, page_url_args['tid'][0]
 	except:
 		return False, None
 
@@ -105,7 +131,7 @@ def get_posts_data(forum_id, start_time, end_time):
 					continue
 
 				# get post data
-				print "Getting post data: " + post_id
+				print "Getting post data: " + post_id + ', post time: ' + post_time.strftime('%Y-%m-%d %H:%M')
 				is_success, this_post = get_post_data(post_id)
 				if is_success:
 					posts_data['forum_posts'].append(this_post)
@@ -118,7 +144,7 @@ def get_posts_data(forum_id, start_time, end_time):
 		if post_time >= start_time:
 			# the comment is too new
 			if post_time > end_time:
-				print "-- The posts are too new! Pass this page! " + post_time.strftime(time_format)
+				print "-- The posts are too new! Pass this page! Post time: " + post_time.strftime('%Y-%m-%d %H:%M')
 			forum_url_args['page'] += 1
 		else:
 			break
@@ -179,6 +205,8 @@ def get_post_data(post_id):
 	return True, this_post
 
 def crawl(args):
+
+	set_website_attrs(args['website_id'])
 
 	print "Now running TencentCrawler for " + website_name
 

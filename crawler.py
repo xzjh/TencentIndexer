@@ -19,8 +19,7 @@ import crawler_douban_subject
 import crawler_tieba_forum
 import crawler_tieba_search
 import crawler_weibo
-import crawler_tencentbbs
-import crawler_duowan
+import crawler_discuz
 
 # configurations
 app_version = "0.1 Alpha"
@@ -86,9 +85,9 @@ if __name__ == '__main__':
 		crawler_tieba_search.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'weibo':
 		crawler_weibo.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'tencentbbs':
-		crawler_tencentbbs.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'duowan':
-		crawler_duowan.crawl(crawler_args)
+	elif crawler_args['website_id'] == 'tencentbbs' or \
+		crawler_args['website_id'] == 'duowan' or \
+		crawler_args['website_id'] == '178':
+		crawler_discuz.crawl(crawler_args)
 	else:
 		print "Invalid website_id!"
