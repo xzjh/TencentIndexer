@@ -18,7 +18,10 @@ crawler.py website_id start_time end_time
 	** 安卓网：hiapk
 	** 百度贴吧吧内：tieba_forum
 	** 百度贴吧搜索：tieba_search
-	** 腾讯论坛（http://bbs.g.qq.com开头）：tencentbbs
+	** 腾讯论坛：tencentbbs
+		*** 其中：
+		*** bbs.g.qq.com 域名下的，生成的数据文件在 data/tencentbbs_bbsg 目录下
+		*** gamebbs.qq.com 域名下的，生成的数据文件在 data/tencentbbs_gamebbs 目录下
 	** 多玩论坛：duowan
 	** 178论坛：178
 * start_time：开始时间
