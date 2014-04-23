@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# TencentCrawler for 腾讯论坛 http://bbs.g.qq.com http://gamebbs.qq.com
+# TencentCrawler for Discuz
 # by Jiaheng Zhang, all rights reserved.
 
 import urllib
