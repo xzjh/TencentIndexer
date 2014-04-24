@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0063)file:///var/folders/3f/mwtw9b4s3fjfpjgv7_57mlxw0000gn/T/28.html -->
+<!-- saved from url=(0064)file:///var/folders/3f/mwtw9b4s3fjfpjgv7_57mlxw0000gn/T/895.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 
 body{
@@ -122,14 +122,27 @@ body{font-size:16px;}
   p, h2, h3 { orphans: 3; widows: 3; }
   h2, h3 { page-break-after: avoid; }
 }
-</style><title>instructions</title></head><body><h1 id="_1">爬虫使用说明</h1>
+</style><title>README</title></head><body><h1 id="_1">爬虫使用说明</h1>
 <h2 id="_2">运行环境</h2>
 <ul>
 <li>Python 2.7.5</li>
 <li>安装<em>BeautifulSoup</em>库，如果有easy_install，直接运行：<code>easy_install beautifulsoup4</code></li>
 <li>安装<em>requests</em>库，如果有easy_install，直接运行：<code>easy_install requests</code></li>
 </ul>
-<h2 id="_3">运行参数</h2>
+<h2 id="_3">配置文件说明</h2>
+<p>配置文件：<code>configs.json</code>，为JSON格式，其中</p>
+<ul>
+<li><code>push_address</code>为每爬完一次后，将数据以post方式推送到的地址</li>
+<li><code>proxies</code>为以网站为单位的代理服务器地址，每个网站指定一个，必须以http开头</li>
+</ul>
+<p>配置文件：<code>page_list/{website_id}.txt</code>，其中<em>{website_id}</em>代表相应网站的ID。该文件每行填入一个地址或者关键字，其中</p>
+<ul>
+<li>应用类网站每行写入一个<strong>应用主页</strong>地址</li>
+<li>论坛类应用每行写入一个<strong>论坛板块</strong>的首页地址</li>
+<li>微博每行写入一条<strong>关键字</strong></li>
+<li><strong>如文件中有特殊注明，请根据注释的规则进行配置</strong></li>
+</ul>
+<h2 id="_4">运行参数</h2>
 <pre><code>./crawler.py website_id start_time end_time
 </code></pre>
 <ul>
@@ -156,12 +169,6 @@ body{font-size:16px;}
 <li>时间格式：<code>YYMMDDhhmm</code>，例如：2014年3月19日22:09，写作201403192209</li>
 </ul>
 </li>
-</ul>
-<h2 id="_4">配置文件说明</h2>
-<p>配置文件：<code>configs.json</code>，为JSON格式，其中</p>
-<ul>
-<li><code>push_address</code>为每爬完一次后，将数据以post方式推送到的地址</li>
-<li><code>proxies</code>为以网站为单位的代理服务器地址，每个网站指定一个，必须以http开头</li>
 </ul>
 <h2 id="_5">输出数据说明</h2>
 <p>输出数据为JSON格式，位置在data目录下，每个网站的数据在其对应的ID为名称的目录下</p>
