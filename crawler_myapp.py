@@ -78,15 +78,15 @@ def get_comments_data(app_info, start_time, end_time):
 				if comment_time > end_time:
 					continue
 
-				item['user_name'] = comment_item['username']
-				item['user_id'] = comment_item['userid']
-				item['user_photo'] = comment_item['userphoto']
-				item['comment_content'] = comment_item['content']
-				item['comment_time'] = comment_time.strftime(time_format)
-				item['comment_star_rating'] = int(comment_item['userpoststarno']) / 20
-				item['comment_channel'] = comment_item['channel']
-				item['comment_agree_count'] = int(comment_item['agree'])
-				item['comment_disagree_count'] = int(comment_item['disagree'])
+				item['app_comment_user_name'] = comment_item['username']
+				item['app_comment_user_id'] = comment_item['userid']
+				item['app_comment_user_photo'] = comment_item['userphoto']
+				item['app_comment_content'] = comment_item['content']
+				item['app_comment_time'] = comment_time.strftime(time_format)
+				item['app_comment_user_score'] = int(comment_item['userpoststarno']) / 20
+				item['app_comment_channel'] = comment_item['channel']
+				item['app_comment_agree_count'] = int(comment_item['agree'])
+				item['app_comment_disagree_count'] = int(comment_item['disagree'])
 
 				data['app_comments'].append(item)
 

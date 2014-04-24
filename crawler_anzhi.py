@@ -82,10 +82,10 @@ def get_comments_data(app_info, start_time, end_time):
 				if comment_time > end_time:
 					continue
 
-				item['user_name'] = soup_comment_item.find('div', attrs = {'class': 'comment_list_top'}).span.contents[0]
-				item['user_photo'] = soup_comment_item.img.attrs['src']
-				item['comment_content'] = soup_comment_item.p.contents[0]
-				item['comment_time'] = comment_time.strftime(time_format)
+				item['app_comment_user_name'] = soup_comment_item.find('div', attrs = {'class': 'comment_list_top'}).span.contents[0]
+				item['app_comment_user_photo'] = soup_comment_item.img.attrs['src']
+				item['app_comment_content'] = soup_comment_item.p.contents[0]
+				item['app_comment_time'] = comment_time.strftime(time_format)
 				data['app_comments'].append(item)
 
 			else:

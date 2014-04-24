@@ -92,19 +92,19 @@ def get_comments_data(app_info, start_time, end_time):
 				soup_user_info = soup_comment_item.find('a', attrs = {'class': 'id-no-nav g-hovercard'})
 				if soup_user_info == None:
 					continue
-				item['user_name'] = soup_user_info.attrs['title']
-				item['user_id'] = soup_user_info.attrs['data-userid']
-				item['user_link'] = soup_user_info.attrs['href']
-				item['user_photo'] = soup_comment_item.img.attrs['src']
+				item['app_comment_user_name'] = soup_user_info.attrs['title']
+				item['app_comment_user_id'] = soup_user_info.attrs['data-userid']
+				item['app_comment_user_link'] = soup_user_info.attrs['href']
+				item['app_comment_user_photo'] = soup_comment_item.img.attrs['src']
 
 				comment_title = soup_comment_item.find('span', attrs = {'class': 'review-title'}).contents
 				if len(comment_title) > 0:
-					item['comment_title'] = comment_title[0].strip()
+					item['app_comment_title'] = comment_title[0].strip()
 				else:
-					item['comment_title'] = ''
-				item['comment_content'] = soup_comment_item.find('div', attrs = {'class': 'review-body'}).contents[2].strip()
-				item['comment_time'] = comment_time.strftime(time_format)
-				item['comment_star_rating'] = int(soup_comment_item.find('div', attrs = {'class': 'current-rating'}).attrs['style'].split(':')[1][:-2]) / 20
+					item['app_comment_title'] = ''
+				item['app_comment_content'] = soup_comment_item.find('div', attrs = {'class': 'review-body'}).contents[2].strip()
+				item['app_comment_time'] = comment_time.strftime(time_format)
+				item['app_comment_user_score'] = int(soup_comment_item.find('div', attrs = {'class': 'current-rating'}).attrs['style'].split(':')[1][:-2]) / 20
 				data['app_comments'].append(item)
 
 			else:

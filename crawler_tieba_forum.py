@@ -84,7 +84,7 @@ def get_posts_data(forum_id, start_time, end_time):
 					# get post id
 					post_id = rep_post_id.search(item_a.attrs['href']).group()
 					# get post data
-					print "Getting post data: " + post_id
+					print "Getting post data: " + post_id + ', post time: ' + post_time.strftime(time_format)
 					is_success, this_post = get_post_data(post_id)
 					if is_success:
 						posts_data['forum_posts'].append(this_post)
@@ -114,7 +114,7 @@ def get_posts_data(forum_id, start_time, end_time):
 def get_post_data(post_id):
 
 	this_post = {}
-	this_post['post_id'] = post_id
+	this_post['forum_post_id'] = post_id
 	post_url_args['kz'] = post_id
 	post_url_args['pn'] = 0
 	post_url = post_url_base + '?' + urllib.urlencode(post_url_args)

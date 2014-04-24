@@ -74,7 +74,7 @@ def get_comments_data(app_info, start_time, end_time):
 		for comment_item in data_json['list']:
 
 			item = {}
-			comment_time = datetime.strptime(comment_item['p'], "%Y/%m/%d %H:%M:%S").replace(second = 0)
+			comment_time = datetime.strptime(comment_item['p'], "%Y-%m-%d %H:%M:%S").replace(second = 0)
 
 			if comment_time >= start_time:
 
@@ -82,13 +82,13 @@ def get_comments_data(app_info, start_time, end_time):
 				if comment_time > end_time:
 					continue
 
-				item['user_name'] = comment_item['un']
-				item['user_id'] = comment_item['ui']
-				item['comment_content'] = comment_item['data']
-				item['comment_time'] = comment_time.strftime(time_format)
-				item['comment_star_rating'] = int(comment_item['s']) / 2
-				item['comment_agree_count'] = int(comment_item['up'])
-				item['comment_disagree_count'] = int(comment_item['dn'])
+				item['app_comment_user_name'] = comment_item['un']
+				item['app_comment_user_id'] = comment_item['ui']
+				item['app_comment_content'] = comment_item['data']
+				item['app_comment_time'] = comment_time.strftime(time_format)
+				item['app_comment_user_score'] = int(comment_item['s']) / 2
+				item['app_comment_agree_count'] = int(comment_item['up'])
+				item['app_comment_disagree_count'] = int(comment_item['dn'])
 
 				data['app_comments'].append(item)
 

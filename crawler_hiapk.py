@@ -92,11 +92,11 @@ def get_comments_data(app_info, start_time, end_time):
 				if comment_time > end_time:
 					continue
 
-				item['user_name'] = soup_comment_item.find('div', attrs = {'class', 'author_tip'}).contents[0].strip().split(' ')[0]
-				item['user_photo'] = soup_comment_item.find('div', attrs = {'class', 'headimg'}).img.attrs['src']
-				item['comment_content'] = soup_comment_item.find('div', attrs = {'class', 'comcontent'}).contents[0].strip()
-				item['comment_time'] = comment_time.strftime(time_format)
-				item['comment_channel'] = soup_comment_item.find('div', attrs = {'class', 'detail_version'}) \
+				item['app_comment_user_name'] = soup_comment_item.find('div', attrs = {'class', 'author_tip'}).contents[0].strip().split(' ')[0]
+				item['app_comment_user_photo'] = soup_comment_item.find('div', attrs = {'class', 'headimg'}).img.attrs['src']
+				item['app_comment_content'] = soup_comment_item.find('div', attrs = {'class', 'comcontent'}).contents[0].strip()
+				item['app_comment_time'] = comment_time.strftime(time_format)
+				item['app_comment_channel'] = soup_comment_item.find('div', attrs = {'class', 'detail_version'}) \
 					.span.next_sibling.next_sibling.contents[0].strip().split(u'：')[1]
 				data['app_comments'].append(item)
 
