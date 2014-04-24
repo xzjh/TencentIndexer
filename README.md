@@ -5,6 +5,19 @@
 * 安装*BeautifulSoup*库，如果有easy_install，直接运行：`easy_install beautifulsoup4`
 * 安装*requests*库，如果有easy_install，直接运行：`easy_install requests`
 
+##配置文件说明
+配置文件：`configs.json`，为JSON格式，其中
+
+* `push_address`为每爬完一次后，将数据以post方式推送到的地址
+* `proxies`为以网站为单位的代理服务器地址，每个网站指定一个，必须以http开头
+
+配置文件：`page_list/{website_id}.txt`，其中*{website_id}*代表相应网站的ID。该文件每行填入一个地址或者关键字，其中
+
+* 应用类网站每行写入一个**应用主页**地址
+* 论坛类应用每行写入一个**论坛板块**的首页地址
+* 微博每行写入一条**关键字**
+* **如文件中有特殊注明，请根据注释的规则进行配置**
+
 ##运行参数
 	./crawler.py website_id start_time end_time
 
@@ -25,12 +38,6 @@
 * start_time：开始时间
 * end_time：结束时间
 	* 时间格式：`YYMMDDhhmm`，例如：2014年3月19日22:09，写作201403192209
-
-##配置文件说明
-配置文件：`configs.json`，为JSON格式，其中
-
-* `push_address`为每爬完一次后，将数据以post方式推送到的地址
-* `proxies`为以网站为单位的代理服务器地址，每个网站指定一个，必须以http开头
 
 ##输出数据说明
 输出数据为JSON格式，位置在data目录下，每个网站的数据在其对应的ID为名称的目录下
