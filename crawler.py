@@ -20,6 +20,7 @@ import crawler_tieba_forum
 import crawler_tieba_search
 import crawler_weibo
 import crawler_discuz
+import crawler_douban_group
 
 # configurations
 app_version = "0.1 Alpha"
@@ -89,5 +90,7 @@ if __name__ == '__main__':
 		crawler_args['website_id'] == 'duowan' or \
 		crawler_args['website_id'] == '178':
 		crawler_discuz.crawl(crawler_args)
+	elif crawler_args['website_id'] == 'douban_group':
+		crawler_douban_group.crawl(crawler_args)
 	else:
 		print "Invalid website_id!"
