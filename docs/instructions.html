@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)file:///var/folders/3f/mwtw9b4s3fjfpjgv7_57mlxw0000gn/T/28.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+
+body{
+  color:#444;
+  font-family:Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman',
+              "Hiragino Sans GB", "STXihei", "微软雅黑", serif;
+  font-size:12px;
+  line-height:1.5em;
+  background:#fefefe;
+  width: 45em;
+  margin: 10px auto;
+  padding: 1em;
+  outline: 1300px solid #FAFAFA;
+}
+
+a{ color: #0645ad; text-decoration:none;}
+a:visited{ color: #0b0080; }
+a:hover{ color: #06e; }
+a:active{ color:#faa700; }
+a:focus{ outline: thin dotted; }
+a:hover, a:active{ outline: 0; }
+
+span.backtick {
+  border:1px solid #EAEAEA;
+  border-radius:3px;
+  background:#F8F8F8;
+  padding:0 3px 0 3px;
+}
+
+::-moz-selection{background:rgba(255,255,0,0.3);color:#000}
+::selection{background:rgba(255,255,0,0.3);color:#000}
+
+a::-moz-selection{background:rgba(255,255,0,0.3);color:#0645ad}
+a::selection{background:rgba(255,255,0,0.3);color:#0645ad}
+
+p{
+margin:1em 0;
+}
+
+img{
+max-width:100%;
+}
+
+h1,h2,h3,h4,h5,h6{
+font-weight:normal;
+color:#111;
+line-height:1em;
+}
+h4,h5,h6{ font-weight: bold; }
+h1{ font-size:2.5em; }
+h2{ font-size:2em; border-bottom:1px solid silver; padding-bottom: 5px; }
+h3{ font-size:1.5em; }
+h4{ font-size:1.2em; }
+h5{ font-size:1em; }
+h6{ font-size:0.9em; }
+
+blockquote{
+color:#666666;
+margin:0;
+padding-left: 3em;
+border-left: 0.5em #EEE solid;
+}
+hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
+
+
+pre , code, kbd, samp { 
+  color: #000; 
+  font-family: monospace; 
+  font-size: 0.88em; 
+  border-radius:3px;
+  background-color: #F8F8F8;
+  border: 1px solid #CCC; 
+}
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 5px 12px;}
+pre code { border: 0px !important; padding: 0;}
+code { padding: 0 3px 0 3px; }
+
+b, strong { font-weight: bold; }
+
+dfn { font-style: italic; }
+
+ins { background: #ff9; color: #000; text-decoration: none; }
+
+mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+ul, ol { margin: 1em 0; padding: 0 0 0 2em; }
+li p:last-child { margin:0 }
+dd { margin: 0 0 0 2em; }
+
+img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+table { border-collapse: collapse; border-spacing: 0; }
+td { vertical-align: top; }
+
+@media only screen and (min-width: 480px) {
+body{font-size:14px;}
+}
+
+@media only screen and (min-width: 768px) {
+body{font-size:16px;}
+}
+
+@media print {
+  * { background: transparent !important; color: black !important; filter:none !important; -ms-filter: none !important; }
+  body{font-size:12pt; max-width:100%; outline:none;}
+  a, a:visited { text-decoration: underline; }
+  hr { height: 1px; border:0; border-bottom:1px solid black; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }
+  pre, blockquote { border: 1px solid #999; padding-right: 1em; page-break-inside: avoid; }
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page :left { margin: 15mm 20mm 15mm 10mm; }
+  @page :right { margin: 15mm 10mm 15mm 20mm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}
+</style><title>instructions</title></head><body><h1 id="_1">爬虫使用说明</h1>
+<h2 id="_2">运行环境</h2>
+<ul>
+<li>Python 2.7.5</li>
+<li>安装<em>BeautifulSoup</em>库，如果有easy_install，直接运行：<code>easy_install beautifulsoup4</code></li>
+<li>安装<em>requests</em>库，如果有easy_install，直接运行：<code>easy_install requests</code></li>
+</ul>
+<h2 id="_3">运行参数</h2>
+<pre><code>./crawler.py website_id start_time end_time
+</code></pre>
+<ul>
+<li>website_id：网站标识符，其中<ul>
+<li>应用宝：myapp</li>
+<li>91手机助手：91</li>
+<li>安智网：anzhi</li>
+<li>豆瓣条目：douban_subject</li>
+<li>Google Play：googleplay</li>
+<li>安卓网：hiapk</li>
+<li>百度贴吧吧内：tieba_forum</li>
+<li>百度贴吧搜索：tieba_search</li>
+<li>腾讯论坛：tencentbbs，其中<ul>
+<li><code>bbs.g.qq.com</code>域名下的，生成的数据文件在<code>data/tencentbbs_bbsg</code>目录下</li>
+<li><code>gamebbs.qq.com</code>域名下的，生成的数据文件在<code>data/tencentbbs_gamebbs</code>目录下</li>
+</ul>
+</li>
+<li>多玩论坛：duowan</li>
+<li>178论坛：178</li>
+</ul>
+</li>
+<li>start_time：开始时间</li>
+<li>end_time：结束时间<ul>
+<li>时间格式：<code>YYMMDDhhmm</code>，例如：2014年3月19日22:09，写作201403192209</li>
+</ul>
+</li>
+</ul>
+<h2 id="_4">配置文件说明</h2>
+<p>配置文件：<code>configs.json</code>，为JSON格式，其中</p>
+<ul>
+<li><code>push_address</code>为每爬完一次后，将数据以post方式推送到的地址</li>
+<li><code>proxies</code>为以网站为单位的代理服务器地址，每个网站指定一个，必须以http开头</li>
+</ul>
+<h2 id="_5">输出数据说明</h2>
+<p>输出数据为JSON格式，位置在data目录下，每个网站的数据在其对应的ID为名称的目录下</p>
+<p>数据文件中，字段名称以<code>app_</code>开头的为应用市场类网站爬取的数据，<code>forum_</code>开头的为论坛类网站爬取的数据，<code>weibo_</code>开头的为微博爬取的数据，具体字段含义如下</p>
+<ul>
+<li><code>app_name</code>：应用名称mdp</li>
+<li><code>app_score</code>：应用评分</li>
+<li><code>app_score_count_all</code>：应用评分总数</li>
+<li><code>app_score_count_1</code>：1分的数量</li>
+<li><code>app_score_count_2</code>：2分的数量</li>
+<li><code>app_score_count_3</code>：3分的数量</li>
+<li><code>app_score_count_4</code>：4分的数量</li>
+<li><code>app_score_count_5</code>：5分的数量</li>
+<li><code>app_downloads_count</code>：应用下载次数</li>
+<li><code>app_id</code>：应用在该网站的ID</li>
+<li><code>app_comments_count</code>：本次抓取的应用评论数量</li>
+<li><code>app_version</code>：应用版本</li>
+<li><code>app_comments_start_time</code>：应用评论的开始时间</li>
+<li><code>app_comments_end_time</code>：应用评论的结束时间</li>
+<li>
+<p><code>app_comments</code>：应用评论列表，其中</p>
+<ul>
+<li><code>app_comment_user_id</code>：用户ID</li>
+<li><code>app_comment_user_name</code>：用户名称</li>
+<li><code>app_comment_user_photo</code>：用户头像地址</li>
+<li><code>app_comment_user_link</code>：用户主页地址</li>
+<li><code>app_comment_user_score</code>：该用户的评分</li>
+<li><code>app_comment_content</code>：评论内容</li>
+<li><code>app_comment_agree_count</code>：评论同意数</li>
+<li><code>app_comment_disagree_count</code>：评论否定数</li>
+<li><code>app_comment_time</code>：评论时间</li>
+<li><code>app_comment_channel</code>：评论发表渠道</li>
+</ul>
+</li>
+<li>
+<p><code>forum_name</code>：论坛名称</p>
+</li>
+<li><code>forum_id</code>：论坛ID</li>
+<li><code>forum_posts_count</code>：本次抓取的帖子数量</li>
+<li><code>forum_posts_start_time</code>：论坛帖子的开始时间</li>
+<li><code>forum_posts_end_time</code>：论坛帖子的结束时间</li>
+<li>
+<p><code>forum_posts</code>：论坛帖子列表，其中</p>
+<ul>
+<li><code>forum_post_id</code>：帖子ID</li>
+<li><code>forum_post_title</code>：帖子标题</li>
+<li><code>forum_post_view_count</code>：帖子的浏览量</li>
+<li><code>forum_post_reply_count</code>：帖子的回复数</li>
+<li><code>forum_post_author_content</code>：楼主帖子内容</li>
+<li><code>forum_post_author_time</code>：楼主帖子发表时间</li>
+<li><code>forum_post_author_user_name</code>：楼主用户名</li>
+<li><code>forum_post_author_user_photo</code>：楼主的头像地址</li>
+<li><code>forum_post_author_user_link</code>：楼主的用户主页地址</li>
+<li><code>forum_post_reply_content</code>：最新回复内容</li>
+<li><code>forum_post_reply_user_name</code>：最新回复的用户名</li>
+<li><code>forum_post_reply_time</code>：最新回复的时间</li>
+<li><code>forum_post_reply_user_photo</code>：最新回复用户的头像地址</li>
+<li><code>forum_post_reply_user_link</code>：最新回复用户的主页地址</li>
+</ul>
+</li>
+<li>
+<p><code>weibo_posts_count</code>：本次抓取的微博数量</p>
+</li>
+<li><code>weibo_posts_start_time</code>：抓取微博的开始时间</li>
+<li><code>weibo_posts_end_time</code>：抓取微博的结束时间</li>
+<li>
+<p><code>weibo_posts</code>：微博列表，其中</p>
+<ul>
+<li><code>weibo_post_user_name</code>：发表该微博的用户名</li>
+<li><code>weibo_post_user_link</code>：发表该微博的用户链接</li>
+<li><code>weibo_post_content</code>：微博内容</li>
+<li><code>weibo_post_forward_content</code>：微博转发理由</li>
+<li><code>weibo_post_original_user_name</code>：微博原作者用户名</li>
+<li><code>weibo_post_original_user_link</code>：微博原作者链接</li>
+</ul>
+</li>
+<li>
+<p><code>search_keyword</code>：搜索关键字，用于新浪微博和百度贴吧搜索</p>
+</li>
+</ul>
+<h2 id="_6">注意事项</h2>
+<ul>
+<li><em>Google Play</em>的评论时间只可以精确到天，但时间格式不变，后面的小时、分钟将被忽略</li>
+<li>贴吧、豆瓣小组较老的帖子的发表时间只能精确到天，程序默认将其发表时间设置为当天的<strong>中午12:00</strong></li>
+<li>微博、论坛、贴吧数据更新较为频繁，抓取时请设置<strong>较小</strong>的时间段</li>
+</ul>
+<h2 id="_7">关于我</h2>
+<p>Jiaheng Zhang</p>
+<p>熟悉<em>Python</em>、<em>C#</em>、<em>Java</em>等多种语言的开发，擅长<em>Windows</em>、<em>Windows Phone</em>、<em>Android</em>等平台和服务器程序的开发</p>
+<p>E-mail：<a href="mailto:jsxzjh@gmail.com">jsxzjh@gmail.com</a>，个人主页：<a href="http://xzjh.org/">http://xzjh.org</a></p></body></html>
