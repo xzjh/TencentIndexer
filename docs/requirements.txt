@@ -9,7 +9,7 @@
 
 *2、百度贴吧： http://tieba.baidu.com/
 *3、豆瓣： http://www.douban.com/
-4、腾讯游戏各游戏官网论坛：http://game.qq.com/index.shtml
+*4、腾讯游戏各游戏官网论坛：http://game.qq.com/index.shtml
 （包括里面的手机游戏论坛：http://bbs.agame.qq.com/forum.php）
 
 *5、安智市场： http://www.anzhi.com/
@@ -20,8 +20,8 @@
 *10、91助手：
 *11、google play store： https://play.google.com
 
-12、多玩： http://www.duowan.com/
-13、178： http://www.178.com/
+*12、多玩： http://www.duowan.com/
+*13、178： http://www.178.com/
 
 从上到下是按优先级来排的哈
 

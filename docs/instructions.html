@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0064)file:///var/folders/3f/mwtw9b4s3fjfpjgv7_57mlxw0000gn/T/895.html -->
+<!-- saved from url=(0063)file:///var/folders/3f/mwtw9b4s3fjfpjgv7_57mlxw0000gn/T/44.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 
 body{
@@ -146,26 +146,26 @@ body{font-size:16px;}
 <pre><code>./crawler.py website_id start_time end_time
 </code></pre>
 <ul>
-<li>website_id：网站标识符，其中<ul>
-<li>应用宝：myapp</li>
-<li>91手机助手：91</li>
-<li>安智网：anzhi</li>
-<li>豆瓣条目：douban_subject</li>
-<li>Google Play：googleplay</li>
-<li>安卓网：hiapk</li>
-<li>百度贴吧吧内：tieba_forum</li>
-<li>百度贴吧搜索：tieba_search</li>
-<li>腾讯论坛：tencentbbs，其中<ul>
+<li><code>website_id</code>：网站标识符，其中<ul>
+<li>应用宝：<code>myapp</code></li>
+<li>91手机助手：<code>91</code></li>
+<li>安智网：<code>anzhi</code></li>
+<li>豆瓣条目：<code>douban_subject</code></li>
+<li>Google Play：<code>googleplay</code></li>
+<li>安卓网：<code>hiapk</code></li>
+<li>百度贴吧吧内：<code>tieba_forum</code></li>
+<li>百度贴吧搜索：<code>tieba_search</code></li>
+<li>腾讯论坛：<code>tencentbbs</code>，其中<ul>
 <li><code>bbs.g.qq.com</code>域名下的，生成的数据文件在<code>data/tencentbbs_bbsg</code>目录下</li>
 <li><code>gamebbs.qq.com</code>域名下的，生成的数据文件在<code>data/tencentbbs_gamebbs</code>目录下</li>
 </ul>
 </li>
-<li>多玩论坛：duowan</li>
-<li>178论坛：178</li>
+<li>多玩论坛：<code>duowan</code></li>
+<li>178论坛：<code>178</code></li>
 </ul>
 </li>
-<li>start_time：开始时间</li>
-<li>end_time：结束时间<ul>
+<li><code>start_time</code>：开始时间</li>
+<li><code>end_time</code>：结束时间<ul>
 <li>时间格式：<code>YYMMDDhhmm</code>，例如：2014年3月19日22:09，写作201403192209</li>
 </ul>
 </li>
@@ -173,8 +173,10 @@ body{font-size:16px;}
 <h2 id="_5">输出数据说明</h2>
 <p>输出数据为JSON格式，位置在data目录下，每个网站的数据在其对应的ID为名称的目录下</p>
 <p>数据文件中，字段名称以<code>app_</code>开头的为应用市场类网站爬取的数据，<code>forum_</code>开头的为论坛类网站爬取的数据，<code>weibo_</code>开头的为微博爬取的数据，具体字段含义如下</p>
+<h3 id="_6">应用市场类</h3>
+<p>包含<code>hiapk</code>、<code>anzhi</code>、<code>myapp</code>、<code>91</code>、<code>googleplay</code>、<code>douban_subject</code></p>
 <ul>
-<li><code>app_name</code>：应用名称mdp</li>
+<li><code>app_name</code>：应用名称</li>
 <li><code>app_score</code>：应用评分</li>
 <li><code>app_score_count_all</code>：应用评分总数</li>
 <li><code>app_score_count_1</code>：1分的数量</li>
@@ -188,9 +190,7 @@ body{font-size:16px;}
 <li><code>app_version</code>：应用版本</li>
 <li><code>app_comments_start_time</code>：应用评论的开始时间</li>
 <li><code>app_comments_end_time</code>：应用评论的结束时间</li>
-<li>
-<p><code>app_comments</code>：应用评论列表，其中</p>
-<ul>
+<li><code>app_comments</code>：应用评论列表，其中<ul>
 <li><code>app_comment_user_id</code>：用户ID</li>
 <li><code>app_comment_user_name</code>：用户名称</li>
 <li><code>app_comment_user_photo</code>：用户头像地址</li>
@@ -203,16 +203,16 @@ body{font-size:16px;}
 <li><code>app_comment_channel</code>：评论发表渠道</li>
 </ul>
 </li>
-<li>
-<p><code>forum_name</code>：论坛名称</p>
-</li>
+</ul>
+<h3 id="_7">论坛类</h3>
+<p>包含<code>tieba_search</code>、<code>tieba_forum</code>、<code>douban_group</code>、<code>duowan</code>、<code>178</code>、<code>tencentbbs</code></p>
+<ul>
+<li><code>forum_name</code>：论坛名称</li>
 <li><code>forum_id</code>：论坛ID</li>
 <li><code>forum_posts_count</code>：本次抓取的帖子数量</li>
 <li><code>forum_posts_start_time</code>：论坛帖子的开始时间</li>
 <li><code>forum_posts_end_time</code>：论坛帖子的结束时间</li>
-<li>
-<p><code>forum_posts</code>：论坛帖子列表，其中</p>
-<ul>
+<li><code>forum_posts</code>：论坛帖子列表，其中<ul>
 <li><code>forum_post_id</code>：帖子ID</li>
 <li><code>forum_post_title</code>：帖子标题</li>
 <li><code>forum_post_view_count</code>：帖子的浏览量</li>
@@ -229,14 +229,15 @@ body{font-size:16px;}
 <li><code>forum_post_reply_user_link</code>：最新回复用户的主页地址</li>
 </ul>
 </li>
-<li>
-<p><code>weibo_posts_count</code>：本次抓取的微博数量</p>
-</li>
+<li><code>search_keyword</code>：搜索关键字，百度贴吧搜索</li>
+</ul>
+<h3 id="_8">新浪微博</h3>
+<p><code>weibo</code></p>
+<ul>
+<li><code>weibo_posts_count</code>：本次抓取的微博数量</li>
 <li><code>weibo_posts_start_time</code>：抓取微博的开始时间</li>
 <li><code>weibo_posts_end_time</code>：抓取微博的结束时间</li>
-<li>
-<p><code>weibo_posts</code>：微博列表，其中</p>
-<ul>
+<li><code>weibo_posts</code>：微博列表，其中<ul>
 <li><code>weibo_post_user_name</code>：发表该微博的用户名</li>
 <li><code>weibo_post_user_link</code>：发表该微博的用户链接</li>
 <li><code>weibo_post_content</code>：微博内容</li>
@@ -245,17 +246,15 @@ body{font-size:16px;}
 <li><code>weibo_post_original_user_link</code>：微博原作者链接</li>
 </ul>
 </li>
-<li>
-<p><code>search_keyword</code>：搜索关键字，用于新浪微博和百度贴吧搜索</p>
-</li>
+<li><code>search_keyword</code>：搜索关键字</li>
 </ul>
-<h2 id="_6">注意事项</h2>
+<h2 id="_9">注意事项</h2>
 <ul>
 <li><em>Google Play</em>的评论时间只可以精确到天，但时间格式不变，后面的小时、分钟将被忽略</li>
 <li>贴吧、豆瓣小组较老的帖子的发表时间只能精确到天，程序默认将其发表时间设置为当天的<strong>中午12:00</strong></li>
 <li>微博、论坛、贴吧数据更新较为频繁，抓取时请设置<strong>较小</strong>的时间段</li>
 </ul>
-<h2 id="_7">关于我</h2>
+<h2 id="_10">关于我</h2>
 <p>Jiaheng Zhang</p>
 <p>熟悉<em>Python</em>、<em>C#</em>、<em>Java</em>等多种语言的开发，擅长<em>Windows</em>、<em>Windows Phone</em>、<em>Android</em>等平台和服务器程序的开发</p>
 <p>E-mail：<a href="mailto:jsxzjh@gmail.com">jsxzjh@gmail.com</a>，个人主页：<a href="http://xzjh.org/">http://xzjh.org</a></p></body></html>

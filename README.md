@@ -21,22 +21,22 @@
 ##运行参数
 	./crawler.py website_id start_time end_time
 
-* website_id：网站标识符，其中
-	* 应用宝：myapp
-	* 91手机助手：91
-	* 安智网：anzhi
-	* 豆瓣条目：douban_subject
-	* Google Play：googleplay
-	* 安卓网：hiapk
-	* 百度贴吧吧内：tieba_forum
-	* 百度贴吧搜索：tieba_search
-	* 腾讯论坛：tencentbbs，其中
+* `website_id`：网站标识符，其中
+	* 应用宝：`myapp`
+	* 91手机助手：`91`
+	* 安智网：`anzhi`
+	* 豆瓣条目：`douban_subject`
+	* Google Play：`googleplay`
+	* 安卓网：`hiapk`
+	* 百度贴吧吧内：`tieba_forum`
+	* 百度贴吧搜索：`tieba_search`
+	* 腾讯论坛：`tencentbbs`，其中
 		* `bbs.g.qq.com`域名下的，生成的数据文件在`data/tencentbbs_bbsg`目录下
 		* `gamebbs.qq.com`域名下的，生成的数据文件在`data/tencentbbs_gamebbs`目录下
-	* 多玩论坛：duowan
-	* 178论坛：178
-* start_time：开始时间
-* end_time：结束时间
+	* 多玩论坛：`duowan`
+	* 178论坛：`178`
+* `start_time`：开始时间
+* `end_time`：结束时间
 	* 时间格式：`YYMMDDhhmm`，例如：2014年3月19日22:09，写作201403192209
 
 ##输出数据说明
@@ -44,7 +44,10 @@
 
 数据文件中，字段名称以`app_`开头的为应用市场类网站爬取的数据，`forum_`开头的为论坛类网站爬取的数据，`weibo_`开头的为微博爬取的数据，具体字段含义如下
 
-* `app_name`：应用名称mdp
+###应用市场类
+包含`hiapk`、`anzhi`、`myapp`、`91`、`googleplay`、`douban_subject`
+
+* `app_name`：应用名称
 * `app_score`：应用评分
 * `app_score_count_all`：应用评分总数
 * `app_score_count_1`：1分的数量
@@ -70,6 +73,9 @@
 	* `app_comment_time`：评论时间
 	* `app_comment_channel`：评论发表渠道
 
+###论坛类
+包含`tieba_search`、`tieba_forum`、`douban_group`、`duowan`、`178`、`tencentbbs`
+
 * `forum_name`：论坛名称
 * `forum_id`：论坛ID
 * `forum_posts_count`：本次抓取的帖子数量
@@ -90,6 +96,10 @@
 	* `forum_post_reply_time`：最新回复的时间
 	* `forum_post_reply_user_photo`：最新回复用户的头像地址
 	* `forum_post_reply_user_link`：最新回复用户的主页地址
+* `search_keyword`：搜索关键字，百度贴吧搜索
+
+###新浪微博
+`weibo`
 
 * `weibo_posts_count`：本次抓取的微博数量
 * `weibo_posts_start_time`：抓取微博的开始时间
@@ -101,8 +111,7 @@
 	* `weibo_post_forward_content`：微博转发理由
 	* `weibo_post_original_user_name`：微博原作者用户名
 	* `weibo_post_original_user_link`：微博原作者链接
-
-* `search_keyword`：搜索关键字，用于新浪微博和百度贴吧搜索
+* `search_keyword`：搜索关键字
 
 ##注意事项
 * *Google Play*的评论时间只可以精确到天，但时间格式不变，后面的小时、分钟将被忽略
