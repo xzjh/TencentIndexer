@@ -56,15 +56,15 @@ def process_results(dir_name, file_name, data):
 			push_data = {}
 			push_data['json'] = data_encoded
 			push_data['file_name'] = os.getcwd() + '/' + full_file_name
-			urllib2.urlopen(push_address, data = push_data)
+			url_open(push_address, post_args = push_data, use_proxy = False)
 			print "-- Pushed to address: " + push_address
 		except:
 			print "-- Failed to push to " + push_address
 
-def url_open(url, post_args = None, additional_headers = None, cookies = None):
+def url_open(url, post_args = None, additional_headers = None, cookies = None, use_proxy = True):
 
 	# set up the proxy
-	if proxy_address != None:
+	if proxy_address and use_proxy:
 		proxy = {"http": proxy_address}
 	else:
 		proxy = None
