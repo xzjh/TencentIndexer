@@ -51,21 +51,26 @@ def parse_forum_url(forum_url):
 
 	global website_id, forum_url_base, post_url_base
 
+	rep_bbs = re.compile(ur'(?<=bbs\.).+(?=\.qq\.com)')
+	rep_gamebbs = re.compile(ur'.+(?=\.gamebbs\.qq\.com)')
+
 	try:
 		page_url_parse = urlparse.urlparse(forum_url)
 		if website_id == 'duowan' or website_id == '178':
 			return True, page_url_parse.path.split('-')[1]
 		else:
 			# tencentbbs, set args
-			if page_url_parse.netloc == 'bbs.g.qq.com':
-				# bbs.g.qq.com domain
-				website_id = 'tencentbbs_bbsg'
-				forum_url_base = 'http://bbs.g.qq.com/forum.php'
+			result_bbs = rep_bbs.search(page_url_parse.netloc)
+			result_gamebbs = rep_gamebbs.search(page_url_parse.netloc)
+			if result_bbs:
+				# bbs.xxx.qq.com domain
+				website_id = 'tencentbbs_' + result_bbs.group()
+				forum_url_base = 'http://bbs.' + result_bbs.group() + '.qq.com/forum.php'
 				post_url_base = forum_url_base
-			elif page_url_parse.netloc.endswith('gamebbs.qq.com'):
-				# gamebbs.qq.com domain
-				website_id = 'tencentbbs_gamebbs'
-				forum_url_base = 'http://' + page_url_parse.netloc + '/forum.php'
+			elif result_gamebbs:
+				# xxx.gamebbs.qq.com domain
+				website_id = 'tencentbbs_' + result_gamebbs.group()
+				forum_url_base = 'http://' + result_gamebbs.group() + '.gamebbs.qq.com/forum.php'
 				post_url_base = forum_url_base
 			else:
 				return False, None

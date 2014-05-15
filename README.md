@@ -30,9 +30,7 @@
 	* 安卓网：`hiapk`
 	* 百度贴吧吧内：`tieba_forum`
 	* 百度贴吧搜索：`tieba_search`
-	* 腾讯论坛：`tencentbbs`，其中
-		* `bbs.g.qq.com`域名下的，生成的数据文件在`data/tencentbbs_bbsg`目录下
-		* `gamebbs.qq.com`域名下的，生成的数据文件在`data/tencentbbs_gamebbs`目录下
+	* 腾讯论坛：`tencentbbs`，支持`bbs.{bbs_id}.qq.com`和`{bbs_id}.gamebbs.qq.com`域名，其中*{bbs_id}*表示相应论坛的ID，生成的数据文件在`data/tencentbbs_{bbs_id}`目录下
 	* 多玩论坛：`duowan`
 	* 178论坛：`178`
 * `start_time`：开始时间

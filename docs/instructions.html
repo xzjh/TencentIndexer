@@ -122,14 +122,14 @@ body{font-size:16px;}
   p, h2, h3 { orphans: 3; widows: 3; }
   h2, h3 { page-break-after: avoid; }
 }
-</style><title>README</title></head><body><h1 id="_1">爬虫使用说明</h1>
-<h2 id="_2">运行环境</h2>
+</style><title>README</title></head><body><h1 id="爬虫使用说明">爬虫使用说明</h1>
+<h2 id="运行环境">运行环境</h2>
 <ul>
 <li>Python 2.7.5</li>
 <li>安装<em>BeautifulSoup</em>库，如果有easy_install，直接运行：<code>easy_install beautifulsoup4</code></li>
 <li>安装<em>requests</em>库，如果有easy_install，直接运行：<code>easy_install requests</code></li>
 </ul>
-<h2 id="_3">配置文件说明</h2>
+<h2 id="配置文件说明">配置文件说明</h2>
 <p>配置文件：<code>configs.json</code>，为JSON格式，其中</p>
 <ul>
 <li><code>push_address</code>为每爬完一次后，将数据以post方式推送到的地址</li>
@@ -142,7 +142,7 @@ body{font-size:16px;}
 <li>微博每行写入一条<strong>关键字</strong></li>
 <li><strong>如文件中有特殊注明，请根据注释的规则进行配置</strong></li>
 </ul>
-<h2 id="_4">运行参数</h2>
+<h2 id="运行参数">运行参数</h2>
 <pre><code>./crawler.py website_id start_time end_time
 </code></pre>
 <ul>
@@ -155,11 +155,7 @@ body{font-size:16px;}
 <li>安卓网：<code>hiapk</code></li>
 <li>百度贴吧吧内：<code>tieba_forum</code></li>
 <li>百度贴吧搜索：<code>tieba_search</code></li>
-<li>腾讯论坛：<code>tencentbbs</code>，其中<ul>
-<li><code>bbs.g.qq.com</code>域名下的，生成的数据文件在<code>data/tencentbbs_bbsg</code>目录下</li>
-<li><code>gamebbs.qq.com</code>域名下的，生成的数据文件在<code>data/tencentbbs_gamebbs</code>目录下</li>
-</ul>
-</li>
+<li>腾讯论坛：<code>tencentbbs</code>，支持<code>bbs.{bbs_id}.qq.com</code>和<code>{bbs_id}.gamebbs.qq.com</code>域名，其中<em>{bbs_id}</em>表示相应论坛的ID，生成的数据文件在<code>data/tencentbbs_{bbs_id}</code>目录下</li>
 <li>多玩论坛：<code>duowan</code></li>
 <li>178论坛：<code>178</code></li>
 </ul>
@@ -170,10 +166,10 @@ body{font-size:16px;}
 </ul>
 </li>
 </ul>
-<h2 id="_5">输出数据说明</h2>
+<h2 id="输出数据说明">输出数据说明</h2>
 <p>输出数据为JSON格式，位置在data目录下，每个网站的数据在其对应的ID为名称的目录下</p>
 <p>数据文件中，字段名称以<code>app_</code>开头的为应用市场类网站爬取的数据，<code>forum_</code>开头的为论坛类网站爬取的数据，<code>weibo_</code>开头的为微博爬取的数据，具体字段含义如下</p>
-<h3 id="_6">应用市场类</h3>
+<h3 id="应用市场类">应用市场类</h3>
 <p>包含<code>hiapk</code>、<code>anzhi</code>、<code>myapp</code>、<code>91</code>、<code>googleplay</code>、<code>douban_subject</code></p>
 <ul>
 <li><code>app_name</code>：应用名称</li>
@@ -204,7 +200,7 @@ body{font-size:16px;}
 </ul>
 </li>
 </ul>
-<h3 id="_7">论坛类</h3>
+<h3 id="论坛类">论坛类</h3>
 <p>包含<code>tieba_search</code>、<code>tieba_forum</code>、<code>douban_group</code>、<code>duowan</code>、<code>178</code>、<code>tencentbbs</code></p>
 <ul>
 <li><code>forum_name</code>：论坛名称</li>
@@ -231,7 +227,7 @@ body{font-size:16px;}
 </li>
 <li><code>search_keyword</code>：搜索关键字，百度贴吧搜索</li>
 </ul>
-<h3 id="_8">新浪微博</h3>
+<h3 id="新浪微博">新浪微博</h3>
 <p><code>weibo</code></p>
 <ul>
 <li><code>weibo_posts_count</code>：本次抓取的微博数量</li>
@@ -248,13 +244,13 @@ body{font-size:16px;}
 </li>
 <li><code>search_keyword</code>：搜索关键字</li>
 </ul>
-<h2 id="_9">注意事项</h2>
+<h2 id="注意事项">注意事项</h2>
 <ul>
 <li><em>Google Play</em>的评论时间只可以精确到天，但时间格式不变，后面的小时、分钟将被忽略</li>
 <li>贴吧、豆瓣小组较老的帖子的发表时间只能精确到天，程序默认将其发表时间设置为当天的<strong>中午12:00</strong></li>
 <li>微博、论坛、贴吧数据更新较为频繁，抓取时请设置<strong>较小</strong>的时间段</li>
 </ul>
-<h2 id="_10">关于我</h2>
+<h2 id="关于我">关于我</h2>
 <p>Jiaheng Zhang</p>
 <p>熟悉<em>Python</em>、<em>C#</em>、<em>Java</em>等多种语言的开发，擅长<em>Windows</em>、<em>Windows Phone</em>、<em>Android</em>等平台和服务器程序的开发</p>
 <p>E-mail：<a href="mailto:jsxzjh@gmail.com">jsxzjh@gmail.com</a>，个人主页：<a href="http://xzjh.org/">http://xzjh.org</a></p></body></html>
