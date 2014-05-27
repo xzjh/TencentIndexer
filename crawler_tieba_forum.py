@@ -31,23 +31,25 @@ def get_time_from_str(time_str):
 
 	rep_time = re.compile(r'\d+:\d+')
 	rep_old_date = re.compile(r'\d+-\d+-\d+')
+	rep_post_time = re.compile(r'\d+-\d+ \d+:\d+')
 	time_now = general_func.get_beijing_time()
-	time_strs = time_str.strip().split(' ')
-	if rep_time.search(time_strs[0]):
-		# today's post
-		post_time = datetime.strptime(time_strs[0], '%H:%M')
+	if rep_post_time.search(time_str):
+		# post time like 05-24 21:23
+		post_time = datetime.strptime(time_str, '%m-%d %H:%M')
+		post_time = post_time.replace(year = time_now.year)
+	elif rep_time.search(time_str):
+		# today's post like 21:23
+		post_time = datetime.strptime(time_str, '%H:%M')
 		post_time = post_time.replace(year = time_now.year, month = time_now.month, day = time_now.day)
+	elif rep_old_date.search(time_str):
+		# old post not in this year like 2013-05-24
+		# no detailed time, so set to 12:00
+		post_time = datetime.strptime(time_str + ' 12:00', '%Y-%m-%d %H:%M')
 	else:
-		# old post not today
-		# time_strs[0] is date, time_strs[1] is time
-		if rep_old_date.search(time_strs[0]):
-			# old post not in this year
-			# no detailed time, so set to 12:00
-			post_time = datetime.strptime(time_strs[0] + ' 12:00', '%Y-%m-%d %H:%M')
-		else:
-			# old post in this year
-			post_time = datetime.strptime(time_strs[0] + ' ' + time_strs[1], '%m-%d %H:%M')
-			post_time = post_time.replace(year = time_now.year)
+		# old post in this year like 05-24
+		# no detailed time, so set to 12:00
+		post_time = datetime.strptime(time_str + ' 12:00', '%m-%d %H:%M')
+		post_time = post_time.replace(year = time_now.year)
 
 	return post_time
 
@@ -68,13 +70,13 @@ def get_posts_data(forum_id, start_time, end_time):
 		print 'Processing forum page: ' + forum_url
 		forum_html = general_func.url_open(forum_url, additional_headers = additional_headers)
 		soup = BeautifulSoup(forum_html)
-		soup_a = soup.find_all('a')
+		soup_div = soup.find_all('div', attrs = {'class': 'i'})
 
 		# get the IDs and times of the posts
-		for item_a in soup_a:
-			if 'm?kz=' in item_a.attrs['href']:
+		for item_div in soup_div:
+			if 'm?kz=' in item_div.a.attrs['href']:
 				# get post time
-				post_time = get_time_from_str(item_a.find_next('br').next_sibling.split(u'\xa0')[2])
+				post_time = get_time_from_str(item_div.p.text.split(u'\xa0')[-1])
 				if post_time >= start_time:
 					if post_time > end_time:
 						# the post is too new
@@ -82,7 +84,7 @@ def get_posts_data(forum_id, start_time, end_time):
 					
 					# now it's the post needed
 					# get post id
-					post_id = rep_post_id.search(item_a.attrs['href']).group()
+					post_id = rep_post_id.search(item_div.a.attrs['href']).group()
 					# get post data
 					print "Getting post data: " + post_id + ', post time: ' + post_time.strftime(time_format)
 					is_success, this_post = get_post_data(post_id)
@@ -91,7 +93,7 @@ def get_posts_data(forum_id, start_time, end_time):
 					else:
 						print '-- Failed to get post: ' + post_id
 						continue
-				elif u'[顶]' in item_a.next_sibling:
+				elif item_div.find('span', attrs = {'class': 'light'}, text = u'顶'):
 					# ignore the old top post
 					continue
 				else:
@@ -101,7 +103,7 @@ def get_posts_data(forum_id, start_time, end_time):
 			# the comment is too new
 			if post_time > end_time:
 				print "-- The posts are too new! Pass this page! " + post_time.strftime(time_format)
-			forum_url_args['pn'] += 10
+			forum_url_args['pn'] += 20
 		else:
 			break
 
@@ -124,54 +126,32 @@ def get_post_data(post_id):
 	try:
 		post_html = general_func.url_open(post_url, additional_headers = additional_headers)
 		soup = BeautifulSoup(post_html)
-		this_post['forum_post_title'] = soup.card.attrs['title']
-		# post content match re:
-		#(?<=\d楼\.&#160;).+?(?=(<br/>)*<a href="/mo/.+</a>)
+		this_post['forum_post_title'] = soup.strong.text.strip()
 
 		# get author content
-		soup_content_pos = soup.find('a', text = u'刷新').next_sibling
-		post_content = ''
-		while not (soup_content_pos.name == 'a' and soup_content_pos.attrs['href'].startswith('/mo/q')):
-			post_content += unicode(soup_content_pos)
-			soup_content_pos = soup_content_pos.next_sibling
-
-		this_post['forum_post_author_content'] = post_content
-		this_post['forum_post_author_user_name'] = soup_content_pos.contents[0]
-		this_post['forum_post_author_time'] = get_time_from_str(unicode(soup_content_pos.next_sibling)) \
-			.strftime(time_format)
+		soup_author = soup.find('div', attrs = {'class': 'i'})
+		this_post['forum_post_author_content'] = soup_author.text.strip()
+		this_post['forum_post_author_user_name'] = soup_author.find('span', attrs = {'class': 'g'}).a.text.strip()
+		this_post['forum_post_author_time'] = get_time_from_str(soup_author.find('span', \
+			attrs = {'class': 'b'}).text.strip()).strftime(time_format)
 
 		# get last reply content
-		soup_next_page = soup.find('a', text = u'下一页')
-		if soup_next_page:
+		page_result = rep_page.search(soup.find('div', attrs = {'class': 'h'}).text.strip())
+		if page_result:
 			# more than 1 pages
-			while soup_next_page:
-				result = rep_page.search(unicode(soup_next_page))
-				if result:
-					page_num = result.group()
-					break
-				else:
-					soup_next_page = soup_next_page.next_sibling
-					continue
-			post_url_args['pn'] = (int(page_num) - 1) * 10
+			post_url_args['pn'] = (int(page_result.group()) - 1) * 30
 			# get last page
 			post_url = post_url_base + '?' + urllib.urlencode(post_url_args)
 			post_html = general_func.url_open(post_url, additional_headers = additional_headers)
 			soup = BeautifulSoup(post_html)
 
 		# get last reply
-		for item in soup.p.contents:
-			if type(item) == bs4.element.NavigableString and rep_reply.match(item):
-				soup_last_reply_pos = item
-		post_content = ''
-		while not (soup_last_reply_pos.name == 'a' and soup_last_reply_pos.attrs['href'].startswith('/mo/q')):
-			post_content += unicode(soup_last_reply_pos)
-			soup_last_reply_pos = soup_last_reply_pos.next_sibling
-
-		this_post['forum_post_reply_content'] = post_content
-		this_post['forum_post_reply_user_name'] = soup_last_reply_pos.string
-		this_post['forum_post_reply_time'] = get_time_from_str(unicode(soup_last_reply_pos.next_sibling)) \
-			.strftime(time_format)
-
+		soup_reply = soup.find_all('div', attrs = {'class': 'i'})[-1]
+		this_post['forum_post_reply_content'] = soup_reply.text.strip()
+		this_post['forum_post_reply_user_name'] = soup_reply.find('span', attrs = {'class': 'g'}).text.strip()
+		this_post['forum_post_reply_time'] = get_time_from_str(soup_reply.find('span', \
+			attrs = {'class': 'b'}).text.strip()).strftime(time_format)
+		
 	except:
 		return False, None
 
