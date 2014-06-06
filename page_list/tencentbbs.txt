@@ -1,4 +1,6 @@
-# 在此文件中输入论坛板块页面地址，一定要有fid参数，支持bbs.g.qq.com和gamebbs.qq.com两种域名
+# 在此文件中输入论坛板块页面地址，一定要有fid参数，支持bbs.xxx.qq.com和xxx.gamebbs.qq.com两种域名
+
+http://bbs.map.qq.com/forum-46-1.html
 http://bbs.g.qq.com/forum.php?mod=forumdisplay&fid=119&styleflag=&page=1
 http://7.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30672
 http://bbs.lol.qq.com/forum.php?mod=forumdisplay&fid=40

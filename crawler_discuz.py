@@ -53,6 +53,7 @@ def parse_forum_url(forum_url):
 
 	rep_bbs = re.compile(ur'(?<=bbs\.).+(?=\.qq\.com)')
 	rep_gamebbs = re.compile(ur'.+(?=\.gamebbs\.qq\.com)')
+	rep_dash = re.compile(ur'(?<=forum-)\d+(?=-\d+)')
 
 	try:
 		page_url_parse = urlparse.urlparse(forum_url)
@@ -75,20 +76,37 @@ def parse_forum_url(forum_url):
 			else:
 				return False, None
 			# parse fid
-			page_url_args = urlparse.parse_qs(page_url_parse.query)
-			return True, page_url_args['fid'][0]
-
+			result_dash = rep_dash.search(page_url_parse.path)
+			if result_dash:
+				# url like forum_url_base/forum-46-1.html
+				return True, result_dash.group()
+			else:
+				# url like forum_url_base/forum.php?fid=46&...
+				page_url_args = urlparse.parse_qs(page_url_parse.query)
+				return True, page_url_args['fid'][0]
 	except:
 		return False, None
 
 # get the post ID from the page url
 def get_post_id(post_url):
 
+	rep_dash = re.compile(ur'(?<=thread-)\d+(?=-\d+-\d+)')
+
 	try:
-		page_url_parse = urlparse.urlparse(post_url)
-		if website_id == 'duowan' or website_id == '178':
-			return True, page_url_parse.path.split('-')[1]
+	# page_url_parse = urlparse.urlparse(post_url)
+	# print post_url
+	# if website_id == 'duowan' or website_id == '178':
+	# 	return True, page_url_parse.path.split('-')[1]
+	# else:
+	# 	page_url_args = urlparse.parse_qs(page_url_parse.query)
+	# 	return True, page_url_args['tid'][0]
+		result_dash = rep_dash.search(post_url)
+		if result_dash:
+			# url like thread-7487-1-1.html
+			return True, result_dash.group()
 		else:
+			# url like forum.php?tid=7498&...
+			page_url_parse = urlparse.urlparse(post_url)
 			page_url_args = urlparse.parse_qs(page_url_parse.query)
 			return True, page_url_args['tid'][0]
 	except:
@@ -129,6 +147,12 @@ def get_posts_data(forum_id, start_time, end_time):
 
 				# now it's the post needed
 				# get post id
+				# print soup_post
+				# soup_post_as = soup_post.find_all('a')
+				# for soup_post_a in soup_post_as:
+				# 	if soup_post_a.attrs['href'].startswith('forum.php'):
+				# 		post_url_raw = soup_post_a.attrs['href']
+				# 		break
 				post_url_raw = soup_post.a.attrs['href']
 				is_success, post_id = get_post_id(post_url_raw)
 				if not is_success:
