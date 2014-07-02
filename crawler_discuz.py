@@ -131,7 +131,8 @@ def get_posts_data(forum_id, start_time, end_time):
 
 		# remove stick threads
 		for i in range(len(soup_posts))[::-1]:
-			if not soup_posts[i].attrs['id'].startswith('normalthread_'):
+			if not (soup_posts[i].has_attr('id') and \
+				soup_posts[i].attrs['id'].startswith('normalthread_')):
 				del soup_posts[i]
 
 		# process every post

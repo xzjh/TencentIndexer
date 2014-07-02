@@ -70,31 +70,28 @@ def get_comments_data(app_info, start_time, end_time):
 		data_raw = data_raw[5:]
 		data_json = json.loads(data_raw)
 		data_html = data_json[0][2]
-		f = open('test/google.html','w')
-		f.write(data_html.encode('utf8'))
-		f.close()
+		# f = open('test/google.html','w')
+		# f.write(data_html.encode('utf8'))
+		# f.close()
 		# get useful information
 		soup = BeautifulSoup(data_html)
 		soup_comments = soup.find_all('div', attrs = {'class': 'single-review'})
 
 		for soup_comment_item in soup_comments:
-
 			item = {}
 			comment_time_raw = soup_comment_item.find('span', attrs = {'class': 'review-date'}).contents[0].strip().replace(u'年', '-').replace(u'月', '-').replace(u'日', '')
-			comment_time = datetime.strptime(comment_time_raw, "%Y-%m-%d")
+			comment_time = datetime.strptime(comment_time_raw, "%Y-%m-%d").replace(hour = 12)
 
 			if comment_time >= start_time:
-
 				# the comment is too new
 				if comment_time > end_time:
 					continue
 
-				soup_user_info = soup_comment_item.find('a', attrs = {'class': 'id-no-nav g-hovercard'})
-				if soup_user_info == None:
+				soup_user_info = soup_comment_item.find('span', attrs = {'class': 'author-name'})
+				if soup_user_info == None or soup_user_info.a == None:
 					continue
-				item['app_comment_user_name'] = soup_user_info.attrs['title']
-				item['app_comment_user_id'] = soup_user_info.attrs['data-userid']
-				item['app_comment_user_link'] = soup_user_info.attrs['href']
+				item['app_comment_user_name'] = soup_user_info.a.text.strip()
+				item['app_comment_user_link'] = soup_user_info.a.attrs['href']
 				item['app_comment_user_photo'] = soup_comment_item.img.attrs['src']
 
 				comment_title = soup_comment_item.find('span', attrs = {'class': 'review-title'}).contents
@@ -132,7 +129,7 @@ def crawl(args):
 	end_time = args['end_time']
 	# ignore the time
 	start_time = start_time.replace(hour = 0, minute = 0)
-	end_time = end_time.replace(hour = 0, minute = 0)
+	end_time = end_time.replace(hour = 23, minute = 59)
 
 	page_list = general_func.get_list_from_file(page_list_file)
 
