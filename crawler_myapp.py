@@ -8,6 +8,7 @@ import urlparse
 from bs4 import BeautifulSoup
 from datetime import datetime
 import json
+import re
 
 import general_func
 
@@ -16,8 +17,7 @@ website_id = 'myapp'
 website_name = "应用宝 http://android.myapp.com"
 page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 comment_url_args = {}
-comment_url_args['pageSize'] = 10
-comment_url_base = "http://android.myapp.com/android/commentlist_web"
+comment_url_base = "http://android.app.qq.com/myapp/app/comment.htm"
 app_url_base = "http://android.app.qq.com/android/appdetail.jsp"
 #start_time = time.strptime("2014-03-12 0:0", "%Y-%m-%d %H:%M")
 #end_time = time.strptime("2014-03-14 23:59", "%Y-%m-%d %H:%M")
@@ -25,20 +25,22 @@ time_format = '%Y%m%d%H%M'
 
 def get_app_info(app_id):
 
+	rep_apkName = re.compile(ur'(?<=apkName:\").+(?=\")')
+	rep_apkCode = re.compile(ur'(?<=apkCode:\").+(?=\")')
+
 	app_info = {}
 
 	app_url = app_url_base + '?appid=' + app_id
 	app_page_html = general_func.url_open(app_url)
 
 	soup = BeautifulSoup(app_page_html)
-	soup_app_info = soup.find('div', attrs = {"class": "app-msg"})
-	app_info['app_name'] = soup_app_info.h1.contents[0].string
-	
-	soup_dts = soup_app_info.dl.find_all('dt')
-	for item in soup_dts:
-		if item.string.replace(u'\xa0', '').find(u'版本') >= 0:
-			app_info['app_version'] = item.next_sibling.contents[0].string
-			break
+	app_info['app_name'] = soup.find('div', attrs = {'class': 'det-name-int'}).text.strip()
+	app_info['app_downloads_count'] = soup.find('div', attrs = {'class': 'det-ins-num'}).text.strip(u'下载')
+	app_info['app_score'] = soup.find('div', attrs = {'class': 'com-blue-star-num'}).text.strip(u'分')
+	app_info['app_version'] = soup.find('div', attrs = {'class': 'det-othinfo-data'}).text.strip()
+	app_info_more_raw = soup.find_all('script')[-1].text.strip().replace(' ', '')
+	comment_url_args['apkName'] = rep_apkName.search(app_info_more_raw).group()
+	comment_url_args['apkCode'] = rep_apkCode.search(app_info_more_raw).group()
 
 	return app_info
 
@@ -56,7 +58,9 @@ def get_comments_data(app_info, start_time, end_time):
 
 	data = app_info
 	data['app_comments'] = []
-	comment_url_args['pageNo'] = 1
+	comment_url_args['p'] = 1
+	comment_url_args['contextData'] = ''
+	stick_tolerence = 5
 	
 	while True:
 		# the url of comment page
@@ -65,12 +69,13 @@ def get_comments_data(app_info, start_time, end_time):
 		# get the source code of comment page
 		data_raw = general_func.url_open(comment_url)
 		data_json = json.loads(data_raw)
+		comment_url_args['contextData'] = data_json['obj']['contextData']
 
 		# get useful information
-		for comment_item in data_json['info']['value']:
+		for comment_item in data_json['obj']['commentDetails']:
 
 			item = {}
-			comment_time = datetime.strptime(comment_item['createtime'], "%Y-%m-%d %H:%M")
+			comment_time = datetime.fromtimestamp(int(comment_item['createdTime']))
 
 			if comment_time >= start_time:
 
@@ -78,37 +83,42 @@ def get_comments_data(app_info, start_time, end_time):
 				if comment_time > end_time:
 					continue
 
-				item['app_comment_user_name'] = comment_item['username']
-				item['app_comment_user_id'] = comment_item['userid']
-				item['app_comment_user_photo'] = comment_item['userphoto']
+				item['app_comment_user_name'] = comment_item['nickName']
+				item['app_comment_user_id'] = comment_item['uin']
+				# item['app_comment_user_photo'] = comment_item['userphoto']
 				item['app_comment_content'] = comment_item['content']
 				item['app_comment_time'] = comment_time.strftime(time_format)
-				item['app_comment_user_score'] = int(comment_item['userpoststarno']) / 20
-				item['app_comment_channel'] = comment_item['channel']
-				item['app_comment_agree_count'] = int(comment_item['agree'])
-				item['app_comment_disagree_count'] = int(comment_item['disagree'])
+				item['app_comment_user_score'] = comment_item['score']
+				# item['app_comment_channel'] = comment_item['channel']
+				# item['app_comment_agree_count'] = int(comment_item['agree'])
+				# item['app_comment_disagree_count'] = int(comment_item['disagree'])
 
 				data['app_comments'].append(item)
 
 			else:
-				break
+				# comment is old, but may be the stick-to-top comments
+				if stick_tolerence:
+					stick_tolerence -= 1
+					continue
+				else:
+					break
 
 		if comment_time >= start_time:
 			# the comment is too new
 			if comment_time > end_time:
 				print "-- The comments are too new! Pass this page!"
-			comment_url_args['pageNo'] += 1
+			comment_url_args['p'] += 1
 		else:
 			break
 
 
-	data['app_score'] = data_json['info']['allscore']
-	data['app_score_count_all'] = int(data_json['info']['allcount'])
-	data['app_score_count_1'] = int(data_json['info']['all1vcount'])
-	data['app_score_count_2'] = int(data_json['info']['all2vcount'])
-	data['app_score_count_3'] = int(data_json['info']['all3vcount'])
-	data['app_score_count_4'] = int(data_json['info']['all4vcount'])
-	data['app_score_count_5'] = int(data_json['info']['all5vcount'])
+	# data['app_score'] = data_json['info']['allscore']
+	# data['app_score_count_all'] = int(data_json['info']['allcount'])
+	# data['app_score_count_1'] = int(data_json['info']['all1vcount'])
+	# data['app_score_count_2'] = int(data_json['info']['all2vcount'])
+	# data['app_score_count_3'] = int(data_json['info']['all3vcount'])
+	# data['app_score_count_4'] = int(data_json['info']['all4vcount'])
+	# data['app_score_count_5'] = int(data_json['info']['all5vcount'])
 	
 	data['app_comments_count'] = len(data['app_comments'])
 	data['app_comments_start_time'] = start_time.strftime(time_format)
