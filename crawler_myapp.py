@@ -18,7 +18,7 @@ website_name = "应用宝 http://android.myapp.com"
 page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 comment_url_args = {}
 comment_url_base = "http://android.app.qq.com/myapp/app/comment.htm"
-app_url_base = "http://android.app.qq.com/android/appdetail.jsp"
+app_url_base = "http://android.app.qq.com/myapp/detail.htm"
 #start_time = time.strptime("2014-03-12 0:0", "%Y-%m-%d %H:%M")
 #end_time = time.strptime("2014-03-14 23:59", "%Y-%m-%d %H:%M")
 time_format = '%Y%m%d%H%M'
@@ -30,7 +30,7 @@ def get_app_info(app_id):
 
 	app_info = {}
 
-	app_url = app_url_base + '?appid=' + app_id
+	app_url = app_url_base + '?apkName=' + app_id
 	app_page_html = general_func.url_open(app_url)
 
 	soup = BeautifulSoup(app_page_html)
@@ -49,8 +49,8 @@ def get_app_id(app_url):
 
 	page_url_parse = urlparse.urlparse(app_url)
 	page_url_args = urlparse.parse_qs(page_url_parse.query)
-	if page_url_args.has_key('appid') and page_url_args['appid'] != '':
-		return True, page_url_args['appid'][0]
+	if page_url_args.has_key('apkName') and page_url_args['apkName'] != '':
+		return True, page_url_args['apkName'][0]
 	else:
 		return False, None
 
