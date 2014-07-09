@@ -61,6 +61,7 @@ def get_comments_data(app_info, start_time, end_time):
 	comment_url_args['p'] = 1
 	comment_url_args['contextData'] = ''
 	stick_tolerence = 5
+	load_retry = 5
 	
 	while True:
 		# the url of comment page
@@ -69,6 +70,16 @@ def get_comments_data(app_info, start_time, end_time):
 		# get the source code of comment page
 		data_raw = general_func.url_open(comment_url)
 		data_json = json.loads(data_raw)
+		if not data_json['obj']:
+			if load_retry > 0:
+				print "-- Load this page failed! Now retry: " + str(load_retry)
+				load_retry -= 1
+				continue
+			else:
+				# retry failed
+				break
+		else:
+			load_retry = 5
 		comment_url_args['contextData'] = data_json['obj']['contextData']
 
 		# get useful information
