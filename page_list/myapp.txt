@@ -1,5 +1,5 @@
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.mm
-#http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.android.qqdownloader
+http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.android.qqdownloader
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.WBlog
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.qqpimsecure
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.qqlive
