@@ -81,6 +81,9 @@ def get_comments_data(app_info, start_time, end_time):
 		else:
 			load_retry = 5
 		comment_url_args['contextData'] = data_json['obj']['contextData']
+		# control not to reload the newest comments, sometimes the server returns newest comments
+		# from the beginning recurrently
+		has_next = data_json['obj']['hasNext']
 
 		# get useful information
 		for comment_item in data_json['obj']['commentDetails']:
@@ -93,6 +96,8 @@ def get_comments_data(app_info, start_time, end_time):
 				# the comment is too new
 				if comment_time > end_time:
 					continue
+
+				crawling_started = True
 
 				item['app_comment_user_name'] = comment_item['nickName']
 				item['app_comment_user_id'] = comment_item['uin']
@@ -114,7 +119,7 @@ def get_comments_data(app_info, start_time, end_time):
 				else:
 					break
 
-		if comment_time >= start_time:
+		if comment_time >= start_time and has_next:
 			# the comment is too new
 			if comment_time > end_time:
 				print "-- The comments are too new! Pass this page!"
