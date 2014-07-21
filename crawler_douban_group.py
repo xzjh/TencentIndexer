@@ -88,6 +88,8 @@ def get_posts_data(forum_id, start_time, end_time):
 			# only 1 page
 			last_page_num = 1
 
+		post_time = None
+
 		# process every post
 		for soup_post in soup_posts:
 			# get post time
@@ -116,7 +118,7 @@ def get_posts_data(forum_id, start_time, end_time):
 			else:
 				break
 
-		if post_time >= start_time and forum_url_args['start'] < last_page_num:
+		if post_time != None and post_time >= start_time and forum_url_args['start'] < last_page_num:
 			# the comment is too new
 			if post_time > end_time:
 				print "-- The posts are too new! Pass this page! Post time: " + post_time.strftime('%Y-%m-%d %H:%M')

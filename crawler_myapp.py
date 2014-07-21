@@ -85,6 +85,8 @@ def get_comments_data(app_info, start_time, end_time):
 		# from the beginning recurrently
 		has_next = data_json['obj']['hasNext']
 
+		comment_time = None
+
 		# get useful information
 		for comment_item in data_json['obj']['commentDetails']:
 
@@ -119,7 +121,7 @@ def get_comments_data(app_info, start_time, end_time):
 				else:
 					break
 
-		if comment_time >= start_time and has_next:
+		if comment_time != None and comment_time >= start_time and has_next:
 			# the comment is too new
 			if comment_time > end_time:
 				print "-- The comments are too new! Pass this page!"

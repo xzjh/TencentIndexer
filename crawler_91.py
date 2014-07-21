@@ -70,6 +70,8 @@ def get_comments_data(app_info, start_time, end_time):
 		if len(data_json['list']) == 0:
 			break;
 
+		comment_time = None
+
 		# get useful information
 		for comment_item in data_json['list']:
 
@@ -95,7 +97,7 @@ def get_comments_data(app_info, start_time, end_time):
 			else:
 				break
 
-		if comment_time >= start_time:
+		if comment_time != None and comment_time >= start_time:
 			# the comment is too new
 			if comment_time > end_time:
 				print "-- The comments are too new! Pass this page!"

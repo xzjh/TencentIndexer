@@ -78,6 +78,8 @@ def get_comments_data(app_info, start_time, end_time):
 		# get useful information
 		soup = BeautifulSoup(data_html)
 
+		comment_time = None
+
 		soup_comments = soup.find_all('div', attrs = {'class': 'comment_item'})
 		for soup_comment_item in soup_comments:
 
@@ -103,7 +105,7 @@ def get_comments_data(app_info, start_time, end_time):
 			else:
 				break
 
-		if comment_time >= start_time:
+		if comment_time != None and comment_time >= start_time:
 			# the comment is too new
 			if comment_time > end_time:
 				print "-- The comments are too new! Pass this page!"

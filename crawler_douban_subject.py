@@ -87,6 +87,8 @@ def get_comments_data(app_info, start_time, end_time):
 		if len(soup_comments) == 0:
 			break
 
+		comment_time = None
+
 		for soup_comment_item in soup_comments:
 
 			item = {}
@@ -112,7 +114,7 @@ def get_comments_data(app_info, start_time, end_time):
 			else:
 				break
 
-		if comment_time >= start_time:
+		if comment_time != None and comment_time >= start_time:
 			# the comment is too new
 			if comment_time > end_time:
 				print "-- The comments are too new! Pass this page!"

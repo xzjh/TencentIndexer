@@ -72,6 +72,8 @@ def get_posts_data(forum_id, start_time, end_time):
 		soup = BeautifulSoup(forum_html)
 		soup_div = soup.find_all('div', attrs = {'class': 'i'})
 
+		post_time = None
+
 		# get the IDs and times of the posts
 		for item_div in soup_div:
 			if 'm?kz=' in item_div.a.attrs['href']:
@@ -99,7 +101,7 @@ def get_posts_data(forum_id, start_time, end_time):
 				else:
 					break
 
-		if post_time >= start_time:
+		if post_time != None and post_time >= start_time:
 			# the comment is too new
 			if post_time > end_time:
 				print "-- The posts are too new! Pass this page! " + post_time.strftime(time_format)

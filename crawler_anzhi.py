@@ -69,6 +69,8 @@ def get_comments_data(app_info, start_time, end_time):
 		if len(comments_count_result) > 0:
 			app_info['app_score_count_all'] = int(comments_count_result[0])
 
+		comment_time = None
+
 		soup_comments = soup.find_all('ul', attrs = {'id': 'comment_list'})[0].find_all('li')
 		for soup_comment_item in soup_comments:
 
@@ -91,7 +93,7 @@ def get_comments_data(app_info, start_time, end_time):
 			else:
 				break
 
-		if comment_time >= start_time:
+		if comment_time != None and comment_time >= start_time:
 			# the comment is too new
 			if comment_time > end_time:
 				print "-- The comments are too new! Pass this page!"

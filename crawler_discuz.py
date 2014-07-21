@@ -135,6 +135,8 @@ def get_posts_data(forum_id, start_time, end_time):
 				soup_posts[i].attrs['id'].startswith('normalthread_')):
 				del soup_posts[i]
 
+		post_time = None
+
 		# process every post
 		for soup_post in soup_posts:
 			# get post time
@@ -171,7 +173,7 @@ def get_posts_data(forum_id, start_time, end_time):
 			else:
 				break
 
-		if post_time >= start_time:
+		if post_time != None and post_time >= start_time:
 			# the comment is too new
 			if post_time > end_time:
 				print "-- The posts are too new! Pass this page! Post time: " + post_time.strftime('%Y-%m-%d %H:%M')

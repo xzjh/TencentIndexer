@@ -23,8 +23,8 @@ weibo_url_args = {}
 weibo_url_args['sort'] = 'time'
 weibo_url_args['advancedfilter'] = '1'
 cookies = {}
-cookies['_T_WM'] = '4cf86a4ce4bd5843c1d88cf580fabc99'
-cookies['gsid_CTandWM'] = '4uqB8a1a1K4PspglQopzucH0w6H'
+cookies['_T_WM'] = '2a247ec4a8ee0a40c0f26be9523e8812'
+cookies['gsid_CTandWM'] = '4uA9aea71XDVckpKOwlcSdpWu1p'
 # post_url_base = 'http://tieba.baidu.com/mo/m'
 # post_url_args = {}
 # post_url_args['global'] = '1'
@@ -90,6 +90,8 @@ def get_posts_data(search_keyword, start_time, end_time):
 		else:
 			last_page_num = 1
 
+		post_time = None
+
 		# get the IDs and times of the posts
 		for soup_weibo in soup_weibos:
 			# get post time
@@ -125,7 +127,7 @@ def get_posts_data(search_keyword, start_time, end_time):
 			else:
 				break
 
-		if post_time >= start_time and weibo_url_args['page'] < last_page_num:
+		if post_time != None and post_time >= start_time and weibo_url_args['page'] < last_page_num:
 			# the comment is too new
 			if post_time > end_time:
 				print "-- The posts are too new! Pass this page! " + post_time.strftime(time_format)

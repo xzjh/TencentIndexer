@@ -77,6 +77,8 @@ def get_comments_data(app_info, start_time, end_time):
 		soup = BeautifulSoup(data_html)
 		soup_comments = soup.find_all('div', attrs = {'class': 'single-review'})
 
+		comment_time = None
+
 		for soup_comment_item in soup_comments:
 			item = {}
 			comment_time_raw = soup_comment_item.find('span', attrs = {'class': 'review-date'}).contents[0].strip().replace(u'年', '-').replace(u'月', '-').replace(u'日', '')
@@ -107,7 +109,7 @@ def get_comments_data(app_info, start_time, end_time):
 			else:
 				break
 
-		if comment_time >= start_time:
+		if comment_time != None and comment_time >= start_time:
 			# the comment is too new
 			if comment_time > end_time:
 				print "-- The comments are too new! Pass this page!"
