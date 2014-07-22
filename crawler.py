@@ -30,6 +30,8 @@ if __name__ == '__main__':
 
 	print '\n' + "TencentCrawler " + app_version + " by Jiaheng Zhang, all rights reserved."
 	os.chdir(sys.path[0])
+	reload(sys)
+	sys.setdefaultencoding("utf-8")
 
 	# read args
 	crawler_args = {}
