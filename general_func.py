@@ -69,11 +69,11 @@ def process_results(dir_name, file_name, data):
 			# 必须要有这个头
 			headers = {"Content-Type":"application/json","Accept": "application/json"}
 			# 加了个timeout防止有什么其它问题
-    		# conn = httplib.HTTPConnection("mrs.oa.com",18881, timeout=10)
-    		# values = json.dumps({'json':data_encoded})
-    		# PostUrl = "/moa/microtrend/openservices/service/AddJsonData"
-    		# conn.request("POST",PostUrl,values,headers)
-    		# conn.request("POST",PostUrl,values,headers)
+			# conn = httplib.HTTPConnection("mrs.oa.com",18881, timeout=10)
+			# values = json.dumps({'json':data_encoded})
+			# PostUrl = "/moa/microtrend/openservices/service/AddJsonData"
+			# conn.request("POST",PostUrl,values,headers)
+			# conn.request("POST",PostUrl,values,headers)
 			url_open(push_address, post_args = push_data, use_proxy = False, \
 				dditional_headers = headers)
 			print "-- Pushed to address: " + push_address
