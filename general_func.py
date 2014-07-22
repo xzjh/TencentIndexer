@@ -3,12 +3,21 @@
 # TencentCrawler module of general functions
 # by Jiaheng Zhang, all rights reserved.
 
+import sys
+reload(sys)
+sys.setdefaultencoding( "utf-8" )
+
 import os
 import json
 import urllib
 import requests
 import datetime
 import codecs
+
+# import traceback
+# import urllib2
+# import urllib
+# import httplib
 
 #configurations
 data_dir_name = "data"
@@ -21,7 +30,7 @@ def get_list_from_file(file_name):
 
 	the_file = codecs.open(file_name, encoding = 'utf-8')
 	the_list = the_file.readlines()
-	
+
 	for i in range(len(the_list))[::-1]:
 		the_list[i] = the_list[i].strip()
 		if the_list[i] == '' or the_list[i][0] == '#':
@@ -56,7 +65,17 @@ def process_results(dir_name, file_name, data):
 			push_data = {}
 			push_data['json'] = data_encoded
 			push_data['file_name'] = os.getcwd() + '/' + full_file_name
-			url_open(push_address, post_args = push_data, use_proxy = False)
+
+			# 必须要有这个头
+			headers = {"Content-Type":"application/json","Accept": "application/json"}
+			# 加了个timeout防止有什么其它问题
+    		# conn = httplib.HTTPConnection("mrs.oa.com",18881, timeout=10)
+    		# values = json.dumps({'json':data_encoded})
+    		# PostUrl = "/moa/microtrend/openservices/service/AddJsonData"
+    		# conn.request("POST",PostUrl,values,headers)
+    		# conn.request("POST",PostUrl,values,headers)
+			url_open(push_address, post_args = push_data, use_proxy = False, \
+				dditional_headers = headers)
 			print "-- Pushed to address: " + push_address
 		except:
 			print "-- Failed to push to " + push_address
