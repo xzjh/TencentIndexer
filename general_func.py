@@ -93,9 +93,11 @@ def url_open(url, post_args = None, additional_headers = None, cookies = None, u
 		headers.update(additional_headers)
 
 	if post_args != None:
-		req = requests.post(url, data = post_args, headers = headers, cookies = cookies, proxies = proxy)
+		req = requests.post(url, data = post_args, headers = headers, cookies = cookies, \
+			proxies = proxy, timeout = 5)
 	else:
-		req = requests.get(url, headers = headers, cookies = cookies, proxies = proxy)
+		req = requests.get(url, headers = headers, cookies = cookies, proxies = proxy, \
+			timeout = 5)
 
 	return req.text
 
