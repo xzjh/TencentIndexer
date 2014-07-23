@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # TencentCrawler module of general functions
-# by Jiaheng Zhang, all rights reserved.
-
-import sys
-reload(sys)
-sys.setdefaultencoding( "utf-8" )
+# by Jiaheng Zhang, all rights reserved.ß
 
 import os
 import json

@@ -13,6 +13,7 @@ import re
 import general_func
 
 from datetime import timedelta
+import random
 
 # configurations
 website_id = 'weibo'
@@ -22,15 +23,26 @@ weibo_url_base = "http://weibo.cn/search/mblog"
 weibo_url_args = {}
 weibo_url_args['sort'] = 'time'
 weibo_url_args['advancedfilter'] = '1'
-cookies = {}
-cookies['_T_WM'] = '2a247ec4a8ee0a40c0f26be9523e8812'
-cookies['gsid_CTandWM'] = '4uA9aea71XDVckpKOwlcSdpWu1p'
-# post_url_base = 'http://tieba.baidu.com/mo/m'
-# post_url_args = {}
-# post_url_args['global'] = '1'
-# post_url_args['expand'] = '1'
+cookies_list = None
+# cookies = {}
+# cookies['_T_WM'] = '2a247ec4a8ee0a40c0f26be9523e8812'
+# cookies['gsid_CTandWM'] = '4uA9aea71XDVckpKOwlcSdpWu1p'
 time_format = '%Y%m%d%H%M'
 date_format = '%Y%m%d'
+
+def get_cookies_list():
+
+	global cookies_list
+
+	file_configs = open('configs.json')
+	configs_raw = file_configs.read()
+	configs = json.loads(configs_raw)
+	cookies_list = configs['weibo_accounts']
+	file_configs.close()
+
+def get_cookies_index():
+
+	return int(random.random() * len(cookies_list))
 
 def get_time_from_str(time_str):
 
@@ -75,8 +87,10 @@ def get_posts_data(search_keyword, start_time, end_time):
 	while True:
 		# the url of weibo page
 		weibo_url = weibo_url_base + '?' + urllib.urlencode(weibo_url_args)
-		print 'Processing weibo search result: ' + weibo_url
-		weibo_html = general_func.url_open(weibo_url, cookies = cookies)
+		cookies_index = get_cookies_index()
+		print 'Processing weibo search result: ' + str(weibo_url_args['page']) + \
+			', with account: ' + str(cookies_index)
+		weibo_html = general_func.url_open(weibo_url, cookies = cookies_list[cookies_index])
 		soup = BeautifulSoup(weibo_html)
 		soup_weibos = soup.find_all('div', attrs = {'class': 'c'})
 		for i in range(len(soup_weibos))[::-1]:
@@ -122,7 +136,8 @@ def get_posts_data(search_keyword, start_time, end_time):
 
 					posts_data['weibo_posts'].append(this_post)
 				except:
-					print '-- Failed to get current weibo!'
+					print '-- Failed to get current page of weibo, with account: ' + \
+						str(cookies_index)
 					continue
 			else:
 				break
@@ -149,6 +164,7 @@ def crawl(args):
 	end_time = args['end_time']
 
 	weibo_keyword_list = general_func.get_list_from_file(page_list_file)
+	get_cookies_list()
 
 	for weibo_keyword in weibo_keyword_list:
 

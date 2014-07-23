@@ -2,5 +2,31 @@
     "push_address": "http://mrs.oa.com:18881/moa/microtrend/openservices/service/AddJsonData",
     "proxies": {
         "googleplay": "http://127.0.0.1:9743"
-    }
+    },
+    "weibo_accounts": [
+        {
+            "_T_WM": "5ab2ed4fcfc668809907abc27d247deb",
+            "gsid_CTandWM": "4u1Eaea71DTxg1KLrgqbKcXXVeU"
+        },
+        {
+            "_T_WM": "2a247ec4a8ee0a40c0f26be9523e8812",
+            "gsid_CTandWM": "4uA9aea71XDVckpKOwlcSdpWu1p"
+        },
+        {
+            "_T_WM": "7aa445eb6a1204a4901a031d0cb041b4",
+            "gsid_CTandWM": "4uIeaea71dsOdO7CJe4XEcXXP9I"
+        },
+        {
+            "_T_WM": "d7648f1193f9361b77b857d9b5598466",
+            "gsid_CTandWM": "4uegaea714lqPtq74tFSQcGWz9p"
+        },
+        {
+            "_T_WM": "5037e2b6980c0c875115cb5fce547856",
+            "gsid_CTandWM": "4ujUaea71afgTGsXIc3Y1cXHTfQ"
+        },
+        {
+            "_T_WM": "d9a465ae330a7f70b24600baadde0690",
+            "gsid_CTandWM": "4urraea71Fw20PE7mbdiwcJ3QaG"
+        }
+    ]
 }
