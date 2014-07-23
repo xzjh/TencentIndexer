@@ -246,7 +246,7 @@ def crawl(args):
 
 	set_website_attrs(args['website_id'])
 
-	print "Now running TencentCrawler for " + website_name
+	print "Now running TencentCrawler for Discuz!"
 
 	start_time = args['start_time']
 	end_time = args['end_time']
