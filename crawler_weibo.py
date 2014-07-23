@@ -158,8 +158,12 @@ def crawl(args):
 		print "Crawling weibo with keyword: " + weibo_keyword
 		print "Analyzing weibo pages..."
 
-		# get post list
-		data = get_posts_data(weibo_keyword, start_time, end_time)
+		try:
+			# get post list
+			data = get_posts_data(weibo_keyword, start_time, end_time)
+		except:
+			print "-- Failed to get the posts of this topic!"
+			continue
 
 		# save to json file
 		data_file_prefix = 'data_' + website_id + '_'

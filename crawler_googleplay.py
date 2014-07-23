@@ -150,15 +150,19 @@ def crawl(args):
 			print "Wrong page URL: " + app_url
 			continue
 
-		# get app info
-		app_info = get_app_info(app_id)
-		print "App name: " + app_info['app_name'] + ", App ID: " + comment_url_args['id']
-		app_info['app_id'] = app_id
+		try:
+			# get app info
+			app_info = get_app_info(app_id)
+			print "App name: " + app_info['app_name'] + ", App ID: " + comment_url_args['id']
+			app_info['app_id'] = app_id
 
-		print "Analyzing comment pages..."
+			print "Analyzing comment pages..."
 
-		# get comments data
-		data = get_comments_data(app_info, start_time, end_time)
+			# get comments data
+			data = get_comments_data(app_info, start_time, end_time)
+		except:
+			print "-- Failed to get the comments of this App!"
+			continue
 
 		# save to json file
 
