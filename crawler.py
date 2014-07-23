@@ -90,7 +90,8 @@ if __name__ == '__main__':
 		crawler_weibo.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'tencentbbs' or \
 		crawler_args['website_id'] == 'duowan' or \
-		crawler_args['website_id'] == '178':
+		crawler_args['website_id'] == '178' or \
+		crawler_args['website_id'] == 'kuyoo':
 		crawler_discuz.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'douban_group':
 		crawler_douban_group.crawl(crawler_args)

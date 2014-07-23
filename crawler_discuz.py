@@ -43,6 +43,10 @@ def set_website_attrs(website_id_arg):
 		website_name = '178论坛 http://bbs.178.com/'
 		forum_url_base = 'http://bbs.178.com/forum.php'
 		post_url_base = forum_url_base
+	elif website_id == 'kuyoo':
+		website_name = 'kuyoo'
+		forum_url_base = 'http://bbs2.kuyoo.com/forum.php'
+		post_url_base = forum_url_base
 
 	page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 
@@ -59,6 +63,9 @@ def parse_forum_url(forum_url):
 		page_url_parse = urlparse.urlparse(forum_url)
 		if website_id == 'duowan' or website_id == '178':
 			return True, page_url_parse.path.split('-')[1]
+		elif website_id == 'kuyoo':
+			page_url_args = urlparse.parse_qs(page_url_parse.query)
+			return True, page_url_args['fid'][0]
 		else:
 			# tencentbbs, set args
 			result_bbs = rep_bbs.search(page_url_parse.netloc)
@@ -128,7 +135,6 @@ def get_posts_data(forum_id, start_time, end_time):
 		soup = BeautifulSoup(forum_html)
 		posts_data['forum_name'] = soup.h1.a.text
 		soup_posts = soup.find_all('tbody')
-
 		# remove stick threads
 		for i in range(len(soup_posts))[::-1]:
 			if not (soup_posts[i].has_attr('id') and \
