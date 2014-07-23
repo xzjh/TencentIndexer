@@ -60,14 +60,14 @@ if __name__ == '__main__':
 	else:
 		general_func.proxy_address = None
 	# push address
-	if configs.has_key('push_address'):
-		if re.match(r'^https?:/{2}\w.+$', configs['push_address']):
-			general_func.push_address = configs['push_address']
-			print "-- Push address: " + general_func.push_address
-		else:
-			print "-- Invalid push address: " + configs['push_address']
-	else:
-		general_func.push_address = None
+	# if configs.has_key('push_address'):
+	# 	if re.match(r'^https?:/{2}\w.+$', configs['push_address']):
+	# 		general_func.push_address = configs['push_address']
+	# 		print "-- Push address: " + general_func.push_address
+	# 	else:
+	# 		print "-- Invalid push address: " + configs['push_address']
+	# else:
+	# 	general_func.push_address = None
 
 	# call the crawler
 	if crawler_args['website_id'] == 'myapp':
