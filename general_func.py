@@ -73,7 +73,6 @@ def process_results(dir_name, file_name, data):
 		values = json.dumps({'json': data_encoded})
 		push_address = "/moa/microtrend/openservices/service/AddJsonData"
 		conn.request("POST", push_address, values, headers)
-		conn.request("POST", push_address, values, headers)
 		# url_open(push_address, post_args = push_data, use_proxy = False, \
 		# 	dditional_headers = headers)
 		print "-- Pushed to address: " + push_address
