@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # TencentCrawler module of general functions
-# by Jiaheng Zhang, all rights reserved.ß
+# by Jiaheng Zhang, all rights reserved.
 
 import os
 import json
