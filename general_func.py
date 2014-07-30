@@ -3,10 +3,6 @@
 # TencentCrawler module of general functions
 # by Jiaheng Zhang, all rights reserved.
 
-import sys
-reload(sys)
-sys.setdefaultencoding( "utf-8" )
-
 import os
 import json
 import urllib
