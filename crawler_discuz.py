@@ -33,7 +33,7 @@ def set_website_attrs(website_id_arg):
 
 	website_id = website_id_arg
 
-	if website_id == 'tencentbbs':
+	if website_id == 'tencentbbs' or website_id == 'tencentbbs_sub':
 		website_name = '腾讯论坛 http://bbs.g.qq.com http://gamebbs.qq.com'
 	elif website_id == 'duowan':
 		website_name = '多玩论坛 http://bbs.duowan.com'

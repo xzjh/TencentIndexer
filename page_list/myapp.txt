@@ -1,5 +1,4 @@
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.mm
-http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.android.qqdownloader
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.WBlog
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.qqpimsecure
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.qqlive
@@ -13,8 +12,9 @@ http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.qqcalendar
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.qqpinyin
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.mobileqq
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.mobileqqi
-http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.game.SSGame
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.qqgame
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.ttpic
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.QQLottery
 http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.qqbus
+http://android.myapp.com/myapp/detail.htm?apkName=com.tencent.group
+http://android.myapp.com/myapp/detail.htm?apkName=com.qq.qcloud

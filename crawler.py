@@ -82,13 +82,14 @@ if __name__ == '__main__':
 		crawler_91.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'douban_subject':
 		crawler_douban_subject.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'tieba_forum':
+	elif crawler_args['website_id'] == 'tieba_forum' or crawler_args['website_id'] == 'tieba_forum_sub':
 		crawler_tieba_forum.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'tieba_search':
 		crawler_tieba_search.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'weibo':
 		crawler_weibo.crawl(crawler_args)
 	elif crawler_args['website_id'] == 'tencentbbs' or \
+		crawler_args['website_id'] == 'tencentbbs_sub' or \
 		crawler_args['website_id'] == 'duowan' or \
 		crawler_args['website_id'] == '178' or \
 		crawler_args['website_id'] == 'kuyoo':

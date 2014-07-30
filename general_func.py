@@ -3,6 +3,9 @@
 # TencentCrawler module of general functions
 # by Jiaheng Zhang, all rights reserved.
 
+#import sys
+#reload(sys)
+#sys.setdefaultencoding("utf-8")
 import os
 import json
 import urllib
@@ -44,16 +47,23 @@ def init_dir(dir_name):
 def process_results(dir_name, file_name, data):
 
 	# encode to json
-	data_encoded = json.dumps(data, ensure_ascii = False, indent = 4)
+	try:
+		data_encoded = json.dumps(data, ensure_ascii = False, indent = 4)
+	except:
+		print "-- Failed to save to json.dumps"
+
 
 	# save to file
-	init_dir(data_dir_name)
-	init_dir(data_dir_name + '/' + dir_name)
-	full_file_name = data_dir_name + '/' + dir_name + '/' + file_name
-	file_json = open(full_file_name, 'w')
-	file_json.write(data_encoded.encode('utf-8'))
-	file_json.close()
-	print "-- Saved to file: " + full_file_name
+	try:
+		init_dir(data_dir_name)
+		init_dir(data_dir_name + '/' + dir_name)
+		full_file_name = data_dir_name + '/' + dir_name + '/' + file_name
+		file_json = open(full_file_name, 'w')
+		file_json.write(data_encoded.encode('utf-8'))
+		file_json.close()
+		print "-- Saved to file: " + full_file_name
+	except:
+		print "-- Failed to save to file: " + full_file_name
 
 	# push to server
 	# if push_address != None:
