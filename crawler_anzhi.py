@@ -87,6 +87,7 @@ def get_comments_data(app_info, start_time, end_time):
 
 				item['app_comment_user_name'] = soup_comment_item.find('div', attrs = {'class': 'comment_list_top'}).span.contents[0]
 				item['app_comment_user_photo'] = soup_comment_item.img.attrs['src']
+				item['app_comment_user_score'] = float(soup_comment_item.find('div', attrs = {'class': 'comment_list_top'}).find('span', attrs = {'class': 'stars center'}).attrs['style'].split(' ')[-1].strip('px;')) / -24
 				item['app_comment_content'] = soup_comment_item.p.text.strip()
 				item['app_comment_time'] = comment_time.strftime(time_format)
 				data['app_comments'].append(item)
