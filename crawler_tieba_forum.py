@@ -166,7 +166,9 @@ def crawl(args):
 	start_time = args['start_time']
 	end_time = args['end_time']
 
-	page_list_file = general_func.page_list_dir_name + '/' + args['website_id'] + ".txt"
+        website_id = args['website_id']
+
+	page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 
 	forum_list = general_func.get_list_from_file(page_list_file)
 

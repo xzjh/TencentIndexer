@@ -3,9 +3,6 @@
 # TencentCrawler module of general functions
 # by Jiaheng Zhang, all rights reserved.
 
-#import sys
-#reload(sys)
-#sys.setdefaultencoding("utf-8")
 import os
 import json
 import urllib
@@ -58,6 +55,8 @@ def process_results(dir_name, file_name, data):
 		init_dir(data_dir_name)
 		init_dir(data_dir_name + '/' + dir_name)
 		full_file_name = data_dir_name + '/' + dir_name + '/' + file_name
+		full_file_name = full_file_name.encode('utf-8')           # 转换为utf-8编码
+		full_file_name = full_file_name.strip().replace(' ', '_') # 把空格转为_
 		file_json = open(full_file_name, 'w')
 		file_json.write(data_encoded.encode('utf-8'))
 		file_json.close()
