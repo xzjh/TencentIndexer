@@ -4,149 +4,15 @@
         "googleplay": "http://127.0.0.1:9743"
     },
     "weibo_accounts": [
-        {
-            "_T_WM": "49fd50f6058ecaad1750faf01bd7ac8f",
-            "gsid_CTandWM": "4uiZ7ccf1OWXmy3cFuTxIcKMkee"
-        },
-        {
-            "_T_WM": "9b225ebfd15cf7f9bdc0c71c3d2456f2",
-            "gsid_CTandWM": "4ujM7ccf1FvLhQAMUvH2bcKHX52"
-        },
-        {
-            "_T_WM": "45ca807967d842273456f1aba53e0422",
-            "gsid_CTandWM": "4ucT7ccf1EhHHGk47PczMcJ0L2q"
-        },
-        {
-            "_T_WM": "242ffb73acef440c56989066ff3465a3",
-            "gsid_CTandWM": "4uZt7ccf1ztXliinBdz3OcXXucg"
-        },
-        {
-            "_T_WM": "b6b3e1c03e71d44dff38cb72aea4bb44",
-            "gsid_CTandWM": "4uO47ccf1bjWJSuBUjqf7dpVEdr"
-        },
-        {
-            "_T_WM": "cce7d6f1f3475088e4bd6b5af80788e6",
-            "gsid_CTandWM": "4uEB7ccf1in7bkktx9ws0drZtbT"
-        },
-        {
-            "_T_WM": "edf9bd250e73f2adc2ca0880dc3b63f7",
-            "gsid_CTandWM": "4uOp7ccf1GLrtDP5pSbjDcKJxdW"
-        },
-        {
-            "_T_WM": "0b6c8b4fc8b650db6f297edb0c985948",
-            "gsid_CTandWM": "4u2j7ccf1ZDA8OK6CRkDAcJ4bao"
-        },
-        {
-            "_T_WM": "082c4360ef2cbb16a76da5c586b1a0a9",
-            "gsid_CTandWM": "4uRo7ccf1dS6QlkNPIG5Xdqhd0r"
-        },
-        {
-            "_T_WM": "f619d8051f95a80821570ef155daf061",
-            "gsid_CTandWM": "4usO7ccf1SWY0X0KKc7GscZOQ1Q"
-        },
-        {
-            "_T_WM": "0fd222a4f4aca799f2e49fe8938afc9c",
-            "gsid_CTandWM": "4ujL7ccf19maglYGYH9N1cJ1s8K"
-        },
-        {
-            "_T_WM": "d995bb6c76fb6b87b41afaecba2baa02",
-            "gsid_CTandWM": "4u8S7ccf1WDmBG3ihA1R1cJ0S6Y"
-        },
-        {
-            "_T_WM": "73ec5a6c1c801dc9395327ca84e94013",
-            "gsid_CTandWM": "4uVk7ccf16GPUCQnJGGUscJ3m8W"
-        },
-        {
-            "_T_WM": "5ba9d9ff26b89ad2bab3a81923e7dcc6",
-            "gsid_CTandWM": "4uxa7ccf1FGA7aFV9YvhYcH0G21"
-        },
-        {
-            "_T_WM": "7d1154d0e6996f9378d766d2c4886f69",
-            "gsid_CTandWM": "4uxs7ccf1qJYE9BMvBsRccJ3X9A"
-        },
-        {
-            "_T_WM": "52487441f3e5712caf594556c2706327",
-            "gsid_CTandWM": "4uk27ccf1EZIM2mkgnAuncJ3T6Y"
-        },
-        {
-            "_T_WM": "f8283372d061bb7c1e91cb6868d578ba",
-            "gsid_CTandWM": "4u5n7ccf1vz9xejmsOdIocXIE4w"
-        },
-        {
-            "_T_WM": "32ba117a12a2f64fd0002938e5d497d4",
-            "gsid_CTandWM": "4uOa7ccf113cPGsMbMYvdcJ4ocC"
-        },
-        {
-            "_T_WM": "37f48290152b3ba9274a91be6cdca53b",
-            "gsid_CTandWM": "4ui57ccf1wlgKyCLkLJYfcKMkey"
-        },
-        {
-            "_T_WM": "51500c599ade8c60fcb10c292074a52a",
-            "gsid_CTandWM": "4uXd7ccf1Gr5KtLSKT4g7cJ4ocK"
-        },
-        {
-            "_T_WM": "1ad9f706179c6b173a973695d636d92f",
-            "gsid_CTandWM": "4uq17ccf1wIBKSgyJQejycJ3rfw"
-        },
-        {
-            "_T_WM": "c173fd41fd6e7019d22284ce58644f26",
-            "gsid_CTandWM": "4uu37ccf1pFAMG0cpAHZ7drKOa7"
-        },
-        {
-            "_T_WM": "2102bbb2b92c1d7a58450dd3a2fb05ce",
-            "gsid_CTandWM": "4ugj7ccf1f1PoF1bcL1sdcKGg76"
-        },
-        {
-            "_T_WM": "9737a64a55091e8e047e3c8e3c6e9151",
-            "gsid_CTandWM": "4uUP7ccf1raaTNmUMaw20cJ0J0S"
-        },
-        {
-            "_T_WM": "f0722014c0cb4225190bb96a09781c78",
-            "gsid_CTandWM": "4uQF7ccf1MnNGLn3rrZVXdpVF4t"
-        },
-        {
-            "_T_WM": "4d86ccca8737fbd5cc4c0a731bd3553c",
-            "gsid_CTandWM": "4uv77ccf1uAvjtMiEeRCIdrZx2R"
-        },
-        {
-            "_T_WM": "ffdd8cb08ecdd67b3e7a08065180b78f",
-            "gsid_CTandWM": "4u5T7ccf1aWxLgqYvuXNxcZKi4c"
-        },
-        {
-            "_T_WM": "86d1608e5edba3744acfc67955ea2a59",
-            "gsid_CTandWM": "4uuE7ccf15NYJjnEkbziZcJ1z5G"
-        },
-        {
-            "_T_WM": "361720e4ad47cdb1bace32231870c718",
-            "gsid_CTandWM": "4uKr7ccf1wwNpq3y6OJgocKETfG"
-        },
-        {
-            "_T_WM": "e1d2f13539800ac7e6ce90f34a42ad06",
-            "gsid_CTandWM": "4usz7ccf1PQyGsH8rLdBidrDm2t"
-        },
-        {
-            "_T_WM": "5ab2ed4fcfc668809907abc27d247deb",
-            "gsid_CTandWM": "4u1Eaea71DTxg1KLrgqbKcXXVeU"
-        },
-        {
-            "_T_WM": "2a247ec4a8ee0a40c0f26be9523e8812",
-            "gsid_CTandWM": "4uA9aea71XDVckpKOwlcSdpWu1p"
-        },
-        {
-            "_T_WM": "7aa445eb6a1204a4901a031d0cb041b4",
-            "gsid_CTandWM": "4uIeaea71dsOdO7CJe4XEcXXP9I"
-        },
-        {
-            "_T_WM": "d7648f1193f9361b77b857d9b5598466",
-            "gsid_CTandWM": "4uegaea714lqPtq74tFSQcGWz9p"
-        },
-        {
-            "_T_WM": "5037e2b6980c0c875115cb5fce547856",
-            "gsid_CTandWM": "4ujUaea71afgTGsXIc3Y1cXHTfQ"
-        },
-        {
-            "_T_WM": "d9a465ae330a7f70b24600baadde0690",
-            "gsid_CTandWM": "4urraea71Fw20PE7mbdiwcJ3QaG"
-        }
+	{"name": "15918951628", "password": "fmubjq7136p"},
+	{"name": "13417059419", "password": "pxgnwc3582b"},
+	{"name": "15989847503", "password": "jqyent0257r"},
+	{"name": "13433896917", "password": "enucjq7136y"},
+	{"name": "13924760195", "password": "zgoudj5713c"},
+	{"name": "13750473768", "password": "rziqxd3581u"},
+	{"name": "13926754690", "password": "biqxgm6825n"},
+	{"name": "15989749421", "password": "rygnxd3581b"},
+	{"name": "13417037686", "password": "howdlr8146l"},
+	{"name": "13926782904", "password": "msdjry1368q"}
     ]
 }
