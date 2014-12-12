@@ -25,57 +25,47 @@ weibo_url_base = "http://weibo.cn/search/mblog"
 weibo_url_args = {}
 weibo_url_args['sort'] = 'time'
 weibo_url_args['advancedfilter'] = '1'
-# cookies = {}
-# cookies['_T_WM'] = '2a247ec4a8ee0a40c0f26be9523e8812'
-# cookies['gsid_CTandWM'] = '4uA9aea71XDVckpKOwlcSdpWu1p'
+
 time_format = '%Y%m%d%H%M'
 date_format = '%Y%m%d'
 
-account_list = None
-account_index = 0
-invalid_account_list = []
+login_account_list = []
 login_url = 'http://login.weibo.cn/login/'
 
 rep_remove_content_extra = re.compile(ur'赞\[\d+\]\xa0转发\[\d+\]')
 rep_last_page = re.compile(ur'(?<=\d/)\d+(?=页)')
 rep_user_id_and_post_id = re.compile(ur'comment/(.*)\?uid=(\d+)')
 
-def get_account_list():
-
-	global account_list
-
+def cache_account_list():
 	file_configs = open('configs.json')
 	configs_raw = file_configs.read()
 	configs = json.loads(configs_raw)
 	account_list = configs['weibo_accounts']
 	file_configs.close()
 
-def get_account_index():
+	invalid_account_list = []
 
-	return int(random.random() * len(account_list))
-
-
-def get_session():
-        ret = general_func.url_open(login_url)
-	form_tag = BeautifulSoup(ret).find('form')
-
-	action 		= form_tag.attrs['action']
-	backURL 	= form_tag.find('input', attrs = { 'name': 'backURL'}).attrs['value']
-	backTitle 	= form_tag.find('input', attrs = { 'name': 'backTitle'}).attrs['value']
-	submit 		= form_tag.find('input', attrs = { 'name': 'submit'}).attrs['value']
-	vk 		= form_tag.find('input', attrs = { 'name': 'vk'}).attrs['value']
-	password_name 	= form_tag.find_all('input')[1].attrs['name']	# password_name will be changed every time
-	
-	idx = 1
-	while ( idx <= 5 ):
-		account_index = get_account_index()
-		print 'Processing weibo search result: ' + str(weibo_url_args['page']) + ', with account: ' + account_list[account_index]['name']
-		#weibo_html = general_func.url_open(weibo_url, cookies = cookies_list[cookies_index])
-		#soup = BeautifulSoup(weibo_html)
+	for account in account_list:
 		s = requests.Session()
+		s.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36'
+		s.headers['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+		s.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8'
+		ret = s.get(login_url, headers=s.headers)
+		ret = ret.text
+		form_tag = BeautifulSoup(ret).find('form')
+
+		action 		= form_tag.attrs['action']
+		backURL 	= form_tag.find('input', attrs = { 'name': 'backURL'}).attrs['value']
+		backTitle 	= form_tag.find('input', attrs = { 'name': 'backTitle'}).attrs['value']
+		submit 		= form_tag.find('input', attrs = { 'name': 'submit'}).attrs['value']
+		vk 		= form_tag.find('input', attrs = { 'name': 'vk'}).attrs['value']
+		password_name 	= form_tag.find_all('input')[1].attrs['name']	# password_name will be changed every time
+	
+		print 'login with account: ' + account['name']
+
 		post_args = {
-			'mobile': 	account_list[account_index]['name'],
-			password_name: 	account_list[account_index]['password'],
+			'mobile': 	account['name'],
+			password_name: 	account['password'],
 			'backURL': 	backURL,
 			'backTitle': 	backTitle,
 			'remember': 	'on',
@@ -84,13 +74,17 @@ def get_session():
 			'submit': 	submit 
 		}
 
-		if BeautifulSoup(s.post(login_url+action, data = post_args).text).find('a', attrs = {'class': 'nl'}, text = u'首页') != None:
-			return s
-		
-		idx+=1
-		invalid_account_list.append(account_list[account_index]["name"])
-		del account_list[account_index]
-	return None
+		text = s.post(login_url+action, data = post_args, headers = s.headers, timeout = 60).text
+		if BeautifulSoup(text).find('a', attrs = {'class': 'nl'}, text = u'首页') != None:
+			login_account_list.append({'name': account['name'], 'session': s})
+		else:
+			invalid_account_list.append(account['name'])
+
+	f = open('./invalid_account_list', 'w')
+	f.write("\n".join(invalid_account_list))
+	f.close()
+
+	return login_account_list
 
 def get_time_from_str(time_str):
 
@@ -115,7 +109,7 @@ def get_time_from_str(time_str):
 			day = int(result_this_year.group(2)), hour = int(result_this_year.group(3)), \
 			minute = int(result_this_year.group(4)))
 	else:
-		weibo_time = datetime.strptime(timestr, u'%Y-%m-%d %H:%M:%S').replace(second = 0)
+		weibo_time = datetime.strptime(time_str, u'%Y-%m-%d %H:%M:%S').replace(second = 0)
 
 	return weibo_time
 
@@ -132,12 +126,16 @@ def get_posts_data(search_keyword, start_time, end_time):
 
 
 	# 多试几次微博账户	
-	session = get_session()
+	account = random.choice(login_account_list)
+	print 'Crawling with account: ' + account['name']
+	session = account['session']
 	while session != None:
 		# the url of weibo page
 		weibo_url = weibo_url_base + '?' + urllib.urlencode(weibo_url_args)
 		print weibo_url
-		soup = BeautifulSoup(session.post(weibo_url).text)
+		soup = BeautifulSoup(session.post(weibo_url, headers=session.headers, timeout = 60).text)
+		#print soup
+		#print seesion.headers
 
 		soup_weibos = soup.find_all('div', attrs = {'class': 'c'})
 		for i in range(len(soup_weibos))[::-1]:
@@ -196,7 +194,7 @@ def get_posts_data(search_keyword, start_time, end_time):
 
 					posts_data['weibo_posts'].append(this_post)
 				except:
-					print '-- Failed to get current page of weibo, with account: ' + account_list[account_index]['name']
+					print '-- Failed to get current page of weibo, with account: ' + account['name']
 					print traceback.format_exc()
 					continue
 			else:
@@ -224,7 +222,7 @@ def crawl(args):
 	end_time = args['end_time']
 
 	weibo_keyword_list = general_func.get_list_from_file(page_list_file)
-	get_account_list()
+	cache_account_list()
 
 	for weibo_keyword in weibo_keyword_list:
 
@@ -239,6 +237,7 @@ def crawl(args):
 			data = get_posts_data(weibo_keyword, start_time, end_time)
 		except:
 			print "-- Failed to get the posts of this topic!"
+			print traceback.format_exc()
 			continue
 
 		# save to json file
@@ -248,9 +247,6 @@ def crawl(args):
 			'_' + end_time.strftime(time_format) + '.json'
 		general_func.process_results(dir_name, file_name, data)
 	
-	f = open('./invalid_account_list', 'w')
-	f.write("\n".join(invalid_account_list))
-	f.close()
 
 if __name__ == '__main__':
 

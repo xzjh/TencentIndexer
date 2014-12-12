@@ -73,7 +73,7 @@ def process_results(dir_name, file_name, data):
 
 		# 必须要有这个头
 		headers = {"Content-Type": "application/json", "Accept": "application/json"}
-		conn = httplib.HTTPConnection("mrs.oa.com", 18881)
+		conn = httplib.HTTPConnection("mrs.oa.com", 18881, timeout = 60)
 		values = json.dumps({'json': data_encoded})
 		push_address = "/moa/microtrend/openservices/service/AddJsonData"
 		conn.request("POST", push_address, values, headers)
@@ -96,9 +96,9 @@ def url_open(url, post_args = None, additional_headers = None, cookies = None, u
 		headers.update(additional_headers)
 
 	if post_args != None:
-		req = requests.post(url, data = post_args, headers = headers, cookies = cookies, proxies = proxy)
+		req = requests.post(url, data = post_args, headers = headers, cookies = cookies, proxies = proxy, timeout = 60)
 	else:
-		req = requests.get(url, headers = headers, cookies = cookies, proxies = proxy)
+		req = requests.get(url, headers = headers, cookies = cookies, proxies = proxy, timeout = 60)
 
 	return req.text
 
