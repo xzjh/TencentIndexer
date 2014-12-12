@@ -33,7 +33,7 @@ def set_website_attrs(website_id_arg):
 
 	website_id = website_id_arg
 
-	if website_id == 'tencentbbs':
+	if website_id == 'tencentbbs' or website_id == 'tencentbbs_sub':
 		website_name = '腾讯论坛 http://bbs.g.qq.com http://gamebbs.qq.com'
 	elif website_id == 'duowan':
 		website_name = '多玩论坛 http://bbs.duowan.com'
@@ -219,6 +219,7 @@ def get_post_data(post_id):
 		this_post['forum_post_view_count'] = int(post_counter[0].text)
 		this_post['forum_post_reply_count'] = int(post_counter[1].text)
 		this_post['forum_post_title'] = soup_author.h1.text.replace('\n', ' ').strip()
+		this_post['forum_post_url'] = post_url_author
 
 		# get author content
 		this_post['forum_post_author_time'] = get_post_time(soup_author.find('div', attrs = {'class': 'pti'})). \

@@ -1,5 +1,21 @@
-# 在此文件中输入论坛板块页面地址，一定要有fid参数，支持bbs.xxx.qq.com和xxx.gamebbs.qq.com两种域名
-http://bbs.map.qq.com/forum-46-1.html
-http://bbs.g.qq.com/forum.php?mod=forumdisplay&fid=119&styleflag=&page=1
-http://7.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30672
-http://bbs.lol.qq.com/forum.php?mod=forumdisplay&fid=40
+http://yl.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30562
+http://yl.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30794
+http://nz.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30763
+http://nz.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30931
+http://qqgame.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30539&filter=typeid&typeid=50
+http://qqgame.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30539&filter=typeid&typeid=51
+http://qqgame.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30539&filter=typeid&typeid=52
+http://bbs.g.qq.com/forum.php?mod=forumdisplay&fid=247
+http://mho.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=36
+http://mho.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=42
+http://x5.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30517
+http://x5.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30784
+http://speed.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30501
+http://speed.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30502
+http://qqgame.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30698&filter=typeid&typeid=155
+http://qqgame.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30698&filter=typeid&typeid=156
+http://nba2k.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30863
+http://nba2k.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30608
+http://cf.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30827
+http://cf.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30503
+http://cf.gamebbs.qq.com/forum.php?mod=forumdisplay&fid=30816

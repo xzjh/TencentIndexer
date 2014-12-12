@@ -4,29 +4,15 @@
         "googleplay": "http://127.0.0.1:9743"
     },
     "weibo_accounts": [
-        {
-            "_T_WM": "5ab2ed4fcfc668809907abc27d247deb",
-            "gsid_CTandWM": "4u1Eaea71DTxg1KLrgqbKcXXVeU"
-        },
-        {
-            "_T_WM": "2a247ec4a8ee0a40c0f26be9523e8812",
-            "gsid_CTandWM": "4uA9aea71XDVckpKOwlcSdpWu1p"
-        },
-        {
-            "_T_WM": "7aa445eb6a1204a4901a031d0cb041b4",
-            "gsid_CTandWM": "4uIeaea71dsOdO7CJe4XEcXXP9I"
-        },
-        {
-            "_T_WM": "d7648f1193f9361b77b857d9b5598466",
-            "gsid_CTandWM": "4uegaea714lqPtq74tFSQcGWz9p"
-        },
-        {
-            "_T_WM": "5037e2b6980c0c875115cb5fce547856",
-            "gsid_CTandWM": "4ujUaea71afgTGsXIc3Y1cXHTfQ"
-        },
-        {
-            "_T_WM": "d9a465ae330a7f70b24600baadde0690",
-            "gsid_CTandWM": "4urraea71Fw20PE7mbdiwcJ3QaG"
-        }
+{"name": "15918951628", "password": "fmubjq7136p"},
+{"name": "13417059419", "password": "pxgnwc3582b"},
+{"name": "15989847503", "password": "jqyent0257r"},
+{"name": "13433896917", "password": "enucjq7136y"},
+{"name": "13924760195", "password": "zgoudj5713c"},
+{"name": "13750473768", "password": "rziqxd3581u"},
+{"name": "13926754690", "password": "biqxgm6825n"},
+{"name": "15989749421", "password": "rygnxd3581b"},
+{"name": "13417037686", "password": "howdlr8146l"},
+{"name": "13926782904", "password": "msdjry1368q"}
     ]
 }

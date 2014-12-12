@@ -44,16 +44,25 @@ def init_dir(dir_name):
 def process_results(dir_name, file_name, data):
 
 	# encode to json
-	data_encoded = json.dumps(data, ensure_ascii = False, indent = 4)
+	try:
+		data_encoded = json.dumps(data, ensure_ascii = False, indent = 4)
+	except:
+		print "-- Failed to save to json.dumps"
+
 
 	# save to file
-	init_dir(data_dir_name)
-	init_dir(data_dir_name + '/' + dir_name)
-	full_file_name = data_dir_name + '/' + dir_name + '/' + file_name
-	file_json = open(full_file_name, 'w')
-	file_json.write(data_encoded.encode('utf-8'))
-	file_json.close()
-	print "-- Saved to file: " + full_file_name
+	try:
+		init_dir(data_dir_name)
+		init_dir(data_dir_name + '/' + dir_name)
+		full_file_name = data_dir_name + '/' + dir_name + '/' + file_name
+		full_file_name = full_file_name.encode('utf-8')           # 转换为utf-8编码
+		full_file_name = full_file_name.strip().replace(' ', '_') # 把空格转为_
+		file_json = open(full_file_name, 'w')
+		file_json.write(data_encoded.encode('utf-8'))
+		file_json.close()
+		print "-- Saved to file: " + full_file_name
+	except:
+		print "-- Failed to save to file: " + full_file_name
 
 	# push to server
 	if push_address != None:
@@ -87,11 +96,9 @@ def url_open(url, post_args = None, additional_headers = None, cookies = None, u
 		headers.update(additional_headers)
 
 	if post_args != None:
-		req = requests.post(url, data = post_args, headers = headers, cookies = cookies, \
-			proxies = proxy, timeout = 5)
+		req = requests.post(url, data = post_args, headers = headers, cookies = cookies, proxies = proxy, timeout = 60)
 	else:
-		req = requests.get(url, headers = headers, cookies = cookies, proxies = proxy, \
-			timeout = 5)
+		req = requests.get(url, headers = headers, cookies = cookies, proxies = proxy, timeout = 60)
 
 	return req.text
 

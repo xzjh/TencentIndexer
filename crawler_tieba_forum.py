@@ -15,9 +15,9 @@ import general_func
 import bs4
 
 # configurations
-website_id = 'tieba_forum'
+website_id = ''
 website_name = "百度贴吧吧内 http://tieba.baidu.com"
-page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
+page_list_file = ''
 forum_url_base = "http://tieba.baidu.com/mo/m"
 forum_url_args = {}
 post_url_base = 'http://tieba.baidu.com/mo/m'
@@ -165,6 +165,10 @@ def crawl(args):
 
 	start_time = args['start_time']
 	end_time = args['end_time']
+
+        website_id = args['website_id']
+
+	page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 
 	forum_list = general_func.get_list_from_file(page_list_file)
 
