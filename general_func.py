@@ -56,24 +56,23 @@ def process_results(dir_name, file_name, data):
 	print "-- Saved to file: " + full_file_name
 
 	# push to server
-	# if push_address != None:
-	try:
-		push_data = {}
-		push_data['json'] = data_encoded
-		push_data['file_name'] = os.getcwd() + '/' + full_file_name
+	if push_address != None:
+		try:
+			push_data = {}
+			push_data['json'] = data_encoded
+			push_data['file_name'] = os.getcwd() + '/' + full_file_name
 
-		# 必须要有这个头
-		headers = {"Content-Type": "application/json", "Accept": "application/json"}
-		# 加了个timeout防止有什么其它问题
-		conn = httplib.HTTPConnection("mrs.oa.com", 18881, timeout = 5)
-		values = json.dumps({'json': data_encoded})
-		push_address = "/moa/microtrend/openservices/service/AddJsonData"
-		conn.request("POST", push_address, values, headers)
-		# url_open(push_address, post_args = push_data, use_proxy = False, \
-		# 	dditional_headers = headers)
-		print "-- Pushed to address: " + push_address
-	except:
-		print "-- Failed to push to " + push_address
+			# 必须要有这个头
+			headers = {"Content-Type": "application/json", "Accept": "application/json"}
+			# 加了个timeout防止有什么其它问题
+			conn = httplib.HTTPConnection("mrs.oa.com", 18881, timeout = 5)
+			values = json.dumps({'json': data_encoded})
+			conn.request("POST", push_address, values, headers)
+			# url_open(push_address, post_args = push_data, use_proxy = False, \
+			# 	dditional_headers = headers)
+			print "-- Pushed to address: " + push_address
+		except:
+			print "-- Failed to push to " + push_address
 
 def url_open(url, post_args = None, additional_headers = None, cookies = None, use_proxy = True):
 
