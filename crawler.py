@@ -42,8 +42,10 @@ if __name__ == '__main__':
 	if 'proxies' in configs and configs['proxies'].has_key(crawler_args['website_id']):
 		general_func.proxy_address = configs['proxies'][crawler_args['website_id']]
 		print '-- Using proxy: ' + general_func.proxy_address
-	else:
-		general_func.proxy_address = None
+	# push_address
+	if 'push_address' in configs:
+		general_func.push_address = configs['push_address']
+		print '-- Push address: ' + general_func.push_address
 	if 'processes_num' in configs and configs['processes_num'] >= 1:
 		crawler_args['processes_num'] = configs['processes_num']
 	else:
