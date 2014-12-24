@@ -221,31 +221,41 @@ def crawl(args):
 	start_time = args['start_time']
 	end_time = args['end_time']
 
+	date_list = []
+	if end_time >= start_time:
+		d1 = start_time
+		d2 = end_time
+		while d2 >= d1:
+			date_list.append([d1, d1 + timedelta(hours=23, minutes=59, seconds=59)])
+			d1 += timedelta(days=1)
+	else:
+		return
+
 	weibo_keyword_list = general_func.get_list_from_file(page_list_file)
 	cache_account_list()
 
-	for weibo_keyword in weibo_keyword_list:
+	for d in date_list:
+		for weibo_keyword in weibo_keyword_list:
 
-		weibo_keyword = weibo_keyword.strip('\n')
+			weibo_keyword = weibo_keyword.strip('\n')
 
-		print "********************************************************************************"
-		print "Crawling weibo with keyword: " + weibo_keyword
-		print "Analyzing weibo pages..."
+			print "********************************************************************************"
+			print "Crawling weibo with keyword: " + weibo_keyword
+			print "Analyzing weibo pages..."
 
-		try:
-			# get post list
-			data = get_posts_data(weibo_keyword, start_time, end_time)
-		except:
-			print "-- Failed to get the posts of this topic!"
-			print traceback.format_exc()
-			continue
+			try:
+				# get post list
+				data = get_posts_data(weibo_keyword, d[0], d[1])
+			except:
+				print "-- Failed to get the posts of this topic!"
+				print traceback.format_exc()
+				continue
 
-		# save to json file
-		data_file_prefix = 'data_' + website_id + '_'
-		dir_name = 'data_' + website_id
-		file_name = data_file_prefix + weibo_keyword + '_' + start_time.strftime(time_format) + \
-			'_' + end_time.strftime(time_format) + '.json'
-		general_func.process_results(dir_name, file_name, data)
+			# save to json file
+			data_file_prefix = 'data_' + website_id + '_'
+			dir_name = 'data_' + website_id
+			file_name = data_file_prefix + weibo_keyword + '_' + d[0].strftime(time_format) + '_' + d[1].strftime(time_format) + '.json'
+			general_func.process_results(dir_name, file_name, data)
 	
 
 if __name__ == '__main__':
