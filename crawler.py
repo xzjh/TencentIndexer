@@ -16,6 +16,9 @@ app_version = "0.2 Alpha"
 configurations_file = "configs.json"
 rep_crawler_module = re.compile('(?<=crawler_).+(?=\.py)')
 
+discuz_list = ['tencentbbs', 'tencentbbs_sub', 'duowan', '178', 'kuyoo']
+tieba_forum_list = ['tieba_forum', 'tieba_forum_sub']
+
 if __name__ == '__main__':
 
 	print '\n' + "TencentCrawler for Financial News " + app_version + " by Jiaheng Zhang, all rights reserved."
@@ -67,6 +70,12 @@ if __name__ == '__main__':
 		if not os.path.isdir(file_name) and res_crawler_module and \
 			res_crawler_module.group() == crawler_args['website_id']:
 			module_name = os.path.splitext(file_name)[0]
+			break
+		elif crawler_args['website_id'] in discuz_list:
+			module_name = 'crawler_discuz'
+			break
+		elif crawler_args['website_id'] in tieba_forum_list:
+			module_name = 'crawler_tieba_forum'
 			break
 
 	# import and call the crawler
