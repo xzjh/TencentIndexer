@@ -1,18 +1,20 @@
 {
     "push_address": "/moa/microtrend/openservices/service/AddJsonData",
+    "processes_num": 20,
+    "request_timeout": 10,
     "proxies": {
         "googleplay": "http://127.0.0.1:9743"
     },
     "weibo_accounts": [
-{"name": "15918951628", "password": "fmubjq7136p"},
-{"name": "13417059419", "password": "pxgnwc3582b"},
-{"name": "15989847503", "password": "jqyent0257r"},
-{"name": "13433896917", "password": "enucjq7136y"},
-{"name": "13924760195", "password": "zgoudj5713c"},
-{"name": "13750473768", "password": "rziqxd3581u"},
-{"name": "13926754690", "password": "biqxgm6825n"},
-{"name": "15989749421", "password": "rygnxd3581b"},
-{"name": "13417037686", "password": "howdlr8146l"},
-{"name": "13926782904", "password": "msdjry1368q"}
+        {"name": "15918951628", "password": "fmubjq7136p"},
+        {"name": "13417059419", "password": "pxgnwc3582b"},
+        {"name": "15989847503", "password": "jqyent0257r"},
+        {"name": "13433896917", "password": "enucjq7136y"},
+        {"name": "13924760195", "password": "zgoudj5713c"},
+        {"name": "13750473768", "password": "rziqxd3581u"},
+        {"name": "13926754690", "password": "biqxgm6825n"},
+        {"name": "15989749421", "password": "rygnxd3581b"},
+        {"name": "13417037686", "password": "howdlr8146l"},
+        {"name": "13926782904", "password": "msdjry1368q"}
     ]
 }

@@ -83,7 +83,7 @@ def process_results(dir_name, file_name, data):
 		except:
 			print "-- Failed to push to " + push_address
 
-def url_open(url, post_args = None, additional_headers = None, cookies = None, use_proxy = True):
+def url_open(url, post_args = None, additional_headers = None, cookies = None, use_proxy = True, from_encoding = None):
 
 	# set up the proxy
 	if proxy_address and use_proxy:
@@ -96,10 +96,15 @@ def url_open(url, post_args = None, additional_headers = None, cookies = None, u
 		headers.update(additional_headers)
 
 	if post_args != None:
-		req = requests.post(url, data = post_args, headers = headers, cookies = cookies, proxies = proxy, timeout = 60)
+		req = requests.post(url, data = post_args, headers = headers, cookies = cookies, \
+			proxies = proxy, timeout = 10)
 	else:
-		req = requests.get(url, headers = headers, cookies = cookies, proxies = proxy, timeout = 60)
+		req = requests.get(url, headers = headers, cookies = cookies, proxies = proxy, \
+			timeout = 10)
 
+	if from_encoding:
+		req.encoding = from_encoding
+	
 	return req.text
 
 def get_beijing_time():

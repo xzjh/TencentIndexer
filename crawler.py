@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# TencentCrawler 0.1 Alpha
+# TencentCrawler for Financial News
 # by Jiaheng Zhang, all rights reserved.
 
 import sys
@@ -10,25 +10,15 @@ import json
 import re
 
 import general_func
-import crawler_myapp
-import crawler_googleplay
-import crawler_anzhi
-import crawler_hiapk
-import crawler_91
-import crawler_douban_subject
-import crawler_tieba_forum
-import crawler_tieba_search
-import crawler_weibo
-import crawler_discuz
-import crawler_douban_group
 
 # configurations
-app_version = "0.1 Alpha"
+app_version = "0.2 Alpha"
 configurations_file = "configs.json"
+rep_crawler_module = re.compile('(?<=crawler_).+(?=\.py)')
 
 if __name__ == '__main__':
 
-	print '\n' + "TencentCrawler " + app_version + " by Jiaheng Zhang, all rights reserved."
+	print '\n' + "TencentCrawler for Financial News " + app_version + " by Jiaheng Zhang, all rights reserved."
 	os.chdir(sys.path[0])
 	reload(sys)
 	sys.setdefaultencoding("utf-8")
@@ -38,14 +28,8 @@ if __name__ == '__main__':
 	crawler_args['website_id'] = sys.argv[1]
 	crawler_args['start_time'] = datetime.strptime(sys.argv[2], "%Y%m%d%H%M")
 	crawler_args['end_time'] = datetime.strptime(sys.argv[3], "%Y%m%d%H%M")
-	# if len(crawler_args) >= 4:
-	# 	crawler_args['keyword'] = sys.argv[4]
-	# 	print_keyword = 'keyword \"' + crawler_args['keyword'] + '"'
-	# else:
-	# 	crawler_args['keyword'] = None
-	# 	print_keyword = "no keyword"
 
-	print 'Now crawling messages from website "' + crawler_args['website_id'] + '" in the period from ' + \
+	print 'Now crawling news from website "' + crawler_args['website_id'] + '" in the period from ' + \
 		str(crawler_args['start_time']) + ' to ' + str(crawler_args['end_time']) + '.'
 		# ' with ' + print_keyword + '.'
 
@@ -53,48 +37,41 @@ if __name__ == '__main__':
 	file_configs = open(configurations_file)
 	configs_raw = file_configs.read()
 	configs = json.loads(configs_raw)
+	file_configs.close()
 	# proxies
-	if configs.has_key('proxies') and configs['proxies'].has_key(crawler_args['website_id']):
+	if 'proxies' in configs and configs['proxies'].has_key(crawler_args['website_id']):
 		general_func.proxy_address = configs['proxies'][crawler_args['website_id']]
-		print "-- Using proxy: " + general_func.proxy_address
+		print '-- Using proxy: ' + general_func.proxy_address
+	# push_address
+	if 'push_address' in configs:
+		general_func.push_address = configs['push_address']
+		print '-- Push address: ' + general_func.push_address
+	if 'processes_num' in configs and configs['processes_num'] >= 1:
+		crawler_args['processes_num'] = configs['processes_num']
 	else:
-		general_func.proxy_address = None
-	# push address
-	# if configs.has_key('push_address'):
-	# 	if re.match(r'^https?:/{2}\w.+$', configs['push_address']):
-	# 		general_func.push_address = configs['push_address']
-	# 		print "-- Push address: " + general_func.push_address
-	# 	else:
-	# 		print "-- Invalid push address: " + configs['push_address']
-	# else:
-	# 	general_func.push_address = None
+		# default processes num is 10
+		crawler_args['processes_num'] = 10
+	print '-- Working processes: ' + str(crawler_args['processes_num'])
+	if 'request_timeout' in configs and configs['request_timeout'] >= 1:
+		general_func.request_timeout = configs['request_timeout']
+	else:
+		general_func.request_timeout = 10
+	print '-- Request timeout: ' + str(general_func.request_timeout)
 
-	# call the crawler
-	if crawler_args['website_id'] == 'myapp':
-		crawler_myapp.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'googleplay':
-		crawler_googleplay.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'anzhi':
-		crawler_anzhi.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'hiapk':
-		crawler_hiapk.crawl(crawler_args)
-	elif crawler_args['website_id'] == '91':
-		crawler_91.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'douban_subject':
-		crawler_douban_subject.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'tieba_forum' or crawler_args['website_id'] == 'tieba_forum_sub':
-		crawler_tieba_forum.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'tieba_search':
-		crawler_tieba_search.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'weibo':
-		crawler_weibo.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'tencentbbs' or \
-		crawler_args['website_id'] == 'tencentbbs_sub' or \
-		crawler_args['website_id'] == 'duowan' or \
-		crawler_args['website_id'] == '178' or \
-		crawler_args['website_id'] == 'kuyoo':
-		crawler_discuz.crawl(crawler_args)
-	elif crawler_args['website_id'] == 'douban_group':
-		crawler_douban_group.crawl(crawler_args)
+	# import crawler module dynamically
+
+	files_list = os.listdir('.')
+	module_name = None
+	for file_name in files_list:
+		res_crawler_module = rep_crawler_module.search(file_name)
+		if not os.path.isdir(file_name) and res_crawler_module and \
+			res_crawler_module.group() == crawler_args['website_id']:
+			module_name = os.path.splitext(file_name)[0]
+			break
+
+	# import and call the crawler
+	if module_name:
+		crawler_module = __import__(module_name)
+		crawler_module.crawl(crawler_args)
 	else:
-		print "Invalid website_id!"
+		print "\nInvalid website_id! Crawler program now exits."
