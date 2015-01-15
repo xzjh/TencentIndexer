@@ -27,7 +27,11 @@ time_format = '%Y%m%d%H%M'
 rep_total_page_num = re.compile(r"gubapage\('.+',(\d+),(\d+),\d+\)")
 
 def get_time_from_str(time_str):
-	return datetime.strptime(time_str, u'%m-%d').replace(year = general_func.get_beijing_time().year)
+	time_now = general_func.get_beijing_time().replace(minute = 0, second = 0)
+	time_monthday = datetime.strptime(time_str, u'%m-%d').replace(year = time_now.year)
+	if time_monthday > time_now:
+		time_monthday = time_monthday.replace(year = time_monthday.year	- 1)
+	return time_monthday
 
 def get_news_data(stock_id, start_time, end_time, processes_num):
 
