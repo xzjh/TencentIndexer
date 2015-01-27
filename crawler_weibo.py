@@ -40,6 +40,9 @@ user_sex_re = re.compile(ur'级\s*(.*)/')
 user_atnum_re = re.compile(ur'关注\[(\d+)\]')
 user_fansnum_re = re.compile(ur'粉丝\[(\d+)\]')
 user_postnum_re = re.compile(ur'微博\[(\d+)\]')
+weibo_attitude_num_re = re.compile(ur'赞\[(\d+)\]')
+weibo_repost_num_re = re.compile(ur'转发\[(\d+)\]')
+weibo_comment_num_re = re.compile(ur'评论\[(\d+)\]')
 
 def cache_account_list():
     file_configs = open('configs.json')
@@ -120,12 +123,12 @@ def get_time_from_str(time_str):
 
 def get_user_info(arr, user_link, session):
     # 初妈化 用户是否加v, 用户等级, 用户性别, 关注人数, 粉丝数, 微博数
-    arr['weibo_post_user_is_v'] = ''
+    arr['weibo_post_user_is_v'] = '0'
     arr['weibo_post_user_level'] = ''
     arr['weibo_post_user_sex'] = ''
-    arr['weibo_post_user_atnum'] = ''
-    arr['weibo_post_user_fansnum'] = ''
-    arr['weibo_post_user_postnum'] = ''
+    arr['weibo_post_user_atnum'] = '0'
+    arr['weibo_post_user_fansnum'] = '0'
+    arr['weibo_post_user_postnum'] = '0'
     soup = BeautifulSoup(session.post(user_link, headers=session.headers, timeout = 60).text)
     # 取用户是否加V, 用户等级, 用户性别
     span_ctt = soup.find('span', attrs = {'class': 'ctt'})
@@ -230,6 +233,21 @@ def get_posts_data(search_keyword, start_time, end_time):
                     comment_href = rep_user_id_and_post_id.search(comment_href)
                     this_post['weibo_post_id'] = comment_href.group(1)
                     this_post['weibo_post_user_id'] = comment_href.group(2)
+
+                    # 赞, 转发, 评论
+                    this_post['weibo_post_attitude_num'] = '0'
+                    this_post['weibo_post_repost_num'] = '0'
+                    this_post['weibo_post_comment_num'] = '0'
+                    for a in soup_content.find_next_siblings('a'):
+                        attitude_num = weibo_attitude_num_re.search(a.text)
+                        repost_num = weibo_repost_num_re.search(a.text)
+                        comment_num = weibo_comment_num_re.search(a.text)
+                        if attitude_num:
+                            this_post['weibo_post_attitude_num'] = attitude_num.group(1).strip()
+                        if repost_num:
+                            this_post['weibo_post_repost_num'] = repost_num.group(1).strip()
+                        if comment_num:
+                            this_post['weibo_post_comment_num'] = comment_num.group(1).strip()
 
                     # 获取用户额外信息
                     this_post = get_user_info(this_post, this_post['weibo_post_user_link'], session)
