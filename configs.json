@@ -6,15 +6,14 @@
         "googleplay": "http://127.0.0.1:9743"
     },
     "weibo_accounts": [
-        {"name": "15918951628", "password": "fmubjq7136p"},
-        {"name": "13417059419", "password": "pxgnwc3582b"},
-        {"name": "15989847503", "password": "jqyent0257r"},
-        {"name": "13433896917", "password": "enucjq7136y"},
-        {"name": "13924760195", "password": "zgoudj5713c"},
-        {"name": "13750473768", "password": "rziqxd3581u"},
-        {"name": "13926754690", "password": "biqxgm6825n"},
-        {"name": "15989749421", "password": "rygnxd3581b"},
-        {"name": "13417037686", "password": "howdlr8146l"},
-        {"name": "13926782904", "password": "msdjry1368q"}
+		{"name": "18353184686", "password": "howdlr8146t"},
+		{"name": "13665398141", "password": "pxfmvc3501o"},
+		{"name": "15917907517", "password": "nvdjsy1470x"},
+		{"name": "13969945518", "password": "cksygm6035l"},
+		{"name": "13411985127", "password": "zhqwel6824b"},
+		{"name": "13411951691", "password": "cjraio7035v"},
+		{"name": "13417124573", "password": "fmtakp7146f"},
+		{"name": "13926773402", "password": "sykrag4602p"},
+		{"name": "13926774202", "password": "yfntci5713w"}
     ]
 }
