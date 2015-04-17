@@ -16,6 +16,7 @@ import general_func
 
 from datetime import timedelta
 import random
+import time
 
 # configurations
 website_id = 'weibo'
@@ -122,14 +123,16 @@ def get_time_from_str(time_str):
     return weibo_time
 
 def get_user_info(arr, user_link, session):
-    # 初妈化 用户是否加v, 用户等级, 用户性别, 关注人数, 粉丝数, 微博数
+    # 初始化用户是否加v, 用户等级, 用户性别, 关注人数, 粉丝数, 微博数
     arr['weibo_post_user_is_v'] = '0'
     arr['weibo_post_user_level'] = ''
     arr['weibo_post_user_sex'] = ''
     arr['weibo_post_user_atnum'] = '0'
     arr['weibo_post_user_fansnum'] = '0'
     arr['weibo_post_user_postnum'] = '0'
+    return arr
     soup = BeautifulSoup(session.post(user_link, headers=session.headers, timeout = 60).text)
+    #time.sleep(1)
     # 取用户是否加V, 用户等级, 用户性别
     span_ctt = soup.find('span', attrs = {'class': 'ctt'})
     if span_ctt:
@@ -176,6 +179,7 @@ def get_posts_data(search_keyword, start_time, end_time):
         weibo_url = weibo_url_base + '?' + urllib.urlencode(weibo_url_args)
         print weibo_url
         soup = BeautifulSoup(session.post(weibo_url, headers=session.headers, timeout = 60).text)
+        #time.sleep(1)
         #print soup
         #print seesion.headers
 
