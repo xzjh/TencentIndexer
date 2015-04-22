@@ -145,35 +145,35 @@ def get_post_data(post_id):
 	post_url_author = post_url_base + '?' + urllib.urlencode(post_url_author_args)
 	post_url_reply = post_url_base + '?' + urllib.urlencode(post_url_reply_args)
 
-	# try:
-	post_html_author = general_func.url_open(post_url_author)
-	soup_author = BeautifulSoup(post_html_author)
-	post_counter = soup_author.find('div', attrs = {'class': 'ptn'})
-	this_post['forum_post_view_count'] = int(post_counter.find('span', attrs = {'class': 'views'}).text)
-	this_post['forum_post_reply_count'] = int(post_counter.find('span', attrs = {'class': 'replies'}).text)
-	this_post['forum_post_title'] = soup_author.h1.span.text.strip()
-	this_post['forum_post_url'] = post_url_author
+	try:
+		post_html_author = general_func.url_open(post_url_author)
+		soup_author = BeautifulSoup(post_html_author)
+		post_counter = soup_author.find('div', attrs = {'class': 'ptn'})
+		this_post['forum_post_view_count'] = int(post_counter.find('span', attrs = {'class': 'views'}).text)
+		this_post['forum_post_reply_count'] = int(post_counter.find('span', attrs = {'class': 'replies'}).text)
+		this_post['forum_post_title'] = soup_author.h1.span.text.strip()
+		this_post['forum_post_url'] = post_url_author
 
-	# get author content
-	this_post['forum_post_author_time'] = get_post_time(soup_author.find('div', attrs = {'class': 'deanzb'}).em.text.strip(u'发表于 ')). \
-		strftime(time_format)
-	this_post['forum_post_author_user_name'] = soup_author.find('div', attrs = {'class': 'deanzb'}).span.a.text.strip()
-	this_post['forum_post_author_content'] = soup_author.find('td', attrs = {'class': 't_f'}).text.strip()
+		# get author content
+		this_post['forum_post_author_time'] = get_post_time(soup_author.find('div', attrs = {'class': 'deanzb'}).em.text.strip(u'发表于 ')). \
+			strftime(time_format)
+		this_post['forum_post_author_user_name'] = soup_author.find('div', attrs = {'class': 'deanzb'}).span.a.text.strip()
+		this_post['forum_post_author_content'] = soup_author.find('td', attrs = {'class': 't_f'}).text.strip()
 
-	# get last reply content
-	if this_post['forum_post_reply_count'] > 0:
+		# get last reply content
+		if this_post['forum_post_reply_count'] > 0:
 
-		post_html_reply = general_func.url_open(post_url_reply)
-		soup_reply = BeautifulSoup(post_html_reply)
+			post_html_reply = general_func.url_open(post_url_reply)
+			soup_reply = BeautifulSoup(post_html_reply)
 
-		soup_last_reply = soup_reply.find_all('table', attrs = {'class': 'plhin'})[-1]
-		this_post['forum_post_reply_time'] = get_post_time(soup_last_reply.find_all('div', \
-			attrs = {'class': 'authi'})[-1].em.text.strip(u'发表于 ')).strftime(time_format)
-		this_post['forum_post_reply_user_name'] = soup_last_reply.find('div', attrs = {'class': 'deanauthor'}).a.text.strip()
-		this_post['forum_post_reply_content'] = soup_last_reply.find('div', attrs = {'class': 't_fsz'}).table.text.strip()
+			soup_last_reply = soup_reply.find_all('table', attrs = {'class': 'plhin'})[-1]
+			this_post['forum_post_reply_time'] = get_post_time(soup_last_reply.find_all('div', \
+				attrs = {'class': 'authi'})[-1].em.text.strip(u'发表于 ')).strftime(time_format)
+			this_post['forum_post_reply_user_name'] = soup_last_reply.find('div', attrs = {'class': 'deanauthor'}).a.text.strip()
+			this_post['forum_post_reply_content'] = soup_last_reply.find('div', attrs = {'class': 't_fsz'}).table.text.strip()
 
-	# except:
-	# 	return False, None
+	except:
+		return False, None
 
 	return True, this_post
 
@@ -198,12 +198,12 @@ def crawl(args):
 		print "Crawling forum: " + forum_id
 		print "Analyzing forum pages..."
 
-		# try:
-		# get post list
-		data = get_posts_data(forum_id, start_time, end_time)
-		# except:
-		# 	print "-- Failed to get the posts of this topic!"
-		# 	continue
+		try:
+			# get post list
+			data = get_posts_data(forum_id, start_time, end_time)
+		except:
+			print "-- Failed to get the posts of this topic!"
+			continue
 
 		# save to json file
 		data_file_prefix = 'data_' + website_id + '_'
