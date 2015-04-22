@@ -17,6 +17,9 @@ configurations_file = "configs.json"
 rep_crawler_module = re.compile('(?<=crawler_).+(?=\.py)')
 discuz_ids = ['tencentbbs', 'tencentbbs_sub', 'duowan', '178', 'kuyoo']
 
+discuz_list = ['tencentbbs', 'tencentbbs_sub', 'duowan', '178', 'kuyoo']
+tieba_forum_list = ['tieba_forum', 'tieba_forum_sub']
+
 if __name__ == '__main__':
 
 	print '\n' + "TencentCrawler " + app_version + " by Jiaheng Zhang, all rights reserved."

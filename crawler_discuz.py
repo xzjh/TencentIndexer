@@ -11,88 +11,48 @@ import json
 import re
 
 import general_func
+import traceback
 
 # configurations
-website_id = '' # TBD
-website_name = '' # TBD
-page_list_file = '' # TBD
-forum_url_base = '' # TBD
-forum_url_args = {}
-forum_url_args['mod'] = 'forumdisplay'
 post_url_base = '' # TBD
-post_url_author_args = {}
-post_url_author_args['mod'] = 'viewthread'
-post_url_reply_args = {}
-post_url_reply_args['mod'] = 'redirect'
-post_url_reply_args['goto'] = 'lastpost'
 time_format = '%Y%m%d%H%M'
-
-def set_website_attrs(website_id_arg):
-
-	global website_id, forum_url_base, post_url_base, page_list_file
-
-	website_id = website_id_arg
-
-	if website_id == 'tencentbbs' or website_id == 'tencentbbs_sub':
-		website_name = '腾讯论坛 http://bbs.g.qq.com http://gamebbs.qq.com'
-	elif website_id == 'duowan':
-		website_name = '多玩论坛 http://bbs.duowan.com'
-		forum_url_base = 'http://bbs.duowan.com/forum.php'
-		post_url_base = forum_url_base
-	elif website_id == '178':
-		website_name = '178论坛 http://bbs.178.com/'
-		forum_url_base = 'http://bbs.178.com/forum.php'
-		post_url_base = forum_url_base
-	elif website_id == 'kuyoo':
-		website_name = 'kuyoo'
-		forum_url_base = 'http://bbs2.kuyoo.com/forum.php'
-		post_url_base = forum_url_base
-
-	page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
+is_html = False
 
 # get the forum ID from the page url
 def parse_forum_url(forum_url):
 
-	global website_id, forum_url_base, post_url_base
+	global post_url_base, is_html
 
-	rep_bbs = re.compile(ur'(?<=bbs\.).+(?=\.qq\.com)')
-	rep_gamebbs = re.compile(ur'.+(?=\.gamebbs\.qq\.com)')
 	rep_dash = re.compile(ur'(?<=forum-)\d+(?=-\d+)')
 
 	try:
 		page_url_parse = urlparse.urlparse(forum_url)
-		if website_id == 'duowan' or website_id == '178':
-			return True, page_url_parse.path.split('-')[1]
-		elif website_id == 'kuyoo':
-			page_url_args = urlparse.parse_qs(page_url_parse.query)
-			return True, page_url_args['fid'][0]
+
+		post_url_base = page_url_parse.scheme + '://' + page_url_parse.netloc + page_url_parse.path
+
+		# parse fid
+		result_dash = rep_dash.search(page_url_parse.path)
+		if result_dash:
+			# url like post_url_base/forum-46-1.html
+			is_html = True
+			return True, result_dash.group()
 		else:
-			# tencentbbs, set args
-			result_bbs = rep_bbs.search(page_url_parse.netloc)
-			result_gamebbs = rep_gamebbs.search(page_url_parse.netloc)
-			if result_bbs:
-				# bbs.xxx.qq.com domain
-				website_id = 'tencentbbs_' + result_bbs.group()
-				forum_url_base = 'http://bbs.' + result_bbs.group() + '.qq.com/forum.php'
-				post_url_base = forum_url_base
-			elif result_gamebbs:
-				# xxx.gamebbs.qq.com domain
-				website_id = 'tencentbbs_' + result_gamebbs.group()
-				forum_url_base = 'http://' + result_gamebbs.group() + '.gamebbs.qq.com/forum.php'
-				post_url_base = forum_url_base
-			else:
-				return False, None
-			# parse fid
-			result_dash = rep_dash.search(page_url_parse.path)
-			if result_dash:
-				# url like forum_url_base/forum-46-1.html
-				return True, result_dash.group()
-			else:
-				# url like forum_url_base/forum.php?fid=46&...
-				page_url_args = urlparse.parse_qs(page_url_parse.query)
-				return True, page_url_args['fid'][0]
+			# url like post_url_base/forum.php?fid=46&...
+			page_url_args = urlparse.parse_qs(page_url_parse.query)
+			is_html = False
+			return True, page_url_args['fid'][0]
 	except:
 		return False, None
+
+def get_forum_url(forum_url_args):
+	global post_url_base, is_html
+	forum_url = ""
+	if is_html:
+		forum_url = re.sub('-\d+\.html', '-' + str(forum_url_args['page']) + '.html', post_url_base) 
+	else:
+		forum_url = post_url_base + '?' + urllib.urlencode(forum_url_args)
+	return forum_url
+	
 
 # get the post ID from the page url
 def get_post_id(post_url):
@@ -100,13 +60,6 @@ def get_post_id(post_url):
 	rep_dash = re.compile(ur'(?<=thread-)\d+(?=-\d+-\d+)')
 
 	try:
-	# page_url_parse = urlparse.urlparse(post_url)
-	# print post_url
-	# if website_id == 'duowan' or website_id == '178':
-	# 	return True, page_url_parse.path.split('-')[1]
-	# else:
-	# 	page_url_args = urlparse.parse_qs(page_url_parse.query)
-	# 	return True, page_url_args['tid'][0]
 		result_dash = rep_dash.search(post_url)
 		if result_dash:
 			# url like thread-7487-1-1.html
@@ -121,20 +74,25 @@ def get_post_id(post_url):
 
 def get_posts_data(forum_id, start_time, end_time):
 
+	forum_url_args = {}
+	forum_url_args['mod'] = 'forumdisplay'
 	forum_url_args['page'] = 1
 	forum_url_args['fid'] = forum_id
+
 	posts_data = {}
 	posts_data['forum_id'] = forum_id
 	posts_data['forum_posts'] = []
 
 	while True:
 		# the url of forum page
-		forum_url = forum_url_base + '?' + urllib.urlencode(forum_url_args)
+		forum_url = get_forum_url(forum_url_args)
+
 		print 'Processing forum page: ' + forum_url
 		forum_html = general_func.url_open(forum_url)
 		soup = BeautifulSoup(forum_html)
 		posts_data['forum_name'] = soup.h1.a.text
 		soup_posts = soup.find_all('tbody')
+		print soup_posts
 		# remove stick threads
 		for i in range(len(soup_posts))[::-1]:
 			if not (soup_posts[i].has_attr('id') and \
@@ -207,8 +165,16 @@ def get_post_data(post_id):
 
 	this_post = {}
 	this_post['forum_post_id'] = post_id
+
+	post_url_author_args = {}
+	post_url_author_args['mod'] = 'viewthread'
 	post_url_author_args['tid'] = post_id
+
+	post_url_reply_args = {}
+	post_url_reply_args['mod'] = 'redirect'
+	post_url_reply_args['goto'] = 'lastpost'
 	post_url_reply_args['tid'] = post_id
+
 	post_url_author = post_url_base + '?' + urllib.urlencode(post_url_author_args)
 	post_url_reply = post_url_base + '?' + urllib.urlencode(post_url_reply_args)
 
@@ -245,7 +211,8 @@ def get_post_data(post_id):
 
 def crawl(args):
 
-	set_website_attrs(args['website_id'])
+	website_id = args['website_id']
+	page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 
 	print "Now running TencentCrawler for Discuz!"
 
@@ -271,6 +238,7 @@ def crawl(args):
 			data = get_posts_data(forum_id, start_time, end_time)
 		except:
 			print "-- Failed to get the posts of this topic!"
+			print traceback.format_exc()
 			continue
 
 		# save to json file
