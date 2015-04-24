@@ -83,12 +83,17 @@ def process_results(dir_name, file_name, data):
 		except:
 			print "-- Failed to push to " + push_address
 
-def url_open(url, post_args = None, additional_headers = None, cookies = None, use_proxy = True, from_encoding = None):
+def url_open(url, post_args = None, additional_headers = None, cookies = None, use_proxy = True, from_encoding = None, use_spider = False):
 
 	# set up the proxy
 	if proxy_address and use_proxy:
 		proxy = {"http": proxy_address}
 	else:
+		proxy = None
+
+	# use spider.oa.com
+	if use_spider:
+		url = 'http://spider.oa.com/cgi-bin/bin/getCrawlResult.cgi?urls=' + urllib.quote(url.encode('utf-8', 'replace'))
 		proxy = None
 
 	headers = {'User-Agent': 'Mozilla/5.0'}

@@ -15,13 +15,14 @@ import general_func
 app_version = "0.2 Alpha"
 configurations_file = "configs.json"
 rep_crawler_module = re.compile('(?<=crawler_).+(?=\.py)')
+discuz_ids = ['tencentbbs', 'tencentbbs_sub', 'duowan', '178', 'kuyoo']
 
 discuz_list = ['tencentbbs', 'tencentbbs_sub', 'duowan', '178', 'kuyoo']
 tieba_forum_list = ['tieba_forum', 'tieba_forum_sub']
 
 if __name__ == '__main__':
 
-	print '\n' + "TencentCrawler for Financial News " + app_version + " by Jiaheng Zhang, all rights reserved."
+	print '\n' + "TencentCrawler " + app_version + " by Jiaheng Zhang, all rights reserved."
 	os.chdir(sys.path[0])
 	reload(sys)
 	sys.setdefaultencoding("utf-8")
@@ -63,20 +64,17 @@ if __name__ == '__main__':
 
 	# import crawler module dynamically
 
-	files_list = os.listdir('.')
 	module_name = None
-	for file_name in files_list:
-		res_crawler_module = rep_crawler_module.search(file_name)
-		if not os.path.isdir(file_name) and res_crawler_module and \
-			res_crawler_module.group() == crawler_args['website_id']:
-			module_name = os.path.splitext(file_name)[0]
-			break
-		elif crawler_args['website_id'] in discuz_list:
-			module_name = 'crawler_discuz'
-			break
-		elif crawler_args['website_id'] in tieba_forum_list:
-			module_name = 'crawler_tieba_forum'
-			break
+	if crawler_args['website_id'] in discuz_ids:
+		module_name = 'crawler_discuz'
+	else:
+		files_list = os.listdir('.')
+		for file_name in files_list:
+			res_crawler_module = rep_crawler_module.search(file_name)
+			if not os.path.isdir(file_name) and res_crawler_module and \
+				res_crawler_module.group() == crawler_args['website_id']:
+				module_name = os.path.splitext(file_name)[0]
+				break
 
 	# import and call the crawler
 	if module_name:

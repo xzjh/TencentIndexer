@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# TencentCrawler for Discuz
+# TencentCrawler for 高德地图
 # by Jiaheng Zhang, all rights reserved.
 
 import urllib
@@ -11,48 +11,35 @@ import json
 import re
 
 import general_func
-import traceback
 
 # configurations
-post_url_base = '' # TBD
+website_id = 'amap'
+website_name = '高德地图论坛 http://bbs.amap.com'
+page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
+forum_url_base = 'http://bbs.amap.com/forum.php'
+forum_url_args = {}
+forum_url_args['mod'] = 'forumdisplay'
+post_url_base = forum_url_base
+post_url_author_args = {}
+post_url_author_args['mod'] = 'viewthread'
+post_url_reply_args = {}
+post_url_reply_args['mod'] = 'redirect'
+post_url_reply_args['goto'] = 'lastpost'
 time_format = '%Y%m%d%H%M'
-is_html = False
 
 # get the forum ID from the page url
 def parse_forum_url(forum_url):
-
-	global post_url_base, is_html
 
 	rep_dash = re.compile(ur'(?<=forum-)\d+(?=-\d+)')
 
 	try:
 		page_url_parse = urlparse.urlparse(forum_url)
-
-		post_url_base = page_url_parse.scheme + '://' + page_url_parse.netloc + page_url_parse.path
-
-		# parse fid
 		result_dash = rep_dash.search(page_url_parse.path)
 		if result_dash:
-			# url like post_url_base/forum-46-1.html
-			is_html = True
+			# url like forum_url_base/forum-46-1.html
 			return True, result_dash.group()
-		else:
-			# url like post_url_base/forum.php?fid=46&...
-			page_url_args = urlparse.parse_qs(page_url_parse.query)
-			is_html = False
-			return True, page_url_args['fid'][0]
 	except:
 		return False, None
-
-def get_forum_url(forum_url_args):
-	global post_url_base, is_html
-	forum_url = ""
-	if is_html:
-		forum_url = re.sub('-\d+\.html', '-' + str(forum_url_args['page']) + '.html', post_url_base) 
-	else:
-		forum_url = post_url_base + '?' + urllib.urlencode(forum_url_args)
-	return forum_url
-	
 
 # get the post ID from the page url
 def get_post_id(post_url):
@@ -64,35 +51,25 @@ def get_post_id(post_url):
 		if result_dash:
 			# url like thread-7487-1-1.html
 			return True, result_dash.group()
-		else:
-			# url like forum.php?tid=7498&...
-			page_url_parse = urlparse.urlparse(post_url)
-			page_url_args = urlparse.parse_qs(page_url_parse.query)
-			return True, page_url_args['tid'][0]
 	except:
 		return False, None
 
 def get_posts_data(forum_id, start_time, end_time):
 
-	forum_url_args = {}
-	forum_url_args['mod'] = 'forumdisplay'
 	forum_url_args['page'] = 1
 	forum_url_args['fid'] = forum_id
-
 	posts_data = {}
 	posts_data['forum_id'] = forum_id
 	posts_data['forum_posts'] = []
 
 	while True:
 		# the url of forum page
-		forum_url = get_forum_url(forum_url_args)
-
+		forum_url = forum_url_base + '?' + urllib.urlencode(forum_url_args)
 		print 'Processing forum page: ' + forum_url
 		forum_html = general_func.url_open(forum_url)
 		soup = BeautifulSoup(forum_html)
 		posts_data['forum_name'] = soup.h1.a.text
 		soup_posts = soup.find_all('tbody')
-		print soup_posts
 		# remove stick threads
 		for i in range(len(soup_posts))[::-1]:
 			if not (soup_posts[i].has_attr('id') and \
@@ -104,8 +81,11 @@ def get_posts_data(forum_id, start_time, end_time):
 		# process every post
 		for soup_post in soup_posts:
 			# get post time
-			soup_reply = soup_post.find_all('td', attrs = {'class': 'by'})[-1]
-			post_time = get_post_time(soup_reply)
+			soup_reply = soup_post.find('div', attrs = {'class': 'deanforumreply'})
+			if soup_reply.span.a.span:
+				post_time = get_post_time(soup_reply.span.a.span.attrs['title'])
+			else:
+				post_time = get_post_time(soup_reply.span.a.text)
 
 			if post_time >= start_time:
 				if post_time > end_time:
@@ -120,7 +100,7 @@ def get_posts_data(forum_id, start_time, end_time):
 				# 	if soup_post_a.attrs['href'].startswith('forum.php'):
 				# 		post_url_raw = soup_post_a.attrs['href']
 				# 		break
-				post_url_raw = soup_post.a.attrs['href']
+				post_url_raw = soup_post.find('a', attrs = {'class': 'xst'}).attrs['href']
 				is_success, post_id = get_post_id(post_url_raw)
 				if not is_success:
 					print '-- Failed to get post!'
@@ -151,13 +131,8 @@ def get_posts_data(forum_id, start_time, end_time):
 
 	return posts_data
 
-# get post time from soup object
-def get_post_time(soup):
-
-	if soup.em.span:
-		time_str_raw = soup.span.attrs['title']
-	else:
-		time_str_raw = ' '.join(soup.em.text.strip().split(' ')[-2:])
+# get post time from str
+def get_post_time(time_str_raw):
 	time_str = ':'.join(time_str_raw.split(':')[:2])
 	return datetime.strptime(time_str, '%Y-%m-%d %H:%M')
 
@@ -165,32 +140,24 @@ def get_post_data(post_id):
 
 	this_post = {}
 	this_post['forum_post_id'] = post_id
-
-	post_url_author_args = {}
-	post_url_author_args['mod'] = 'viewthread'
 	post_url_author_args['tid'] = post_id
-
-	post_url_reply_args = {}
-	post_url_reply_args['mod'] = 'redirect'
-	post_url_reply_args['goto'] = 'lastpost'
 	post_url_reply_args['tid'] = post_id
-
 	post_url_author = post_url_base + '?' + urllib.urlencode(post_url_author_args)
 	post_url_reply = post_url_base + '?' + urllib.urlencode(post_url_reply_args)
 
 	try:
 		post_html_author = general_func.url_open(post_url_author)
 		soup_author = BeautifulSoup(post_html_author)
-		post_counter = soup_author.find('td', attrs = {'class': 'pls'}).find_all('span', {'class': 'xi1'})
-		this_post['forum_post_view_count'] = int(post_counter[0].text)
-		this_post['forum_post_reply_count'] = int(post_counter[1].text)
-		this_post['forum_post_title'] = soup_author.h1.text.replace('\n', ' ').strip()
+		post_counter = soup_author.find('div', attrs = {'class': 'ptn'})
+		this_post['forum_post_view_count'] = int(post_counter.find('span', attrs = {'class': 'views'}).text)
+		this_post['forum_post_reply_count'] = int(post_counter.find('span', attrs = {'class': 'replies'}).text)
+		this_post['forum_post_title'] = soup_author.h1.span.text.strip()
 		this_post['forum_post_url'] = post_url_author
 
 		# get author content
-		this_post['forum_post_author_time'] = get_post_time(soup_author.find('div', attrs = {'class': 'pti'})). \
+		this_post['forum_post_author_time'] = get_post_time(soup_author.find('div', attrs = {'class': 'deanzb'}).em.text.strip(u'发表于 ')). \
 			strftime(time_format)
-		this_post['forum_post_author_user_name'] = soup_author.find('div', attrs = {'class': 'authi'}).text.strip()
+		this_post['forum_post_author_user_name'] = soup_author.find('div', attrs = {'class': 'deanzb'}).span.a.text.strip()
 		this_post['forum_post_author_content'] = soup_author.find('td', attrs = {'class': 't_f'}).text.strip()
 
 		# get last reply content
@@ -199,10 +166,11 @@ def get_post_data(post_id):
 			post_html_reply = general_func.url_open(post_url_reply)
 			soup_reply = BeautifulSoup(post_html_reply)
 
-			this_post['forum_post_reply_time'] = get_post_time(soup_author.find_all('div', \
-				attrs = {'class': 'pti'})[-1]).strftime(time_format)
-			this_post['forum_post_reply_user_name'] = soup_reply.find_all('div', attrs = {'class': 'authi'})[-2].text.strip()
-			this_post['forum_post_reply_content'] = soup_reply.find_all('td', attrs = {'class': 't_f'})[-1].text.strip()
+			soup_last_reply = soup_reply.find_all('table', attrs = {'class': 'plhin'})[-1]
+			this_post['forum_post_reply_time'] = get_post_time(soup_last_reply.find_all('div', \
+				attrs = {'class': 'authi'})[-1].em.text.strip(u'发表于 ')).strftime(time_format)
+			this_post['forum_post_reply_user_name'] = soup_last_reply.find('div', attrs = {'class': 'deanauthor'}).a.text.strip()
+			this_post['forum_post_reply_content'] = soup_last_reply.find('div', attrs = {'class': 't_fsz'}).table.text.strip()
 
 	except:
 		return False, None
@@ -211,10 +179,7 @@ def get_post_data(post_id):
 
 def crawl(args):
 
-	website_id = args['website_id']
-	page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
-
-	print "Now running TencentCrawler for Discuz!"
+	print "Now running TencentCrawler for " + website_name
 
 	start_time = args['start_time']
 	end_time = args['end_time']
@@ -238,7 +203,6 @@ def crawl(args):
 			data = get_posts_data(forum_id, start_time, end_time)
 		except:
 			print "-- Failed to get the posts of this topic!"
-			print traceback.format_exc()
 			continue
 
 		# save to json file
