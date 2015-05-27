@@ -60,7 +60,7 @@ def get_comments_data(app_info, start_time, end_time):
 	data['app_comments'] = []
 	comment_url_args['p'] = 1
 	comment_url_args['contextData'] = ''
-	stick_tolerence = 5
+	stick_tolerence = 10
 	load_retry = 5
 
 	while True:
