@@ -15,10 +15,9 @@ import general_func
 app_version = "0.2 Alpha"
 configurations_file = "configs.json"
 rep_crawler_module = re.compile('(?<=crawler_).+(?=\.py)')
-discuz_ids = ['tencentbbs', 'tencentbbs_sub', 'duowan', '178', 'kuyoo']
 
-discuz_list = ['tencentbbs', 'tencentbbs_sub', 'duowan', '178', 'kuyoo']
-tieba_forum_list = ['tieba_forum', 'tieba_forum_sub']
+discuz_ids = ['tencentbbs', 'tencentbbs_sub', 'duowan', '178', 'kuyoo']
+tieba_forum_ids = ['tieba_forum', 'tieba_forum_sub']
 
 if __name__ == '__main__':
 
@@ -67,6 +66,8 @@ if __name__ == '__main__':
 	module_name = None
 	if crawler_args['website_id'] in discuz_ids:
 		module_name = 'crawler_discuz'
+	elif crawler_args['website_id'] in tieba_forum_ids:
+		module_name = 'crawler_tieba_forum'
 	else:
 		files_list = os.listdir('.')
 		for file_name in files_list:

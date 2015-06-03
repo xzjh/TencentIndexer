@@ -1,2 +1,0 @@
-# 在此文件中键入豆瓣小组首页地址
-http://www.douban.com/group/wexin/
