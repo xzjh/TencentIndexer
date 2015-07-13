@@ -39,8 +39,9 @@ def parse_forum_url(forum_url):
 		else:
 			# url like post_url_base/forum.php?fid=46&...
 			page_url_args = urlparse.parse_qs(page_url_parse.query)
+			page_url_args = dict(map(lambda (k, v): (k, v[0]), page_url_args.iteritems()))
 			is_html = False
-			return True, page_url_args['fid'][0]
+			return True, page_url_args
 	except:
 		return False, None
 
@@ -72,12 +73,13 @@ def get_post_id(post_url):
 	except:
 		return False, None
 
-def get_posts_data(forum_id, start_time, end_time):
+def get_posts_data(forum_url_args, start_time, end_time):
 
-	forum_url_args = {}
+	# forum_url_args = {}
 	forum_url_args['mod'] = 'forumdisplay'
 	forum_url_args['page'] = 1
-	forum_url_args['fid'] = forum_id
+	# forum_url_args['fid'] = forum_id
+	forum_id = forum_url_args['fid']
 
 	posts_data = {}
 	posts_data['forum_id'] = forum_id
@@ -92,7 +94,6 @@ def get_posts_data(forum_id, start_time, end_time):
 		soup = BeautifulSoup(forum_html)
 		posts_data['forum_name'] = soup.h1.a.text
 		soup_posts = soup.find_all('tbody')
-		print soup_posts
 		# remove stick threads
 		for i in range(len(soup_posts))[::-1]:
 			if not (soup_posts[i].has_attr('id') and \
@@ -224,18 +225,17 @@ def crawl(args):
 	for forum_url in forum_list:
 
 		# get forum id from forum url
-		is_success, forum_id = parse_forum_url(forum_url.strip('\n'))
+		is_success, page_url_args = parse_forum_url(forum_url.strip('\n'))
 		if not is_success:
 			print "Wrong page URL: " + forum_url
 			continue
-
 		print "********************************************************************************"
-		print "Crawling forum: " + forum_id
+		print "Crawling forum: " + page_url_args['fid']
 		print "Analyzing forum pages..."
 
 		try:
 			# get post list
-			data = get_posts_data(forum_id, start_time, end_time)
+			data = get_posts_data(page_url_args, start_time, end_time)
 		except:
 			print "-- Failed to get the posts of this topic!"
 			print traceback.format_exc()
