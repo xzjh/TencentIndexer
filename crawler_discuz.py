@@ -35,7 +35,9 @@ def parse_forum_url(forum_url):
 		if result_dash:
 			# url like post_url_base/forum-46-1.html
 			is_html = True
-			return True, result_dash.group()
+			page_url_args = urlparse.parse_qs(page_url_parse.query)
+			page_url_args['fid'] = result_dash.group()
+			return True, page_url_args
 		else:
 			# url like post_url_base/forum.php?fid=46&...
 			page_url_args = urlparse.parse_qs(page_url_parse.query)
