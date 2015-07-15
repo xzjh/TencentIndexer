@@ -246,7 +246,8 @@ def crawl(args):
 		# save to json file
 		data_file_prefix = 'data_' + website_id + '_'
 		dir_name = 'data_' + website_id
-		file_name = data_file_prefix + forum_id + '_' + start_time.strftime(time_format) + \
+		file_name = data_file_prefix + page_url_args['fid'] + \
+			'_' + start_time.strftime(time_format) + \
 			'_' + end_time.strftime(time_format) + '.json'
 		general_func.process_results(dir_name, file_name, data)
 
