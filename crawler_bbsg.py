@@ -29,6 +29,12 @@ post_api = (
 'method%22:%22QueryReply%22,%22param%22:{{%22forum_type%22:3,%22forum_id%22:{0},%22page_no%22:1,%22'
 'page_size%22:10,%22topic_id%22:{1},%22author_id%22:0,%22rank_way%22:6}}}}}}')
 
+post_content_api = (
+'http://andfcg.qq.com/fcg-bin/mobile/android/base_common_interface_v2?'
+'param={{%22QueryTopicInfo_1%22:{{%22module%22:%22MiniGame.ForumAccessLogicSvr.ForumAccessLogicSvrObj%22,%22'
+'method%22:%22QueryTopicInfo%22,%22param%22:{{%22forum_type%22:3,%22forum_id%22:0,%22'
+'topic_id%22:{0},%22need_navi%22:false}}}}}}')
+
 # get the forum ID from the page url
 def parse_forum_url(forum_url):
 
@@ -58,13 +64,20 @@ def get_forum_url(forum_url_args):
 # get the post ID from the page url
 def get_post_data(forum_id, post_id):
 
+	global post_url, post_content_url
+
 	post_url = post_api.format(forum_id, post_id)
+	post_content_url = post_content_api.format(post_id)
 
 	post_data = {}
 	json_posts = json.loads(general_func.url_open(post_url))['rsp_obj']['QueryReply_1']['data']['pageContent']
+	json_post_content = json.loads(general_func.url_open(post_content_url))['rsp_obj']['QueryTopicInfo_1']['data']['content']
 	if not json_posts:
 		return {}
 	json_post = json_posts[-1]
+	post_data['forum_post_author_content'] = json_post_content['content_info']['content']
+	post_data['forum_post_author_user_name'] = json_post_content['user_info']['nick']
+	post_data['forum_post_author_time'] = datetime.fromtimestamp(json_post_content['content_info']['publish_time']).strftime(time_format)
 	post_data['forum_post_reply_content'] = json_post['content_info']['content']
 	post_data['forum_post_reply_user_name'] = json_post['content_info']['author_name']
 	post_data['forum_post_reply_time'] = datetime.fromtimestamp(json_post['content_info']['publish_time']).strftime(time_format)
@@ -104,7 +117,9 @@ def get_posts_data(forum_url_args, start_time, end_time):
 				# now it's the post needed
 				# get post id
 				post_id = json_post['content_info']['topic_id']
-				posts_data['forum_posts'].append(get_post_data(forum_id, post_id))
+				post_data = get_post_data(forum_id, post_id)
+				if post_data:
+					posts_data['forum_posts'].append(post_data)
 
 			else:
 				break
@@ -128,7 +143,7 @@ def crawl(args):
 	website_id = args['website_id']
 	page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 
-	print "Now running TencentCrawler for Discuz!"
+	print "Now running TencentCrawler for bbsg!"
 
 	start_time = args['start_time']
 	end_time = args['end_time']
