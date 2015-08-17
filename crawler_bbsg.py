@@ -75,12 +75,15 @@ def get_post_data(forum_id, post_id):
 	if not json_posts:
 		return {}
 	json_post = json_posts[-1]
+	post_data['forum_post_id'] = json_post_content['content_info']['topic_id']
+	post_data['forum_post_title'] = json_post_content['content_info']['topic_title']
 	post_data['forum_post_author_content'] = json_post_content['content_info']['content']
 	post_data['forum_post_author_user_name'] = json_post_content['user_info']['nick']
 	post_data['forum_post_author_time'] = datetime.fromtimestamp(json_post_content['content_info']['publish_time']).strftime(time_format)
 	post_data['forum_post_reply_content'] = json_post['content_info']['content']
 	post_data['forum_post_reply_user_name'] = json_post['content_info']['author_name']
 	post_data['forum_post_reply_time'] = datetime.fromtimestamp(json_post['content_info']['publish_time']).strftime(time_format)
+	post_data['forum_post_reply_count'] = json_post_content['topic_info']['reply_count']
 
 	return post_data
 
