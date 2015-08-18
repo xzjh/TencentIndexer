@@ -76,6 +76,7 @@ def get_post_data(forum_id, post_id):
 		return {}
 	json_post = json_posts[-1]
 	post_data['forum_post_id'] = json_post_content['content_info']['topic_id']
+	post_data['forum_post_url'] = 'http://bbs.g.qq.com/thread-'+str(post_data['forum_post_id'])+'-1-1.html'
 	post_data['forum_post_title'] = json_post_content['content_info']['topic_title']
 	post_data['forum_post_author_content'] = json_post_content['content_info']['content']
 	post_data['forum_post_author_user_name'] = json_post_content['user_info']['nick']
