@@ -92,6 +92,7 @@ def get_posts_data(forum_url_args, start_time, end_time):
 	forum_id = forum_url_args['fid']
 
 	posts_data = {}
+	posts_data['type'] = 'bbsg'
 	posts_data['forum_id'] = forum_id
 	posts_data['forum_posts'] = []
 	page_num = 1
