@@ -72,7 +72,7 @@ def get_comments_data(app_info, start_time, end_time):
 
 				item['app_comment_user_name'] = comment_json['author']['name']
 				item['app_comment_user_photo'] = comment_json['author']['avatar']
-				item['app_comment_content'] = comment_json['content']
+				item['app_comment_content'] = comment_json['content'].strip()
 				item['app_comment_time'] = comment_time.strftime(time_format)
 				data['app_comments'].append(item)
 
