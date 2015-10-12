@@ -30,8 +30,7 @@ def get_app_info(app_id):
 	app_page_html = general_func.url_open(app_url, from_encoding = 'utf8')
 
 	soup = BeautifulSoup(app_page_html)
-
-	app_info['app_name'] = soup.h1.text
+	app_info['app_name'] = soup.find('span', itemprop = 'name').text
 	app_info['app_downloads_count'] = soup.find('i', itemprop = 'interactionCount').text
 	soup_infos = soup.find('dl', attrs = {'class': 'infos-list'}).find_all('dt')
 	for soup_info in soup_infos:
