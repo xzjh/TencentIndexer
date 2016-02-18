@@ -1,0 +1,1 @@
+http://app.flyme.cn/apps/public/detail?package_name=com.tencent.mm
