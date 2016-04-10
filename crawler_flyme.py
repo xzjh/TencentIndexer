@@ -62,7 +62,7 @@ def get_comments_data(app_info, start_time, end_time):
 		# get the source code of comment page
 		data_html = general_func.url_open(comment_url)
 		html_parser = HTMLParser.HTMLParser()
-		data_html = html_parser.unescape(data_html)
+		# data_html = html_parser.unescape(data_html)
 
 		# get useful information
 		comments_json = json.loads(data_html)['value']['list']
@@ -82,9 +82,9 @@ def get_comments_data(app_info, start_time, end_time):
 				if comment_time > end_time:
 					continue
 
-				item['app_comment_user_name'] = comment_json['user_name']
+				item['app_comment_user_name'] = html_parser.unescape(comment_json['user_name'])
 				item['app_comment_user_rating'] = float(comment_json['star']) / 10.0
-				item['app_comment_content'] = comment_json['comment'].strip()
+				item['app_comment_content'] = html_parser.unescape(comment_json['comment'].strip())
 				item['app_comment_time'] = comment_time.strftime(time_format)
 				data['app_comments'].append(item)
 
