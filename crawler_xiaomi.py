@@ -86,7 +86,7 @@ def get_comments_data(app_info, start_time, end_time):
 					continue
 
 				item['app_comment_user_name'] = html_parser.unescape(comment_json['user'])
-				item['app_comment_user_rating'] = float(comment_json['appRater'])
+				item['app_comment_user_score'] = float(comment_json['appRater'])
 				item['app_comment_content'] = html_parser.unescape(comment_json['comment'].strip())
 				item['app_comment_time'] = comment_time.strftime(time_format)
 				data['app_comments'].append(item)
