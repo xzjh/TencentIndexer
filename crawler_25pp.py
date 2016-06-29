@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# TencentCrawler for PP助手 http://www.25pp.com/
+# TencentCrawler for PP助手 http://www.25pp.com/ ver.2.0 updated on 06/29/2016
 # by Jiaheng Zhang, all rights reserved.
 
 import urllib
@@ -17,27 +17,39 @@ website_id = '25pp'
 website_name = "PP助手 http://www.25pp.com/"
 page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 comment_url_args = {}
-comment_url_args['pagesize'] = 20
-comment_url_args['modelid'] = 2
-comment_url_args['group'] = 1
 comment_url_base = "http://www.25pp.com/api/getComments"
+comment_url_base = None
+comment_url_base_dict = {}
+comment_url_base_dict['android'] = "http://www.25pp.com/android/api/getCommentList/"
+comment_url_base_dict['ios'] = "http://www.25pp.com/ios/api/getCommentList/"
 time_format = '%Y%m%d%H%M'
 
 def get_app_info(app_url):
 
+	global comment_url_base
+
 	app_info = {}
+
+	rep_app_url = re.compile(r'25pp\.com/(.+?)/detail_(\d+?)/')
+	res_app_url = rep_app_url.search(app_url)
+	platform_type = res_app_url.group(1)
+	comment_url_base = comment_url_base_dict[platform_type]
+	app_info['app_id'] = res_app_url.group(2)
+	app_info['app_platform'] = platform_type
 
 	app_page_html = general_func.url_open(app_url, from_encoding = 'utf8')
 	soup = BeautifulSoup(app_page_html)
 
-	rep = re.compile('var\s(\w*)\s=\s\"(.*)\";')
-	infos_script = soup.find('div', attrs = {'class': 'wrap'}).find_all('script')[-3].text
-	infos = dict(rep.findall(infos_script))
-	app_info['app_version'] = infos['version']
-	app_info['app_id'] = infos['bundleid']
-	app_info['app_name'] = infos['shareText']
-	update_time_str = soup.find('ul', attrs = {'class': 'edition'}).find_all('li')[3].span.text
+	app_info['app_name'] = soup.h1.text.strip()
+	app_info['app_score'] = float(soup.find('div', class_ = 'app-score').attrs['title'].strip(ur'分'))
+
+	soup_app_info = soup.find('div', class_ = 'app-detail-info').find_all('p')
+	soup_app_info_1 = soup_app_info[0].find_all('span')
+	update_time_str = soup_app_info_1[0].strong.text.strip()
 	app_info['app_update_time'] = datetime.strptime(update_time_str, '%Y-%m-%d').strftime(time_format)
+	app_info['app_size'] = soup_app_info_1[1].strong.text.strip()
+	soup_app_info_2 = soup_app_info[1].find_all('span')
+	app_info['app_version'] = soup_app_info_2[0].strong.text.strip()
 
 	return app_info
 
@@ -46,7 +58,7 @@ def get_comments_data(app_info, start_time, end_time):
 	data = app_info
 	data['app_comments'] = []
 	comment_url_args['page'] = 1
-	comment_url_args['buid'] = app_info['app_id']
+	comment_url_args['id'] = app_info['app_id']
 	
 	while True:
 		# the url of comment page
@@ -56,14 +68,19 @@ def get_comments_data(app_info, start_time, end_time):
 		data_html = general_func.url_open(comment_url, post_args = comment_url_args)
 
 		# get useful information
-		comments_json = json.loads(data_html)['commentList']
+		comments_html = json.loads(data_html)['result']
+		soup_comments = BeautifulSoup(comments_html).find_all('div', class_ = 'comment-item')
 
 		comment_time = None
 
-		for comment_json in comments_json:
+		for soup_comment in soup_comments:
 
 			item = {}
-			comment_time = datetime.fromtimestamp(int(comment_json['creatTime']))
+			comment_time_str = soup_comment.find('span', class_ = 'pub-date').text \
+				.replace(ur'年', '-') \
+				.replace(ur'月', '-') \
+				.replace(ur'日', '')
+			comment_time = datetime.strptime(comment_time_str, '%Y-%m-%d %H:%M')
 
 			if comment_time >= start_time:
 
@@ -71,9 +88,10 @@ def get_comments_data(app_info, start_time, end_time):
 				if comment_time > end_time:
 					continue
 
-				item['app_comment_user_name'] = comment_json['username']
-				item['app_comment_content'] = comment_json['content'].strip()
 				item['app_comment_time'] = comment_time.strftime(time_format)
+				item['app_comment_user_name'] = soup_comment.find('span', class_ = 'user-name').text.strip()
+				item['app_comment_content'] = soup_comment.find('p', class_ = 'comment-cnt').text.strip()
+				item['app_comment_score'] = float(soup_comment.find('i', class_ = 'icon').attrs['style'].split(':')[1].strip('%')) / 20.0
 				data['app_comments'].append(item)
 
 			else:
