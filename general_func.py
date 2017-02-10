@@ -43,6 +43,8 @@ def init_dir(dir_name):
 
 def process_results(dir_name, file_name, data):
 
+	file_name = file_name.replace('/', '_').replace('\\', '_')
+
 	# encode to json
 	try:
 		data_encoded = json.dumps(data, ensure_ascii = False, indent = 4)
