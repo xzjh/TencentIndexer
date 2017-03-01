@@ -7,6 +7,7 @@ import urlparse
 from bs4 import BeautifulSoup
 from datetime import datetime
 import json
+import re
 
 import general_func
 
@@ -17,6 +18,7 @@ page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
 comment_url_args = {}
 comment_url_args['reviewType'] = '0'
 comment_url_args['reviewSortOrder'] = '0'
+comment_url_args['xhr'] = '1'
 comment_url_args['hl'] = 'zh-cn'
 comment_url_base = "https://play.google.com/store/getreviews"
 app_url_base = "https://play.google.com/store/apps/details"
@@ -30,7 +32,7 @@ def get_app_info(app_id):
 	app_page_html = general_func.url_open(app_url)
 
 	soup = BeautifulSoup(app_page_html)
-	app_info['app_name'] = soup.find('div', attrs = {"class": "document-title"}).div.contents[0]
+	app_info['app_name'] = soup.find('div', attrs = {"class": "id-app-title"}).text.strip()
 	app_info['app_version'] = soup.find('div', attrs = {'itemprop': 'softwareVersion'}).contents[0].strip()
 	app_info['app_downloads_count'] = soup.find('div', attrs = {'itemprop': 'numDownloads'}).contents[0].strip()
 	app_info['app_score'] = soup.find('div', attrs = {'class': 'score'}).contents[0]
@@ -77,6 +79,9 @@ def get_comments_data(app_info, start_time, end_time):
 		soup = BeautifulSoup(data_html)
 		soup_comments = soup.find_all('div', attrs = {'class': 'single-review'})
 
+		rep_photo = re.compile(ur'url\((.*)\)')
+		rep_rating = re.compile(ur'width: (\d+)%')
+
 		comment_time = None
 
 		for soup_comment_item in soup_comments:
@@ -90,20 +95,17 @@ def get_comments_data(app_info, start_time, end_time):
 					continue
 
 				soup_user_info = soup_comment_item.find('span', attrs = {'class': 'author-name'})
-				if soup_user_info == None or soup_user_info.a == None:
+				if soup_user_info == None:
 					continue
-				item['app_comment_user_name'] = soup_user_info.a.text.strip()
-				item['app_comment_user_link'] = soup_user_info.a.attrs['href']
-				item['app_comment_user_photo'] = soup_comment_item.img.attrs['src']
+				item['app_comment_user_name'] = soup_user_info.text.strip()
+				photo_attr = soup_comment_item.find('span', class_ = 'author-image').attrs['style']
+				item['app_comment_user_photo'] = rep_photo.search(photo_attr).group(1)
 
-				comment_title = soup_comment_item.find('span', attrs = {'class': 'review-title'}).contents
-				if len(comment_title) > 0:
-					item['app_comment_title'] = comment_title[0].strip()
-				else:
-					item['app_comment_title'] = ''
-				item['app_comment_content'] = soup_comment_item.find('div', attrs = {'class': 'review-body'}).contents[2].strip()
+				comment_title = soup_comment_item.find('div', class_ = 'review-body').text.strip().strip(ur'全文').strip()
+				item['app_comment_content'] = comment_title
 				item['app_comment_time'] = comment_time.strftime(time_format)
-				item['app_comment_user_score'] = int(soup_comment_item.find('div', attrs = {'class': 'current-rating'}).attrs['style'].split(':')[1][:-2]) / 20
+				user_score_str = soup_comment_item.find('div', class_ = 'current-rating').attrs['style']
+				item['app_comment_user_score'] = int(rep_rating.search(user_score_str).group(1)) / 20.0
 				data['app_comments'].append(item)
 
 			else:
