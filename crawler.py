@@ -29,8 +29,12 @@ if __name__ == '__main__':
 	# read args
 	crawler_args = {}
 	crawler_args['website_id'] = sys.argv[1]
-	crawler_args['start_time'] = datetime.strptime(sys.argv[2], "%Y%m%d%H%M")
-	crawler_args['end_time'] = datetime.strptime(sys.argv[3], "%Y%m%d%H%M")
+	if len(sys.argv) > 2:
+		crawler_args['start_time'] = datetime.strptime(sys.argv[2], "%Y%m%d%H%M")
+		crawler_args['end_time'] = datetime.strptime(sys.argv[3], "%Y%m%d%H%M")
+	else:
+		crawler_args['start_time'] = 0
+		crawler_args['end_time'] = 0
 
 	print 'Now crawling news from website "' + crawler_args['website_id'] + '" in the period from ' + \
 		str(crawler_args['start_time']) + ' to ' + str(crawler_args['end_time']) + '.'

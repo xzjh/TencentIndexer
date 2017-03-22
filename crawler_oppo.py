@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# TencentCrawler for 360手机助手 http://zhushou.360.cn
+# TencentCrawler for oppo软件商店 http://store.oppomobile.com
 # by Jiaheng Zhang, all rights reserved.
 
 import urllib
