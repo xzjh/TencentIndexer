@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # TencentCrawler for 百度手机助手 http://shouji.baidu.com/
-# by Jiaheng Zhang, all rights reserved. 2016.01.
+# by Jiaheng Zhang, all rights reserved. 2017.10.
 
 import urllib
 import urlparse
@@ -16,9 +16,13 @@ import general_func
 website_id = 'baidu'
 website_name = "百度手机助手 http://shouji.baidu.com/"
 page_list_file = general_func.page_list_dir_name + '/' + website_id + ".txt"
+website_url_base = 'http://shouji.baidu.com'
 comment_url_args = {}
 comment_url_args['action_type'] = 'getCommentList'
 comment_url_base = "http://shouji.baidu.com/comment"
+search_url_base = 'http://shouji.baidu.com/s'
+search_url_args = {}
+search_url_args['data_type'] = 'app'
 time_format = '%Y%m%d%H%M'
 
 def get_app_info(app_url):
@@ -26,7 +30,7 @@ def get_app_info(app_url):
 	app_info = {}
 
 	app_page_html = general_func.url_open(app_url, from_encoding = 'utf8')
-	soup = BeautifulSoup(app_page_html)
+	soup = BeautifulSoup(app_page_html, 'html.parser')
 
 	app_info['app_name'] = soup.find('h1', attrs = {'class': 'app-name'}).span.text.strip()
 	app_info['app_version'] = soup.find('span', attrs = {'class': 'version'}).text.split(':')[1].strip()
@@ -34,6 +38,19 @@ def get_app_info(app_url):
 	app_info['app_score'] = float(soup.find('span', attrs = {'class': 'star-percent'}).attrs['style'].split(':')[1].strip('%')) / 20.0
 
 	return app_info
+
+# get the App URL from the search keyword
+def get_app_id(app_keyword):
+
+	try:
+		search_url_args['wd'] = app_keyword
+		search_url = search_url_base + '?' + urllib.urlencode(search_url_args)
+		search_result_html = general_func.url_open(search_url)
+		soup = BeautifulSoup(search_result_html, 'html.parser')
+		app_url = website_url_base + soup.find('div', class_ = 'search-res').li.find('a', class_ = 'app-name').attrs['href']
+		return True, app_url
+	except:
+		return False, None
 
 def get_comments_data(app_info, start_time, end_time):
 
@@ -47,8 +64,8 @@ def get_comments_data(app_info, start_time, end_time):
 		comment_url = comment_url_base + '?' + urllib.urlencode(comment_url_args)
 		print 'Processing comment page: ' + str(comment_url_args['pn'])
 		# get the source code of comment page
-		data_html = general_func.url_open(comment_url)
-		soup = BeautifulSoup(data_html)
+		data_html = general_func.url_open(comment_url, from_encoding = 'utf-8')
+		soup = BeautifulSoup(data_html, 'html.parser')
 		soup_comments = soup.find('ol', attrs = {'class': 'comment-list'}).find_all('li')
 
 		comment_time = None
@@ -97,24 +114,30 @@ def crawl(args):
 
 	page_list = general_func.get_list_from_file(page_list_file)
 
-	for app_url in page_list:
+	for app_keyword in page_list:
 
 		print "********************************************************************************"
-		print "Crawling page: " + app_url
+		print "Crawling page: " + app_keyword
 
-		try:
-			# get app info
-			app_info = get_app_info(app_url)
-			print "App name: " + app_info['app_name'] + ", App ID: " + app_info['app_id']
-			app_info['app_id'] = app_info['app_id']
-
-			print "Analyzing comment pages..."
-
-			# get comments data
-			data = get_comments_data(app_info, start_time, end_time)
-		except:
-			print "-- Failed to get the comments of this App!"
+		# get app id from app url
+		is_success, app_url = get_app_id(app_keyword)
+		if not is_success:
+			print "Wrong keyword: " + app_keyword
 			continue
+
+		# try:
+		# get app info
+		app_info = get_app_info(app_url)
+		print "App name: " + app_info['app_name'] + ", App ID: " + app_info['app_id']
+		app_info['app_id'] = app_info['app_id']
+
+		print "Analyzing comment pages..."
+
+		# get comments data
+		data = get_comments_data(app_info, start_time, end_time)
+		# except:
+		# 	print "-- Failed to get the comments of this App!"
+		# 	continue
 
 		# save to json file
 
