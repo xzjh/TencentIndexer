@@ -49,7 +49,7 @@ def get_search_result(keyword):
 	path = '/search/v1/completion/card'
 	query_dict = OrderedDict([
 		('keyword', keyword),
-		('size', 10),
+		('size', 1),
 		('start', 0)
 	])
 	query_str = "&".join("%s=%s" % (k,v) for k,v in query_dict.items())
