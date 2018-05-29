@@ -15,6 +15,7 @@ import requests
 import hmac
 from hashlib import sha1
 import yundama
+import multiprocessing
 
 import general_func
 
@@ -47,8 +48,8 @@ comment_url_params = {
     'status': 'open',
 }
 
-username = 'bashang1759687@163.com'
-password = 'eeygvbcx0'
+username = 'quxwe36bnci6@163.com'
+password = 'pnoign8952'
 login_url_base = 'https://www.zhihu.com/login/email'
 login_url_params = {
     'phone_num': username,
@@ -139,10 +140,11 @@ def login():
         print 'Failed to log in!'
 
 def get_search_results(keyword):
-
     search_url_params['q'] = keyword
     search_results = []
     search_url_params['offset'] = 0
+
+    mp_pool = multiprocessing.Pool(search_url_params['limit'])
 
     while True:
         search_url = search_url_base + '?' + urllib.urlencode(search_url_params)
@@ -152,26 +154,30 @@ def get_search_results(keyword):
         if len(result_items_json) == 0:
             break;
 
-        for result_item_json in result_items_json:
-            result_type = result_item_json['object']['type']
-            if result_type != 'answer':
-                continue
-
-            result_item = {}
-            result_item['question_title'] = result_item_json['highlight']['title']
-            result_item['question_created_time'] = datetime.fromtimestamp(result_item_json['object']['created_time']).strftime(time_format)
-            result_item['answer_id'] = str(result_item_json['object']['id'])
-            question_id = result_item_json['object']['question']['id']
-            result_item['question_id'] = question_id
-
-            question_data = get_question_data(question_id)
-            result_item.update(question_data)
-
-            search_results.append(result_item)
+        results = mp_pool.map(search_result_process_impl, result_items_json)
+        results = filter(lambda result: result != None)
+        search_results.extend(results)
 
         search_url_params['offset'] += search_url_params['limit']
 
     return search_results
+
+def search_result_process_impl(result_item_json):
+    result_type = result_item_json['object']['type']
+    if result_type != 'answer':
+        return None
+
+    result_item = {}
+    result_item['question_title'] = result_item_json['highlight']['title']
+    result_item['question_created_time'] = datetime.fromtimestamp(result_item_json['object']['created_time']).strftime(time_format)
+    result_item['answer_id'] = str(result_item_json['object']['id'])
+    question_id = result_item_json['object']['question']['id']
+    result_item['question_id'] = question_id
+
+    question_data = get_question_data(question_id)
+    result_item.update(question_data)
+
+    return result_item
 
 def get_question_data(question_id):
 
@@ -298,10 +304,9 @@ def crawl(args):
         print "Crawling keyword: " + keyword
 
         # try:
-        # get app info
         data = get_search_results(keyword)
         # except:
-        #   print "-- Failed to get the comments of this App!"
+        #   print "Failed to get the data for this keyword: {}!".format(keyword)
         #   continue
 
         # save to json file
