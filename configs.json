@@ -15,5 +15,16 @@
 		{"name": "13417124573", "password": "fmtakp7146f"},
 		{"name": "13926773402", "password": "sykrag4602p"},
 		{"name": "13926774202", "password": "yfntci5713w"}
-    ]
+    ],
+    "zhihu_accounts": [
+	    {"name": "quxwe36bnci6@163.com", "password": "pnoign8952"},
+	    {"name": "yadun1516410@163.com", "password": "thvtgq360"},
+	    {"name": "ctwzep430532163@163.com", "password": "uwnwoii86"},
+	    {"name": "mushan771525@163.com", "password": "ybkibttx65"},
+	    {"name": "rzqyu4839shr96@163.com", "password": "kqgwvz10"},
+	    {"name": "yjgcdv33tl51@163.com", "password": "wjtwkne4931"},
+	    {"name": "jishang4656022@163.com", "password": "ceaosxk556"},
+	    {"name": "wqbsds67nr541@163.com", "password": "jfmpcw7"},
+	    {"name": "chanchi0050843@163.com", "password": "tgjgzp43"}
+	]
 }
