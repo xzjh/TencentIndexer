@@ -35,6 +35,7 @@ search_url_params = {
     'limit': 100,
     'time_zone': 'a_day',
 }
+question_url_base = 'https://www.zhihu.com/question/{}'
 answer_url_base = 'https://www.zhihu.com/api/v4/questions/{}/answers'
 answer_url_params = {
     'include': 'data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,is_sticky,collapsed_by,suggest_edit,comment_count,can_comment,content,editable_content,voteup_count,reshipment_settings,comment_permission,created_time,updated_time,review_info,relevant_info,question,excerpt,relationship.is_authorized,is_author,voting,is_thanked,is_nothelp;data[*].mark_infos[*].url;data[*].author.follower_count,badge[?(type=best_answerer)].topics',
@@ -59,6 +60,8 @@ header = {
     "User-Agent": agent,
     'Connection': 'keep-alive'
 }
+
+answer_ui_url_base = 'https://www.zhihu.com/question/{question_id}/answer/{answer_id}'
 
 def init_sessions():
     global sessions
@@ -88,7 +91,10 @@ def init_session(account):
     except:
         print("Failed to load cookie file for account {}!").format(username)
 
-    is_login(session, username, password)
+    try:
+        is_login(session, username, password)
+    except:
+        print("Failed to log in account {}!").format(username)
 
     return pickle.dumps(session)
 
@@ -198,6 +204,7 @@ def search_result_process_impl(result_item_json):
     result_item = {}
     result_item['question_title'] = result_item_json['highlight']['title']
     result_item['question_created_time'] = datetime.fromtimestamp(result_item_json['object']['created_time']).strftime(time_format)
+    result_item['question_updated_time'] = datetime.fromtimestamp(result_item_json['object']['updated_time']).strftime(time_format)
     result_item['answer_id'] = str(result_item_json['object']['id'])
     question_id = result_item_json['object']['question']['id']
     result_item['question_id'] = question_id
@@ -217,6 +224,14 @@ def get_question_data(question_id):
 
     # use random session fetch question data
     session = random.SystemRandom().choice(sessions)
+
+    # question_url = question_url_base.format(question_id)
+    # question_html = session.get(question_url, headers = header).text
+    # question_soup = BeautifulSoup(question_html, 'html.parser')
+    
+    # question_numbers_soup = question_soup.find('div', class_ = 'QuestionFollowStatus').find_all('strong')
+    # data['question_follower_count'] = question_numbers_soup[0].attrs['title']
+    # data['question_view_count'] = question_numbers_soup[1].attrs['title']
 
     while True:
         print 'Processing question ID: ' + question_id + ', answer #: ' + str(answer_url_params['offset']) + '-' + str(answer_url_params['offset'] + answer_url_params['limit'] - 1)
@@ -249,6 +264,7 @@ def get_question_data(question_id):
                 answer_item['answer_content'] = answer_json['content']
                 answer_item['answer_comment_count'] = answer_json['comment_count']
                 answer_item['answer_comments'] = get_comments_data(session, answer_id, start_time, end_time)
+                answer_item['answer_url'] = answer_ui_url_base.format(question_id = question_id, answer_id = answer_id)
 
                 data['answers'].append(answer_item)
 
