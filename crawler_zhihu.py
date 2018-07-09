@@ -198,16 +198,22 @@ def get_search_results(keyword, processes_num):
 
 def search_result_process_impl(result_item_json):
     result_type = result_item_json['object']['type']
-    if result_type != 'answer':
-        return None
 
-    result_item = {}
-    result_item['question_title'] = result_item_json['highlight']['title']
-    result_item['question_created_time'] = datetime.fromtimestamp(result_item_json['object']['created_time']).strftime(time_format)
-    result_item['question_updated_time'] = datetime.fromtimestamp(result_item_json['object']['updated_time']).strftime(time_format)
-    result_item['answer_id'] = str(result_item_json['object']['id'])
-    question_id = result_item_json['object']['question']['id']
-    result_item['question_id'] = question_id
+    if result_type == 'answer':
+        result_item = {}
+        result_item['question_title'] = result_item_json['highlight']['title']
+        result_item['question_created_time'] = datetime.fromtimestamp(result_item_json['object']['created_time']).strftime(time_format)
+        result_item['question_updated_time'] = datetime.fromtimestamp(result_item_json['object']['updated_time']).strftime(time_format)
+        result_item['answer_id'] = str(result_item_json['object']['id'])
+        question_id = result_item_json['object']['question']['id']
+        result_item['question_id'] = question_id
+    elif result_type == 'question':
+        result_item = {}
+        result_item['question_title'] = result_item_json['highlight']['title']
+        question_id = result_item_json['object']['id']
+        result_item['question_id'] = question_id
+    else:
+        return None
 
     question_data = get_question_data(question_id)
     result_item.update(question_data)
