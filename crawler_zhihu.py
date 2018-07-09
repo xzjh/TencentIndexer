@@ -231,13 +231,14 @@ def get_question_data(question_id):
     # use random session fetch question data
     session = random.SystemRandom().choice(sessions)
 
-    # question_url = question_url_base.format(question_id)
-    # question_html = session.get(question_url, headers = header).text
-    # question_soup = BeautifulSoup(question_html, 'html.parser')
+    question_url = question_url_base.format(question_id)
+    question_html = session.get(question_url, headers = header).text
+    question_soup = BeautifulSoup(question_html, 'html.parser')
     
-    # question_numbers_soup = question_soup.find('div', class_ = 'QuestionFollowStatus').find_all('strong')
-    # data['question_follower_count'] = question_numbers_soup[0].attrs['title']
-    # data['question_view_count'] = question_numbers_soup[1].attrs['title']
+    data['question_detail'] = question_soup.find('div', class_ = 'QuestionHeader-detail').text
+    question_numbers_soup = question_soup.find('div', class_ = 'QuestionFollowStatus').find_all('strong')
+    data['question_follower_count'] = question_numbers_soup[0].attrs['title']
+    data['question_view_count'] = question_numbers_soup[1].attrs['title']
 
     while True:
         print 'Processing question ID: ' + question_id + ', answer #: ' + str(answer_url_params['offset']) + '-' + str(answer_url_params['offset'] + answer_url_params['limit'] - 1)
