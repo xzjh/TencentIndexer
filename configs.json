@@ -1,6 +1,6 @@
 {
     "push_address": "/moa/microtrend/openservices/service/AddJsonData",
-    "processes_num": 20,
+    "processes_num": 10,
     "request_timeout": 10,
     "proxies": {
         "googleplay": "http://127.0.0.1:9743"
