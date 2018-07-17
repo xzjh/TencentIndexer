@@ -168,7 +168,11 @@ def get_question_data(session, question_id, start_time, end_time):
     
     if request_data_from_webpage:
 	    question_url = question_ui_url_base.format(question_id)
-	    question_html = session.get(question_url, headers = header).text
+
+	    try:
+	    	question_html = session.get(question_url, headers = header).text
+	    except Exception as e:
+	    	print 'Exception in question {}: {}\n-- Ignore webpage content.'.format(question_id, str(e))
 	    question_soup = BeautifulSoup(question_html, 'html.parser')
 	    data['question_detail'] = question_soup.find('div', class_ = 'QuestionHeader-detail').text
 	    question_numbers_soup = question_soup.find('div', class_ = 'QuestionFollowStatus').find_all('strong')
@@ -181,7 +185,11 @@ def get_question_data(session, question_id, start_time, end_time):
         print 'Processing question ID: ' + question_id + ', answer #: ' + str(answer_url_params['offset']) + '-' + str(answer_url_params['offset'] + answer_url_params['limit'] - 1)
 
         answer_url = answer_url_base.format(question_id) + '?' + urllib.urlencode(answer_url_params)
-        data_raw = session.get(answer_url, headers = header).text
+        try:
+        	data_raw = session.get(answer_url, headers = header).text
+        except Exception as e:
+	    	print 'Exception in question {}: {}\n-- Abort fetching answers and comments for this question.'.format(question_id, str(e))
+	    	break
         data_json = json.loads(data_raw)
         answer_count = data_json['paging']['totals']
         answers_json = filter(lambda answer_json: answer_json['type'] == 'answer', data_json['data'])
@@ -237,7 +245,11 @@ def get_comments_data(session, qa_id, start_time, end_time, url_base, url_params
 
     while True:
         comment_url = url_base.format(qa_id) + '?' + urllib.urlencode(url_params)
-        data_raw = session.get(comment_url, headers = header).text
+        try:
+        	data_raw = session.get(comment_url, headers = header).text
+        except Exception as e:
+	    	print 'Exception in answer {}: {}\n-- Abort fetching comments for this answer.'.format(qa_id, str(e))
+	    	break
         data_json = json.loads(data_raw)
         if 'data' not in data_json:
             continue
