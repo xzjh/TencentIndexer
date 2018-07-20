@@ -40,11 +40,11 @@ comment_url_params = {
 }
 question_comment_url_base = 'https://www.zhihu.com/api/v4/questions/{}/comments'
 question_comment_url_params = {
-	'include': 'data[*].author,collapsed,reply_to_author,disliked,content,voting,vote_count,is_parent_author,is_author',
-	'order': 'reverse',
-	'limit': 100,
-	'offset': 0,
-	'status': 'open',
+    'include': 'data[*].author,collapsed,reply_to_author,disliked,content,voting,vote_count,is_parent_author,is_author',
+    'order': 'reverse',
+    'limit': 100,
+    'offset': 0,
+    'status': 'open',
 }
 
 agent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
@@ -167,17 +167,17 @@ def get_question_data(session, question_id, start_time, end_time):
     answer_url_params['offset'] = 0
     
     if request_data_from_webpage:
-	    question_url = question_ui_url_base.format(question_id)
+        question_url = question_ui_url_base.format(question_id)
 
-	    try:
-	    	question_html = session.get(question_url, headers = header).text
-	    except Exception as e:
-	    	print 'Exception in question {}: {}\n-- Ignore webpage content.'.format(question_id, str(e))
-	    question_soup = BeautifulSoup(question_html, 'html.parser')
-	    data['question_detail'] = question_soup.find('div', class_ = 'QuestionHeader-detail').text
-	    question_numbers_soup = question_soup.find('div', class_ = 'QuestionFollowStatus').find_all('strong')
-	    data['question_follower_count'] = question_numbers_soup[0].attrs['title']
-	    data['question_view_count'] = question_numbers_soup[1].attrs['title']
+        try:
+            question_html = session.get(question_url, headers = header).text
+        except Exception as e:
+            print 'Exception in question {}: {}\n-- Ignore webpage content.'.format(question_id, str(e))
+        question_soup = BeautifulSoup(question_html, 'html.parser')
+        data['question_detail'] = question_soup.find('div', class_ = 'QuestionHeader-detail').text
+        question_numbers_soup = question_soup.find('div', class_ = 'QuestionFollowStatus').find_all('strong')
+        data['question_follower_count'] = question_numbers_soup[0].attrs['title']
+        data['question_view_count'] = question_numbers_soup[1].attrs['title']
 
     (data['question_comments'], data['question_comment_count']) = get_comments_data(session, question_id, start_time, end_time, question_comment_url_base, question_comment_url_params)
 
@@ -186,10 +186,13 @@ def get_question_data(session, question_id, start_time, end_time):
 
         answer_url = answer_url_base.format(question_id) + '?' + urllib.urlencode(answer_url_params)
         try:
-        	data_raw = session.get(answer_url, headers = header).text
+            req = session.get(answer_url, headers = header)
+            req.encoding = 'utf-8'
+            data_raw = req.text
         except Exception as e:
-	    	print 'Exception in question {}: {}\n-- Abort fetching answers and comments for this question.'.format(question_id, str(e))
-	    	break
+            print 'Exception in question {}: {}\n-- Abort fetching answers and comments for this question.'.format(question_id, str(e))
+            break
+
         data_json = json.loads(data_raw)
         answer_count = data_json['paging']['totals']
         answers_json = filter(lambda answer_json: answer_json['type'] == 'answer', data_json['data'])
@@ -246,11 +249,14 @@ def get_comments_data(session, qa_id, start_time, end_time, url_base, url_params
     while True:
         comment_url = url_base.format(qa_id) + '?' + urllib.urlencode(url_params)
         try:
-        	data_raw = session.get(comment_url, headers = header).text
+            req = session.get(comment_url, headers = header)
+            req.encoding = 'utf-8'
+            data_raw = req.text
         except Exception as e:
-	    	print 'Exception in answer {}: {}\n-- Abort fetching comments for this answer.'.format(qa_id, str(e))
-	    	break
-        data_json = json.loads(data_raw)
+            print 'Exception in answer {}: {}\n-- Abort fetching comments for this answer.'.format(qa_id, str(e))
+            break
+
+        data_json = json.loads(data_raw, 'utf8')
         if 'data' not in data_json:
             continue
         comments_count = data_json['common_counts']
