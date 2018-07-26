@@ -124,7 +124,7 @@ def get_captcha(session, headers):
         return yundama.get_captcha_result('captcha/zhihu.gif')
 
 def is_login(session, username, password):
-    response = session.get("https://www.zhihu.com/inbox", headers=header, allow_redirects=False)
+    response = session.get("https://www.zhihu.com/inbox", headers=header)
     if response.status_code != 200:
         print 'Now log in Zhihu for account {}...'.format(username)
         login(session, username, password)
